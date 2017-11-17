@@ -1,0 +1,109 @@
+Strict
+Import Mojo
+
+Function Main:Int()
+	Local theapp:Pong = New Pong 
+	Return 0
+End Function
+
+Class Pong Extends App
+	Field mycourt:Court
+	
+	Method OnCreate:Int()
+		mycourt = New Court(100,100,DeviceWidth()-200,DeviceHeight()-200)
+		Return 0
+	End Method
+	
+	Method OnUpdate:Int()
+		mycourt.Update
+		Return 0
+	End Method
+	
+	Method OnRender:Int()
+		mycourt.Render
+		Return 0
+	End method
+
+
+End Class
+
+Class Court
+	Field x:Int
+	Field y:Int
+	Field sizex:Int
+	Field sizey:Int
+	
+	Field theball:Ball 
+	
+	Method New(x:Int,y:Int,sizex:Int,sizey:Int)
+		SetUpdateRate(60)
+		Self.x = x
+		Self.y = y
+		Self.sizex = sizex
+		Self.sizey = sizey
+		
+		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,2)
+
+	End Method
+	
+	Method Update:Int()
+		
+	
+	
+		Return 0
+	End Method
+	
+	Method Render:Int()
+		Cls(0,0,0)
+		DrawRect(x,y,sizex,sizey)
+		SetColor(0,0,0)
+		DrawRect(x+5,y+5,sizex-10,sizey-10)
+		theball.Render
+		Return 0
+	End Method
+
+End Class
+
+Class Ball
+	Field x:Int
+	Field y:Int
+	Field size:Int
+	Field speed:Int
+	Field direction:Vec2i
+	
+	Method New(x:Int,y:Int,size:Int,dirx:Int,diry:int)
+		Self.x = x
+		Self.y = y
+		Self.size = size
+		Self.direction = New Vec2i(dirx,diry)
+	End Method
+	
+	Method Update:Int()
+	
+	
+		Return 0
+	End Method
+	
+	Method Render:Int()
+		SetColor(255,255,255)
+		DrawRect(x-0.5*size,y-0.5*size,size,size)
+	
+		return 0
+	End Method
+
+
+End Class
+
+
+Class Vec2i
+	Field x:Int
+	Field y:Int
+	
+	Method New (x:Int,y:Int)
+		Self.x=x
+		Self.y=y
+	
+	End Method
+
+
+End Class
