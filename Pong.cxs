@@ -6,6 +6,13 @@ Function Main:Int()
 	Return 0
 End Function
 
+Class RETVAL
+	Const colx:Int = 1
+	Const coly:Int = 2
+
+	
+End Class
+
 Class Pong Extends App
 	Field mycourt:Court
 	
@@ -32,24 +39,27 @@ Class Court
 	Field y:Int
 	Field sizex:Int
 	Field sizey:Int
+	Field timer:Int
+	Field timerbuffer:int
 	
 	Field theball:Ball 
 	
 	Method New(x:Int,y:Int,sizex:Int,sizey:Int)
-		SetUpdateRate(60)
+		SetUpdateRate(0)
 		Self.x = x
 		Self.y = y
 		Self.sizex = sizex
 		Self.sizey = sizey
 		
-		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,2)
+		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,0)
 
 	End Method
 	
 	Method Update:Int()
-		
-	
-	
+		timer = Millisecs()
+		theball.Update
+		theball.AddSpeed(timer/1000)
+		theball.DirectionHandeler(Collision())
 		Return 0
 	End Method
 	
@@ -61,14 +71,28 @@ Class Court
 		theball.Render
 		Return 0
 	End Method
+	
+	Method Collision:Int()
+		If theball.x < x
+			Return RETVAL.colx
+		Elseif theball.x > x+sizex 
+			Return RETVAL.colx
+		Elseif theball.y < y
+			Return RETVAL.coly
+		Elseif theball.y > y'+sizey
+			Return RETVAL.coly
+		Endif
+		
+		Return 0
+	End Method
 
 End Class
 
 Class Ball
-	Field x:Int
-	Field y:Int
+	Field x:Float
+	Field y:float
 	Field size:Int
-	Field speed:Int
+	Field speed:Float = 0.5
 	Field direction:Vec2i
 	
 	Method New(x:Int,y:Int,size:Int,dirx:Int,diry:int)
@@ -79,19 +103,43 @@ Class Ball
 	End Method
 	
 	Method Update:Int()
-	
-	
+'		Print "x"+x
+'		Print "y"+y
+		Print "directionx"+direction.x
+		Print "directiony"+direction.y	
 		Return 0
 	End Method
 	
 	Method Render:Int()
 		SetColor(255,255,255)
-		DrawRect(x-0.5*size,y-0.5*size,size,size)
-	
+'		DrawRect(x-0.5*size,y-0.5*size,size,size)
+		DrawRect(x,y,size,size)
 		return 0
 	End Method
 
+	Method AddSpeed:Void(time:Int)
+		x = x+(speed*time*direction.x)
+	'	Print x
+		y = y+(speed*time*direction.y)
 
+	'	Print "AddSpeed"
+	End Method
+	
+	Method DirectionHandeler:void(change:Int)
+		Select change
+			Case change = RETVAL.colx	
+				direction.x = direction.x*-1
+			Case change = RETVAL.coly
+				direction.y = direction.y*-1
+				Print"YYY"
+		End Select
+		
+	End method
+			
+	
+	
+	
+	
 End Class
 
 
