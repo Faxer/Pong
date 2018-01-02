@@ -22,7 +22,9 @@ Class Pong Extends App
 	End Method
 	
 	Method OnUpdate:Int()
-		mycourt.Update
+		Local nowtime:= Millisecs() 
+		
+		mycourt.Update(nowtime)
 		Return 0
 	End Method
 	
@@ -39,8 +41,7 @@ Class Court
 	Field y:Int
 	Field sizex:Int
 	Field sizey:Int
-	Field timer:Int = 0
-	Field timerbuffer:int = 0
+	Field oldtime:int  
 	
 	Field theball:Ball 
 	
@@ -55,60 +56,88 @@ Class Court
 
 	End Method
 	
-	Method Update:Int() 
-		timer = Millisecs() - timerbuffer
-		timerbuffer = timer
-		theball.Update
-		theball.AddSpeed(timer/1000)
-		theball.DirectionHandeler(Collision())
+	Method Update:Int(nowtime:Int) 
+		 
+		Local deltatime:Float= Float(nowtime- oldtime)/1000.0
+		
+		oldtime = nowtime
+		ResolveMoves(deltatime)
+		 
+		theball.Applymove() 
+
 		Return 0
 	End Method
 	
+	Method ResolveMoves:Void(deltatime:Float)
+	
+		Local deltaspeed:Float = theball.speed*deltatime
+			
+		theball.movevec  = New Vec2f(deltaspeed*theball.direction.x,deltaspeed*theball.direction.y)
+	 
+	
+		Collision(theball)
+			
+
+	
+		
+	
+	End 
+	
+	
+	
 	Method Render:Int()
 		Cls(0,0,0)
-		DrawRect(x,y,sizex,sizey)
+		SetColor(255,0,0)
+		DrawRect(x-1,y-1,sizex+2,sizey+2)
 		SetColor(0,0,0)
-		DrawRect(x+5,y+5,sizex-10,sizey-10)
+		DrawRect(x,y,sizex,sizey)
 		theball.Render
 		Return 0
 	End Method
 	
-	Method Collision:Int()
-		If theball.x < x
-			Return RETVAL.colx
-		Elseif theball.x > x+sizex 
-			Return RETVAL.colx
-		Elseif theball.y < y
-			Return RETVAL.coly
-		Elseif theball.y > y+sizey
-			Print "COOOOL"
-			Return RETVAL.coly
+	Method Collision:Void(ball:Ball)
+
+		If ball.x < x 
+			ball.movevec.x *=-1
+			ball.direction.x *=-1	 
+		Elseif ball.x > x + sizex - ball.size 
+			ball.movevec.x *=-1
+			ball.direction.x *=-1	 
+		Elseif ball.y < y  
+			ball.movevec.y *=-1
+			ball.direction.y *=-1	 
+		Elseif ball.y > y+sizey - ball.size  
+'			Print "Bottom bounce"
+			ball.movevec.y *=-1
+			ball.direction.y *=-1
+	 
 		Endif
 		
-		Return 0
+	 
 	End Method
 
 End Class
 
 Class Ball
 	Field x:Float
-	Field y:float
-	Field size:Int
-	Field speed:Float = 0.5
-	Field direction:Vec2i
+	Field y:Float
+	Field size:Float
+	Field speed:Float = 50
+	Field direction:Vec2f
+	Field movevec:= New Vec2f	
 	
 	Method New(x:Int,y:Int,size:Int,dirx:Int,diry:int)
 		Self.x = x
 		Self.y = y
 		Self.size = size
-		Self.direction = New Vec2i(dirx,diry)
+		Self.direction = New Vec2f(dirx,diry)
 	End Method
 	
-	Method Update:Int()
-'		Print "x"+x
-'		Print "y"+y
-		Print "directionx"+direction.x
-		Print "directiony"+direction.y	
+	Method Applymove:Int()
+		x += movevec.x
+		y += movevec.y
+
+
 		Return 0
 	End Method
 	
@@ -119,22 +148,8 @@ Class Ball
 		return 0
 	End Method
 
-	Method AddSpeed:Void(time:Int)
-		x = x+(speed*time*direction.x)
-	'	Print x
-		y = y+(speed*time*direction.y)
-
-	'	Print "AddSpeed"
-	End Method
-	
-	Method DirectionHandeler:void(change:Int)
-		If change = RETVAL.colx	
-				direction.x = direction.x*-1		
-		Elseif change = RETVAL.coly
-			direction.y = direction.y*-1
-		Endif
-		
-	End Method
+ 
+ 
 	
 End Class
 
@@ -151,3 +166,19 @@ Class Vec2i
 
 
 End Class
+
+
+Class Vec2f
+	Field x:Float
+	Field y:Float
+	
+	Method New (x:Float,y:Float)
+		Self.x=x
+		Self.y=y
+	
+	End Method
+
+
+End Class
+
+
