@@ -39,8 +39,8 @@ Class Court
 	Field y:Int
 	Field sizex:Int
 	Field sizey:Int
-	Field timer:Int
-	Field timerbuffer:int
+	Field timer:Int = 0
+	Field timerbuffer:int = 0
 	
 	Field theball:Ball 
 	
@@ -51,12 +51,13 @@ Class Court
 		Self.sizex = sizex
 		Self.sizey = sizey
 		
-		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,0)
+		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,1)
 
 	End Method
 	
-	Method Update:Int()
-		timer = Millisecs()
+	Method Update:Int() 
+		timer = Millisecs() - timerbuffer
+		timerbuffer = timer
 		theball.Update
 		theball.AddSpeed(timer/1000)
 		theball.DirectionHandeler(Collision())
@@ -79,7 +80,8 @@ Class Court
 			Return RETVAL.colx
 		Elseif theball.y < y
 			Return RETVAL.coly
-		Elseif theball.y > y'+sizey
+		Elseif theball.y > y+sizey
+			Print "COOOOL"
 			Return RETVAL.coly
 		Endif
 		
@@ -126,19 +128,13 @@ Class Ball
 	End Method
 	
 	Method DirectionHandeler:void(change:Int)
-		Select change
-			Case change = RETVAL.colx	
-				direction.x = direction.x*-1
-			Case change = RETVAL.coly
-				direction.y = direction.y*-1
-				Print"YYY"
-		End Select
+		If change = RETVAL.colx	
+				direction.x = direction.x*-1		
+		Elseif change = RETVAL.coly
+			direction.y = direction.y*-1
+		Endif
 		
-	End method
-			
-	
-	
-	
+	End Method
 	
 End Class
 

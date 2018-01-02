@@ -23,6 +23,7 @@ import android.graphics.*;
 import android.content.*;
 import android.util.*;
 import android.hardware.*;
+import android.net.*;
 import android.widget.*;
 import android.view.inputmethod.*;
 import android.content.res.*;
@@ -66,7 +67,9 @@ static final String BINARY_FILES="*.bin|*.dat";
 static final String BRL_GAMETARGET_IMPLEMENTED="1";
 static final String BRL_THREAD_IMPLEMENTED="1";
 static final String CD="";
-static final String CONFIG="debug";
+static final String CONFIG="release";
+static final String GLFW_COPY_LIBS="openal32";
+static final String GLFW_GCC_LIB_OPTS="-lopenal32";
 static final String HOST="winnt";
 static final String IMAGE_FILES="*.png|*.jpg|*.gif|*.bmp";
 static final String LANG="java";
@@ -325,7 +328,7 @@ class BBGameDelegate{
 	void UpdateGame(){}
 	void RenderGame(){}
 	void KeyEvent( int event,int data ){}
-	void MouseEvent( int event,int data,float x,float y ){}
+	void MouseEvent( int event,int data,float x,float y, float z ){}
 	void TouchEvent( int event,int data,float x,float y ){}
 	void MotionEvent( int event,int data,float x,float y,float z ){}
 	void DiscardGraphics(){}
@@ -625,13 +628,13 @@ abstract class BBGame{
 		}
 	}
 	
-	void MouseEvent( int event,int data,float x,float y ){
+	void MouseEvent( int event,int data,float x,float y, float z ){
 
 		if( !_started ) return;
 		
 		try{
 			synchronized( _delegate ){
-				_delegate.MouseEvent( event,data,x,y );
+				_delegate.MouseEvent( event,data,x,y,z );
 			}
 		}catch( RuntimeException ex ){
 			Die( ex );
@@ -2791,410 +2794,358 @@ class BBThread implements Runnable{
 
 class c_App extends Object{
 	public final c_App m_App_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<152>";
 		if((bb_app.g__app)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<152>";
 			bb_std_lang.error("App has already been created");
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<153>";
 		bb_app.g__app=this;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<154>";
 		bb_app.g__delegate=(new c_GameDelegate()).m_GameDelegate_new();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<155>";
 		bb_app.g__game.SetDelegate(bb_app.g__delegate);
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final int p_OnResize(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public int p_OnCreate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnSuspend(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnResume(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public int p_OnUpdate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnLoading(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public int p_OnRender(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnClose(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<177>";
 		bb_app.g_EndApp();
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnBack(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<181>";
 		p_OnClose();
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
 class c_Pong extends c_App{
 	public final c_Pong m_Pong_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<16>";
 		super.m_App_new();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<16>";
-		bb_std_lang.popErr();
 		return this;
 	}
 	c_Court m_mycourt=null;
 	public final int p_OnCreate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<20>";
 		m_mycourt=(new c_Court()).m_Court_new(100,100,bb_app.g_DeviceWidth()-200,bb_app.g_DeviceHeight()-200);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<21>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnUpdate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<25>";
 		m_mycourt.p_Update();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<26>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_OnRender(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<30>";
 		m_mycourt.p_Render();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<31>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
 class c_GameDelegate extends BBGameDelegate{
 	public final c_GameDelegate m_GameDelegate_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<65>";
-		bb_std_lang.popErr();
 		return this;
 	}
 	gxtkGraphics m__graphics=null;
 	gxtkAudio m__audio=null;
 	c_InputDevice m__input=null;
 	public final void StartGame(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<75>";
 		m__graphics=(new gxtkGraphics());
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<76>";
 		bb_graphics.g_SetGraphicsDevice(m__graphics);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<77>";
-		bb_graphics.g_SetFont(null,32);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<79>";
+		bb_graphics.g_SetFont(null);
 		m__audio=(new gxtkAudio());
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<80>";
 		bb_audio.g_SetAudioDevice(m__audio);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<82>";
 		m__input=(new c_InputDevice()).m_InputDevice_new();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<83>";
 		bb_input.g_SetInputDevice(m__input);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<85>";
 		bb_app.g_ValidateDeviceWindow(false);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<87>";
 		bb_app.g_EnumDisplayModes();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<89>";
 		bb_app.g__app.p_OnCreate();
-		bb_std_lang.popErr();
 	}
 	public final void SuspendGame(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<93>";
 		bb_app.g__app.p_OnSuspend();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<94>";
 		m__audio.Suspend();
-		bb_std_lang.popErr();
 	}
 	public final void ResumeGame(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<98>";
 		m__audio.Resume();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<99>";
 		bb_app.g__app.p_OnResume();
-		bb_std_lang.popErr();
 	}
 	public final void UpdateGame(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<103>";
 		bb_app.g_ValidateDeviceWindow(true);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<104>";
 		m__input.p_BeginUpdate();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<105>";
 		bb_app.g__app.p_OnUpdate();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<106>";
 		m__input.p_EndUpdate();
-		bb_std_lang.popErr();
 	}
 	public final void RenderGame(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<110>";
 		bb_app.g_ValidateDeviceWindow(true);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<111>";
 		int t_mode=m__graphics.BeginRender();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<112>";
 		if((t_mode)!=0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<112>";
 			bb_graphics.g_BeginRender();
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<113>";
 		if(t_mode==2){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<113>";
 			bb_app.g__app.p_OnLoading();
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<113>";
 			bb_app.g__app.p_OnRender();
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<114>";
 		if((t_mode)!=0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<114>";
 			bb_graphics.g_EndRender();
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<115>";
 		m__graphics.EndRender();
-		bb_std_lang.popErr();
 	}
 	public final void KeyEvent(int t_event,int t_data){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<119>";
 		m__input.p_KeyEvent(t_event,t_data);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<120>";
 		if(t_event!=1){
-			bb_std_lang.popErr();
 			return;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<121>";
 		int t_1=t_data;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<122>";
 		if(t_1==432){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<123>";
 			bb_app.g__app.p_OnClose();
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<124>";
 			if(t_1==416){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<125>";
 				bb_app.g__app.p_OnBack();
 			}
 		}
-		bb_std_lang.popErr();
 	}
-	public final void MouseEvent(int t_event,int t_data,float t_x,float t_y){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<130>";
-		m__input.p_MouseEvent(t_event,t_data,t_x,t_y);
-		bb_std_lang.popErr();
+	public final void MouseEvent(int t_event,int t_data,float t_x,float t_y,float t_z){
+		m__input.p_MouseEvent(t_event,t_data,t_x,t_y,t_z);
 	}
 	public final void TouchEvent(int t_event,int t_data,float t_x,float t_y){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<134>";
 		m__input.p_TouchEvent(t_event,t_data,t_x,t_y);
-		bb_std_lang.popErr();
 	}
 	public final void MotionEvent(int t_event,int t_data,float t_x,float t_y,float t_z){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<138>";
 		m__input.p_MotionEvent(t_event,t_data,t_x,t_y,t_z);
-		bb_std_lang.popErr();
 	}
 	public final void DiscardGraphics(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<142>";
 		m__graphics.DiscardGraphics();
-		bb_std_lang.popErr();
 	}
 }
-class c_Image extends Object{
-	static int m_DefaultFlags;
-	public final c_Image m_Image_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<70>";
-		bb_std_lang.popErr();
+class c_Font extends Object{
+	c_Image[] m__pages=new c_Image[0];
+	int m__pageCount=0;
+	int m__firstChar=0;
+	float m__height=.0f;
+	c_IntMap m__charMap=(new c_IntMap()).m_IntMap_new();
+	public final c_Font m_Font_new(c_Image[] t_pages,int t_pageCount,c_IntMap t_chars,int t_firstChar,float t_height){
+		this.m__pages=t_pages;
+		this.m__pageCount=t_pageCount;
+		this.m__firstChar=t_firstChar;
+		this.m__height=t_height;
+		this.m__charMap=t_chars;
 		return this;
 	}
-	gxtkSurface m_surface=null;
-	int m_width=0;
-	int m_height=0;
-	c_Frame[] m_frames=new c_Frame[0];
-	int m_flags=0;
-	float m_tx=.0f;
-	float m_ty=.0f;
-	public final int p_SetHandle(float t_tx,float t_ty){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<114>";
-		this.m_tx=t_tx;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<115>";
-		this.m_ty=t_ty;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<116>";
-		this.m_flags=this.m_flags&-2;
-		bb_std_lang.popErr();
-		return 0;
-	}
-	public final int p_ApplyFlags(int t_iflags){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<198>";
-		m_flags=t_iflags;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<200>";
-		if((m_flags&2)!=0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<201>";
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<201>";
-			c_Frame[] t_=m_frames;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<201>";
-			int t_2=0;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<201>";
-			while(t_2<bb_std_lang.length(t_)){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<201>";
-				c_Frame t_f=t_[t_2];
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<201>";
-				t_2=t_2+1;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<202>";
-				t_f.m_x+=1;
-			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<204>";
-			m_width-=2;
-		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<207>";
-		if((m_flags&4)!=0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<208>";
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<208>";
-			c_Frame[] t_3=m_frames;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<208>";
-			int t_4=0;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<208>";
-			while(t_4<bb_std_lang.length(t_3)){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<208>";
-				c_Frame t_f2=t_3[t_4];
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<208>";
-				t_4=t_4+1;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<209>";
-				t_f2.m_y+=1;
-			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<211>";
-			m_height-=2;
-		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<214>";
-		if((m_flags&1)!=0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<215>";
-			p_SetHandle((float)(m_width)/2.0f,(float)(m_height)/2.0f);
-		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<218>";
-		if(bb_std_lang.length(m_frames)==1 && m_frames[0].m_x==0 && m_frames[0].m_y==0 && m_width==m_surface.Width() && m_height==m_surface.Height()){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<219>";
-			m_flags|=65536;
-		}
-		bb_std_lang.popErr();
-		return 0;
-	}
-	public final c_Image p_Init(gxtkSurface t_surf,int t_nframes,int t_iflags){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<144>";
-		if((m_surface)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<144>";
-			bb_std_lang.error("Image already initialized");
-		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<145>";
-		m_surface=t_surf;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<147>";
-		m_width=m_surface.Width()/t_nframes;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<148>";
-		m_height=m_surface.Height();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<150>";
-		m_frames=new c_Frame[t_nframes];
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<151>";
-		for(int t_i=0;t_i<t_nframes;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<152>";
-			m_frames[t_i]=(new c_Frame()).m_Frame_new(t_i*m_width,0);
-		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<155>";
-		p_ApplyFlags(t_iflags);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<156>";
-		bb_std_lang.popErr();
+	public final c_Font m_Font_new2(){
 		return this;
 	}
-	c_Image m_source=null;
-	public final c_Image p_Init2(gxtkSurface t_surf,int t_x,int t_y,int t_iwidth,int t_iheight,int t_nframes,int t_iflags,c_Image t_src,int t_srcx,int t_srcy,int t_srcw,int t_srch){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<160>";
-		if((m_surface)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<160>";
-			bb_std_lang.error("Image already initialized");
+	public static c_Font m_Load(String t_path,int t_firstChar,int t_numChars,boolean t_padded){
+		c_Image t_image=bb_graphics.g_LoadImage(t_path,1,c_Image.m_DefaultFlags);
+		c_Image[] t__pages=new c_Image[1];
+		t__pages[0]=t_image;
+		c_IntMap t__charMap=(new c_IntMap()).m_IntMap_new();
+		int t__pageCount=1;
+		if(!((t_image)!=null)){
+			return null;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<161>";
-		m_surface=t_surf;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<162>";
-		m_source=t_src;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<164>";
-		m_width=t_iwidth;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<165>";
-		m_height=t_iheight;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<167>";
-		m_frames=new c_Frame[t_nframes];
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<169>";
-		int t_ix=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<169>";
-		int t_iy=t_y;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<171>";
-		for(int t_i=0;t_i<t_nframes;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<172>";
-			if(t_ix+m_width>t_srcw){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<173>";
-				t_ix=0;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<174>";
-				t_iy+=m_height;
-			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<176>";
-			if(t_ix+m_width>t_srcw || t_iy+m_height>t_srch){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<177>";
-				bb_std_lang.error("Image frame outside surface");
-			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<179>";
-			m_frames[t_i]=(new c_Frame()).m_Frame_new(t_ix+t_srcx,t_iy+t_srcy);
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<180>";
-			t_ix+=m_width;
+		int t_cellWidth=t_image.p_Width()/t_numChars;
+		int t_cellHeight=t_image.p_Height();
+		int t_glyphX=0;
+		int t_glyphY=0;
+		int t_glyphWidth=t_cellWidth;
+		int t_glyphHeight=t_cellHeight;
+		if(t_padded){
+			t_glyphX+=1;
+			t_glyphY+=1;
+			t_glyphWidth-=2;
+			t_glyphHeight-=2;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<183>";
-		p_ApplyFlags(t_iflags);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<184>";
-		bb_std_lang.popErr();
-		return this;
+		int t_w=t_image.p_Width()/t_cellWidth;
+		int t_h=t_image.p_Height()/t_cellHeight;
+		for(int t_i=0;t_i<t_numChars;t_i=t_i+1){
+			int t_y=t_i/t_w;
+			int t_x=t_i % t_w;
+			c_Glyph t_glyph=(new c_Glyph()).m_Glyph_new(0,t_firstChar+t_i,t_x*t_cellWidth+t_glyphX,t_y*t_cellHeight+t_glyphY,t_glyphWidth,t_glyphHeight,t_glyphWidth);
+			t__charMap.p_Add(t_firstChar+t_i,t_glyph);
+		}
+		return (new c_Font()).m_Font_new(t__pages,t__pageCount,t__charMap,t_firstChar,(float)(t_glyphHeight));
+	}
+	public static c_Font m_Load2(String t_path,int t_cellWidth,int t_cellHeight,int t_glyphX,int t_glyphY,int t_glyphWidth,int t_glyphHeight,int t_firstChar,int t_numChars){
+		c_Image t_image=bb_graphics.g_LoadImage(t_path,1,c_Image.m_DefaultFlags);
+		c_Image[] t__pages=new c_Image[1];
+		t__pages[0]=t_image;
+		c_IntMap t__charMap=(new c_IntMap()).m_IntMap_new();
+		int t__pageCount=1;
+		if(!((t_image)!=null)){
+			return null;
+		}
+		int t_w=t_image.p_Width()/t_cellWidth;
+		int t_h=t_image.p_Height()/t_cellHeight;
+		for(int t_i=0;t_i<t_numChars;t_i=t_i+1){
+			int t_y=t_i/t_w;
+			int t_x=t_i % t_w;
+			c_Glyph t_glyph=(new c_Glyph()).m_Glyph_new(0,t_firstChar+t_i,t_x*t_cellWidth+t_glyphX,t_y*t_cellHeight+t_glyphY,t_glyphWidth,t_glyphHeight,t_glyphWidth);
+			t__charMap.p_Add(t_firstChar+t_i,t_glyph);
+		}
+		return (new c_Font()).m_Font_new(t__pages,t__pageCount,t__charMap,t_firstChar,(float)(t_glyphHeight));
+	}
+	public static c_Font m_Load3(String t_url){
+		String t_iniText="";
+		int t_pageNum=0;
+		int t_idnum=0;
+		c_Glyph t_tmpChar=null;
+		int t_plLen=0;
+		String[] t_lines=bb_std_lang.emptyStringArray;
+		String t_filename="";
+		int t_lineHeight=0;
+		c_Image[] t__pages=new c_Image[0];
+		c_IntMap t__charMap=(new c_IntMap()).m_IntMap_new();
+		int t__pageCount=0;
+		String t_path="";
+		if(t_url.indexOf("/",0)>-1){
+			String[] t_pl=bb_std_lang.split(t_url,"/");
+			t_plLen=bb_std_lang.length(t_pl);
+			for(int t_pi=0;t_pi<=t_plLen-2;t_pi=t_pi+1){
+				t_path=t_path+t_pl[t_pi]+"/";
+			}
+		}
+		String t_ts=t_url.toLowerCase();
+		if(t_ts.indexOf(".txt",0)>0){
+			t_iniText=bb_app.g_LoadString(t_url);
+		}else{
+			t_iniText=bb_app.g_LoadString(t_url+".txt");
+		}
+		t_lines=bb_std_lang.split(t_iniText,String.valueOf((char)(13))+String.valueOf((char)(10)));
+		if(bb_std_lang.length(t_lines)<2){
+			t_lines=bb_std_lang.split(t_iniText,String.valueOf((char)(10)));
+		}
+		String[] t_=t_lines;
+		int t_2=0;
+		while(t_2<bb_std_lang.length(t_)){
+			String t_line=t_[t_2];
+			t_2=t_2+1;
+			t_line=t_line.trim();
+			if(t_line.startsWith("info") || (t_line.compareTo("")==0)){
+				continue;
+			}
+			if(t_line.startsWith("padding")){
+				continue;
+			}
+			if(t_line.startsWith("common")){
+				String[] t_commondata=bb_std_lang.split(t_line,String.valueOf((char)(32)));
+				String[] t_3=t_commondata;
+				int t_4=0;
+				while(t_4<bb_std_lang.length(t_3)){
+					String t_common=t_3[t_4];
+					t_4=t_4+1;
+					if(t_common.startsWith("lineHeight=")){
+						String[] t_lnh=bb_std_lang.split(t_common,"=");
+						t_lnh[1]=t_lnh[1].trim();
+						t_lineHeight=LangUtil.parseInt((t_lnh[1]).trim());
+					}
+					if(t_common.startsWith("pages=")){
+						String[] t_lnh2=bb_std_lang.split(t_common,"=");
+						t_lnh2[1]=t_lnh2[1].trim();
+						t__pageCount=LangUtil.parseInt((t_lnh2[1]).trim());
+						t__pages=new c_Image[t__pageCount];
+					}
+				}
+			}
+			if(t_line.startsWith("page")){
+				String[] t_pagedata=bb_std_lang.split(t_line,String.valueOf((char)(32)));
+				String[] t_5=t_pagedata;
+				int t_6=0;
+				while(t_6<bb_std_lang.length(t_5)){
+					String t_data=t_5[t_6];
+					t_6=t_6+1;
+					if(t_data.startsWith("file=")){
+						String[] t_fn=bb_std_lang.split(t_data,"=");
+						t_fn[1]=t_fn[1].trim();
+						t_filename=t_fn[1];
+						if((int)t_filename.charAt(0)==34){
+							t_filename=bb_std_lang.slice(t_filename,1,t_filename.length()-1);
+						}
+						t_filename=t_path+t_filename.trim();
+						t__pages[t_pageNum]=bb_graphics.g_LoadImage(t_filename,1,c_Image.m_DefaultFlags);
+						t_pageNum=t_pageNum+1;
+					}
+				}
+			}
+			if(t_line.startsWith("chars")){
+				continue;
+			}
+			if(t_line.startsWith("char")){
+				t_tmpChar=(new c_Glyph()).m_Glyph_new2();
+				String[] t_linedata=bb_std_lang.split(t_line,String.valueOf((char)(32)));
+				String[] t_7=t_linedata;
+				int t_8=0;
+				while(t_8<bb_std_lang.length(t_7)){
+					String t_data2=t_7[t_8];
+					t_8=t_8+1;
+					if(t_data2.startsWith("id=")){
+						String[] t_idc=bb_std_lang.split(t_data2,"=");
+						t_idc[1]=t_idc[1].trim();
+						t_tmpChar.m_id=LangUtil.parseInt((t_idc[1]).trim());
+					}
+					if(t_data2.startsWith("x=")){
+						String[] t_xc=bb_std_lang.split(t_data2,"=");
+						t_xc[1]=t_xc[1].trim();
+						t_tmpChar.m_x=LangUtil.parseInt((t_xc[1]).trim());
+					}
+					if(t_data2.startsWith("y=")){
+						String[] t_yc=bb_std_lang.split(t_data2,"=");
+						t_yc[1]=t_yc[1].trim();
+						t_tmpChar.m_y=LangUtil.parseInt((t_yc[1]).trim());
+					}
+					if(t_data2.startsWith("width=")){
+						String[] t_wc=bb_std_lang.split(t_data2,"=");
+						t_wc[1]=t_wc[1].trim();
+						t_tmpChar.m_width=LangUtil.parseInt((t_wc[1]).trim());
+					}
+					if(t_data2.startsWith("height=")){
+						String[] t_hc=bb_std_lang.split(t_data2,"=");
+						t_hc[1]=t_hc[1].trim();
+						t_tmpChar.m_height=LangUtil.parseInt((t_hc[1]).trim());
+					}
+					if(t_data2.startsWith("xoffset=")){
+						String[] t_xoc=bb_std_lang.split(t_data2,"=");
+						t_xoc[1]=t_xoc[1].trim();
+						t_tmpChar.m_xoff=LangUtil.parseInt((t_xoc[1]).trim());
+					}
+					if(t_data2.startsWith("yoffset=")){
+						String[] t_yoc=bb_std_lang.split(t_data2,"=");
+						t_yoc[1]=t_yoc[1].trim();
+						t_tmpChar.m_yoff=LangUtil.parseInt((t_yoc[1]).trim());
+					}
+					if(t_data2.startsWith("xadvance=")){
+						String[] t_advc=bb_std_lang.split(t_data2,"=");
+						t_advc[1]=t_advc[1].trim();
+						t_tmpChar.m_advance=LangUtil.parseInt((t_advc[1]).trim());
+					}
+					if(t_data2.startsWith("page=")){
+						String[] t_advc2=bb_std_lang.split(t_data2,"=");
+						t_advc2[1]=t_advc2[1].trim();
+						t_tmpChar.m_page=LangUtil.parseInt((t_advc2[1]).trim());
+					}
+				}
+				t__charMap.p_Add(t_tmpChar.m_id,t_tmpChar);
+			}
+			continue;
+		}
+		return (new c_Font()).m_Font_new(t__pages,t__pageCount,t__charMap,-1,(float)(t_lineHeight));
 	}
 }
 class c_GraphicsContext extends Object{
 	public final c_GraphicsContext m_GraphicsContext_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<29>";
-		bb_std_lang.popErr();
 		return this;
 	}
-	c_Image m_defaultFont=null;
-	c_Image m_font=null;
-	int m_firstChar=0;
+	c_Font m_defaultFont=null;
+	c_Font m_font=null;
 	int m_matrixSp=0;
 	float m_ix=1.0f;
 	float m_iy=.0f;
@@ -3214,47 +3165,295 @@ class c_GraphicsContext extends Object{
 	float m_scissor_width=.0f;
 	float m_scissor_height=.0f;
 	public final int p_Validate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<40>";
 		if((m_matDirty)!=0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<41>";
 			bb_graphics.g_renderDevice.SetMatrix(bb_graphics.g_context.m_ix,bb_graphics.g_context.m_iy,bb_graphics.g_context.m_jx,bb_graphics.g_context.m_jy,bb_graphics.g_context.m_tx,bb_graphics.g_context.m_ty);
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<42>";
 			m_matDirty=0;
 		}
-		bb_std_lang.popErr();
 		return 0;
+	}
+}
+class c_Image extends Object{
+	static int m_DefaultFlags;
+	public final c_Image m_Image_new(){
+		return this;
+	}
+	gxtkSurface m_surface=null;
+	int m_width=0;
+	int m_height=0;
+	c_Frame[] m_frames=new c_Frame[0];
+	int m_flags=0;
+	float m_tx=.0f;
+	float m_ty=.0f;
+	public final int p_SetHandle(float t_tx,float t_ty){
+		this.m_tx=t_tx;
+		this.m_ty=t_ty;
+		this.m_flags=this.m_flags&-2;
+		return 0;
+	}
+	public final int p_ApplyFlags(int t_iflags){
+		m_flags=t_iflags;
+		if((m_flags&2)!=0){
+			c_Frame[] t_=m_frames;
+			int t_2=0;
+			while(t_2<bb_std_lang.length(t_)){
+				c_Frame t_f=t_[t_2];
+				t_2=t_2+1;
+				t_f.m_x+=1;
+			}
+			m_width-=2;
+		}
+		if((m_flags&4)!=0){
+			c_Frame[] t_3=m_frames;
+			int t_4=0;
+			while(t_4<bb_std_lang.length(t_3)){
+				c_Frame t_f2=t_3[t_4];
+				t_4=t_4+1;
+				t_f2.m_y+=1;
+			}
+			m_height-=2;
+		}
+		if((m_flags&1)!=0){
+			p_SetHandle((float)(m_width)/2.0f,(float)(m_height)/2.0f);
+		}
+		if(bb_std_lang.length(m_frames)==1 && m_frames[0].m_x==0 && m_frames[0].m_y==0 && m_width==m_surface.Width() && m_height==m_surface.Height()){
+			m_flags|=65536;
+		}
+		return 0;
+	}
+	public final c_Image p_Init(gxtkSurface t_surf,int t_nframes,int t_iflags){
+		if((m_surface)!=null){
+			bb_std_lang.error("Image already initialized");
+		}
+		m_surface=t_surf;
+		m_width=m_surface.Width()/t_nframes;
+		m_height=m_surface.Height();
+		m_frames=new c_Frame[t_nframes];
+		for(int t_i=0;t_i<t_nframes;t_i=t_i+1){
+			m_frames[t_i]=(new c_Frame()).m_Frame_new(t_i*m_width,0);
+		}
+		p_ApplyFlags(t_iflags);
+		return this;
+	}
+	c_Image m_source=null;
+	public final c_Image p_Init2(gxtkSurface t_surf,int t_x,int t_y,int t_iwidth,int t_iheight,int t_nframes,int t_iflags,c_Image t_src,int t_srcx,int t_srcy,int t_srcw,int t_srch){
+		if((m_surface)!=null){
+			bb_std_lang.error("Image already initialized");
+		}
+		m_surface=t_surf;
+		m_source=t_src;
+		m_width=t_iwidth;
+		m_height=t_iheight;
+		m_frames=new c_Frame[t_nframes];
+		int t_ix=t_x;
+		int t_iy=t_y;
+		for(int t_i=0;t_i<t_nframes;t_i=t_i+1){
+			if(t_ix+m_width>t_srcw){
+				t_ix=0;
+				t_iy+=m_height;
+			}
+			if(t_ix+m_width>t_srcw || t_iy+m_height>t_srch){
+				bb_std_lang.error("Image frame outside surface");
+			}
+			m_frames[t_i]=(new c_Frame()).m_Frame_new(t_ix+t_srcx,t_iy+t_srcy);
+			t_ix+=m_width;
+		}
+		p_ApplyFlags(t_iflags);
+		return this;
+	}
+	public final int p_Width(){
+		return m_width;
+	}
+	public final int p_Height(){
+		return m_height;
 	}
 }
 class c_Frame extends Object{
 	int m_x=0;
 	int m_y=0;
 	public final c_Frame m_Frame_new(int t_x,int t_y){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<23>";
 		this.m_x=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<24>";
 		this.m_y=t_y;
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final c_Frame m_Frame_new2(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<18>";
-		bb_std_lang.popErr();
+		return this;
+	}
+}
+class c_Glyph extends Object{
+	int m_page=0;
+	int m_id=0;
+	int m_x=0;
+	int m_y=0;
+	int m_width=0;
+	int m_height=0;
+	int m_advance=0;
+	int m_xoff=0;
+	int m_yoff=0;
+	public final c_Glyph m_Glyph_new(int t_page,int t_id,int t_x,int t_y,int t_width,int t_height,int t_advance){
+		this.m_page=t_page;
+		this.m_id=t_id;
+		this.m_x=t_x;
+		this.m_y=t_y;
+		this.m_width=t_width;
+		this.m_height=t_height;
+		this.m_advance=t_advance;
+		this.m_xoff=0;
+		this.m_yoff=0;
+		return this;
+	}
+	public final c_Glyph m_Glyph_new2(){
+		return this;
+	}
+}
+abstract class c_Map extends Object{
+	public final c_Map m_Map_new(){
+		return this;
+	}
+	c_Node m_root=null;
+	public abstract int p_Compare(int t_lhs,int t_rhs);
+	public final int p_RotateLeft(c_Node t_node){
+		c_Node t_child=t_node.m_right;
+		t_node.m_right=t_child.m_left;
+		if((t_child.m_left)!=null){
+			t_child.m_left.m_parent=t_node;
+		}
+		t_child.m_parent=t_node.m_parent;
+		if((t_node.m_parent)!=null){
+			if(t_node==t_node.m_parent.m_left){
+				t_node.m_parent.m_left=t_child;
+			}else{
+				t_node.m_parent.m_right=t_child;
+			}
+		}else{
+			m_root=t_child;
+		}
+		t_child.m_left=t_node;
+		t_node.m_parent=t_child;
+		return 0;
+	}
+	public final int p_RotateRight(c_Node t_node){
+		c_Node t_child=t_node.m_left;
+		t_node.m_left=t_child.m_right;
+		if((t_child.m_right)!=null){
+			t_child.m_right.m_parent=t_node;
+		}
+		t_child.m_parent=t_node.m_parent;
+		if((t_node.m_parent)!=null){
+			if(t_node==t_node.m_parent.m_right){
+				t_node.m_parent.m_right=t_child;
+			}else{
+				t_node.m_parent.m_left=t_child;
+			}
+		}else{
+			m_root=t_child;
+		}
+		t_child.m_right=t_node;
+		t_node.m_parent=t_child;
+		return 0;
+	}
+	public final int p_InsertFixup(c_Node t_node){
+		while(((t_node.m_parent)!=null) && t_node.m_parent.m_color==-1 && ((t_node.m_parent.m_parent)!=null)){
+			if(t_node.m_parent==t_node.m_parent.m_parent.m_left){
+				c_Node t_uncle=t_node.m_parent.m_parent.m_right;
+				if(((t_uncle)!=null) && t_uncle.m_color==-1){
+					t_node.m_parent.m_color=1;
+					t_uncle.m_color=1;
+					t_uncle.m_parent.m_color=-1;
+					t_node=t_uncle.m_parent;
+				}else{
+					if(t_node==t_node.m_parent.m_right){
+						t_node=t_node.m_parent;
+						p_RotateLeft(t_node);
+					}
+					t_node.m_parent.m_color=1;
+					t_node.m_parent.m_parent.m_color=-1;
+					p_RotateRight(t_node.m_parent.m_parent);
+				}
+			}else{
+				c_Node t_uncle2=t_node.m_parent.m_parent.m_left;
+				if(((t_uncle2)!=null) && t_uncle2.m_color==-1){
+					t_node.m_parent.m_color=1;
+					t_uncle2.m_color=1;
+					t_uncle2.m_parent.m_color=-1;
+					t_node=t_uncle2.m_parent;
+				}else{
+					if(t_node==t_node.m_parent.m_left){
+						t_node=t_node.m_parent;
+						p_RotateRight(t_node);
+					}
+					t_node.m_parent.m_color=1;
+					t_node.m_parent.m_parent.m_color=-1;
+					p_RotateLeft(t_node.m_parent.m_parent);
+				}
+			}
+		}
+		m_root.m_color=1;
+		return 0;
+	}
+	public final boolean p_Add(int t_key,c_Glyph t_value){
+		c_Node t_node=m_root;
+		c_Node t_parent=null;
+		int t_cmp=0;
+		while((t_node)!=null){
+			t_parent=t_node;
+			t_cmp=p_Compare(t_key,t_node.m_key);
+			if(t_cmp>0){
+				t_node=t_node.m_right;
+			}else{
+				if(t_cmp<0){
+					t_node=t_node.m_left;
+				}else{
+					return false;
+				}
+			}
+		}
+		t_node=(new c_Node()).m_Node_new(t_key,t_value,-1,t_parent);
+		if((t_parent)!=null){
+			if(t_cmp>0){
+				t_parent.m_right=t_node;
+			}else{
+				t_parent.m_left=t_node;
+			}
+			p_InsertFixup(t_node);
+		}else{
+			m_root=t_node;
+		}
+		return true;
+	}
+}
+class c_IntMap extends c_Map{
+	public final c_IntMap m_IntMap_new(){
+		super.m_Map_new();
+		return this;
+	}
+	public final int p_Compare(int t_lhs,int t_rhs){
+		return t_lhs-t_rhs;
+	}
+}
+class c_Node extends Object{
+	int m_key=0;
+	c_Node m_right=null;
+	c_Node m_left=null;
+	c_Glyph m_value=null;
+	int m_color=0;
+	c_Node m_parent=null;
+	public final c_Node m_Node_new(int t_key,c_Glyph t_value,int t_color,c_Node t_parent){
+		this.m_key=t_key;
+		this.m_value=t_value;
+		this.m_color=t_color;
+		this.m_parent=t_parent;
+		return this;
+	}
+	public final c_Node m_Node_new2(){
 		return this;
 	}
 }
 class c_InputDevice extends Object{
 	c_JoyState[] m__joyStates=new c_JoyState[4];
 	public final c_InputDevice m_InputDevice_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<26>";
 		for(int t_i=0;t_i<4;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<27>";
 			m__joyStates[t_i]=(new c_JoyState()).m_JoyState_new();
 		}
-		bb_std_lang.popErr();
 		return this;
 	}
 	boolean[] m__keyDown=new boolean[512];
@@ -3262,234 +3461,145 @@ class c_InputDevice extends Object{
 	int[] m__keyHitQueue=new int[33];
 	int[] m__keyHit=new int[512];
 	public final void p_PutKeyHit(int t_key){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<241>";
 		if(m__keyHitPut==bb_std_lang.length(m__keyHitQueue)){
-			bb_std_lang.popErr();
 			return;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<242>";
 		m__keyHit[t_key]+=1;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<243>";
 		m__keyHitQueue[m__keyHitPut]=t_key;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<244>";
 		m__keyHitPut+=1;
-		bb_std_lang.popErr();
 	}
 	public final void p_BeginUpdate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<193>";
 		for(int t_i=0;t_i<4;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<194>";
 			c_JoyState t_state=m__joyStates[t_i];
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<195>";
 			if(!BBGame.Game().PollJoystick(t_i,t_state.m_joyx,t_state.m_joyy,t_state.m_joyz,t_state.m_buttons)){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<195>";
 				break;
 			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<196>";
 			for(int t_j=0;t_j<32;t_j=t_j+1){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<197>";
 				int t_key=256+t_i*32+t_j;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<198>";
 				if(t_state.m_buttons[t_j]){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<199>";
 					if(!m__keyDown[t_key]){
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<200>";
 						m__keyDown[t_key]=true;
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<201>";
 						p_PutKeyHit(t_key);
 					}
 				}else{
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<204>";
 					m__keyDown[t_key]=false;
 				}
 			}
 		}
-		bb_std_lang.popErr();
 	}
 	int m__charGet=0;
 	int m__charPut=0;
 	public final void p_EndUpdate(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<211>";
 		for(int t_i=0;t_i<m__keyHitPut;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<212>";
 			m__keyHit[m__keyHitQueue[t_i]]=0;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<214>";
 		m__keyHitPut=0;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<215>";
 		m__charGet=0;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<216>";
 		m__charPut=0;
-		bb_std_lang.popErr();
 	}
 	int[] m__charQueue=new int[32];
 	public final void p_KeyEvent(int t_event,int t_data){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<115>";
 		int t_1=t_event;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<116>";
 		if(t_1==1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<117>";
 			if(!m__keyDown[t_data]){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<118>";
 				m__keyDown[t_data]=true;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<119>";
 				p_PutKeyHit(t_data);
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<120>";
 				if(t_data==1){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<121>";
 					m__keyDown[384]=true;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<122>";
 					p_PutKeyHit(384);
 				}else{
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<123>";
 					if(t_data==384){
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<124>";
 						m__keyDown[1]=true;
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<125>";
 						p_PutKeyHit(1);
 					}
 				}
 			}
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<128>";
 			if(t_1==2){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<129>";
 				if(m__keyDown[t_data]){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<130>";
 					m__keyDown[t_data]=false;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<131>";
 					if(t_data==1){
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<132>";
 						m__keyDown[384]=false;
 					}else{
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<133>";
 						if(t_data==384){
-							bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<134>";
 							m__keyDown[1]=false;
 						}
 					}
 				}
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<137>";
 				if(t_1==3){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<138>";
 					if(m__charPut<bb_std_lang.length(m__charQueue)){
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<139>";
 						m__charQueue[m__charPut]=t_data;
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<140>";
 						m__charPut+=1;
 					}
 				}
 			}
 		}
-		bb_std_lang.popErr();
 	}
 	float m__mouseX=.0f;
 	float m__mouseY=.0f;
+	float m__mouseZ=.0f;
 	float[] m__touchX=new float[32];
 	float[] m__touchY=new float[32];
-	public final void p_MouseEvent(int t_event,int t_data,float t_x,float t_y){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<146>";
+	public final void p_MouseEvent(int t_event,int t_data,float t_x,float t_y,float t_z){
 		int t_2=t_event;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<147>";
 		if(t_2==4){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<148>";
 			p_KeyEvent(1,1+t_data);
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<149>";
 			if(t_2==5){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<150>";
 				p_KeyEvent(2,1+t_data);
-				bb_std_lang.popErr();
 				return;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<152>";
 				if(t_2==6){
 				}else{
-					bb_std_lang.popErr();
 					return;
 				}
 			}
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<156>";
 		m__mouseX=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<157>";
 		m__mouseY=t_y;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<158>";
+		m__mouseZ=t_z;
 		m__touchX[0]=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<159>";
 		m__touchY[0]=t_y;
-		bb_std_lang.popErr();
 	}
 	public final void p_TouchEvent(int t_event,int t_data,float t_x,float t_y){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<163>";
 		int t_3=t_event;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<164>";
 		if(t_3==7){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<165>";
 			p_KeyEvent(1,384+t_data);
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<166>";
 			if(t_3==8){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<167>";
 				p_KeyEvent(2,384+t_data);
-				bb_std_lang.popErr();
 				return;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<169>";
 				if(t_3==9){
 				}else{
-					bb_std_lang.popErr();
 					return;
 				}
 			}
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<173>";
 		m__touchX[t_data]=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<174>";
 		m__touchY[t_data]=t_y;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<175>";
 		if(t_data==0){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<176>";
 			m__mouseX=t_x;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<177>";
 			m__mouseY=t_y;
 		}
-		bb_std_lang.popErr();
 	}
 	float m__accelX=.0f;
 	float m__accelY=.0f;
 	float m__accelZ=.0f;
 	public final void p_MotionEvent(int t_event,int t_data,float t_x,float t_y,float t_z){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<182>";
 		int t_4=t_event;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<183>";
 		if(t_4==10){
 		}else{
-			bb_std_lang.popErr();
 			return;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<187>";
 		m__accelX=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<188>";
 		m__accelY=t_y;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<189>";
 		m__accelZ=t_z;
-		bb_std_lang.popErr();
 	}
 }
 class c_JoyState extends Object{
 	public final c_JoyState m_JoyState_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/inputdevice.cxs<14>";
-		bb_std_lang.popErr();
 		return this;
 	}
 	float[] m_joyx=new float[2];
@@ -3501,363 +3611,211 @@ class c_DisplayMode extends Object{
 	int m__width=0;
 	int m__height=0;
 	public final c_DisplayMode m_DisplayMode_new(int t_width,int t_height){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<192>";
 		m__width=t_width;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<193>";
 		m__height=t_height;
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final c_DisplayMode m_DisplayMode_new2(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<189>";
-		bb_std_lang.popErr();
 		return this;
 	}
 }
-abstract class c_Map extends Object{
-	public final c_Map m_Map_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<7>";
-		bb_std_lang.popErr();
+abstract class c_Map2 extends Object{
+	public final c_Map2 m_Map_new(){
 		return this;
 	}
-	c_Node m_root=null;
+	c_Node2 m_root=null;
 	public abstract int p_Compare(int t_lhs,int t_rhs);
-	public final c_Node p_FindNode(int t_key){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<157>";
-		c_Node t_node=m_root;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<159>";
+	public final c_Node2 p_FindNode(int t_key){
+		c_Node2 t_node=m_root;
 		while((t_node)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<160>";
 			int t_cmp=p_Compare(t_key,t_node.m_key);
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<161>";
 			if(t_cmp>0){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<162>";
 				t_node=t_node.m_right;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<163>";
 				if(t_cmp<0){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<164>";
 					t_node=t_node.m_left;
 				}else{
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<166>";
-					bb_std_lang.popErr();
 					return t_node;
 				}
 			}
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<169>";
-		bb_std_lang.popErr();
 		return t_node;
 	}
 	public final boolean p_Contains(int t_key){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<25>";
-		boolean t_=p_FindNode(t_key)!=null;
-		bb_std_lang.popErr();
-		return t_;
+		return p_FindNode(t_key)!=null;
 	}
-	public final int p_RotateLeft(c_Node t_node){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<251>";
-		c_Node t_child=t_node.m_right;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<252>";
+	public final int p_RotateLeft2(c_Node2 t_node){
+		c_Node2 t_child=t_node.m_right;
 		t_node.m_right=t_child.m_left;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<253>";
 		if((t_child.m_left)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<254>";
 			t_child.m_left.m_parent=t_node;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<256>";
 		t_child.m_parent=t_node.m_parent;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<257>";
 		if((t_node.m_parent)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<258>";
 			if(t_node==t_node.m_parent.m_left){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<259>";
 				t_node.m_parent.m_left=t_child;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<261>";
 				t_node.m_parent.m_right=t_child;
 			}
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<264>";
 			m_root=t_child;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<266>";
 		t_child.m_left=t_node;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<267>";
 		t_node.m_parent=t_child;
-		bb_std_lang.popErr();
 		return 0;
 	}
-	public final int p_RotateRight(c_Node t_node){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<271>";
-		c_Node t_child=t_node.m_left;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<272>";
+	public final int p_RotateRight2(c_Node2 t_node){
+		c_Node2 t_child=t_node.m_left;
 		t_node.m_left=t_child.m_right;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<273>";
 		if((t_child.m_right)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<274>";
 			t_child.m_right.m_parent=t_node;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<276>";
 		t_child.m_parent=t_node.m_parent;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<277>";
 		if((t_node.m_parent)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<278>";
 			if(t_node==t_node.m_parent.m_right){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<279>";
 				t_node.m_parent.m_right=t_child;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<281>";
 				t_node.m_parent.m_left=t_child;
 			}
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<284>";
 			m_root=t_child;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<286>";
 		t_child.m_right=t_node;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<287>";
 		t_node.m_parent=t_child;
-		bb_std_lang.popErr();
 		return 0;
 	}
-	public final int p_InsertFixup(c_Node t_node){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<212>";
+	public final int p_InsertFixup2(c_Node2 t_node){
 		while(((t_node.m_parent)!=null) && t_node.m_parent.m_color==-1 && ((t_node.m_parent.m_parent)!=null)){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<213>";
 			if(t_node.m_parent==t_node.m_parent.m_parent.m_left){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<214>";
-				c_Node t_uncle=t_node.m_parent.m_parent.m_right;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<215>";
+				c_Node2 t_uncle=t_node.m_parent.m_parent.m_right;
 				if(((t_uncle)!=null) && t_uncle.m_color==-1){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<216>";
 					t_node.m_parent.m_color=1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<217>";
 					t_uncle.m_color=1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<218>";
 					t_uncle.m_parent.m_color=-1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<219>";
 					t_node=t_uncle.m_parent;
 				}else{
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<221>";
 					if(t_node==t_node.m_parent.m_right){
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<222>";
 						t_node=t_node.m_parent;
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<223>";
-						p_RotateLeft(t_node);
+						p_RotateLeft2(t_node);
 					}
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<225>";
 					t_node.m_parent.m_color=1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<226>";
 					t_node.m_parent.m_parent.m_color=-1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<227>";
-					p_RotateRight(t_node.m_parent.m_parent);
+					p_RotateRight2(t_node.m_parent.m_parent);
 				}
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<230>";
-				c_Node t_uncle2=t_node.m_parent.m_parent.m_left;
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<231>";
+				c_Node2 t_uncle2=t_node.m_parent.m_parent.m_left;
 				if(((t_uncle2)!=null) && t_uncle2.m_color==-1){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<232>";
 					t_node.m_parent.m_color=1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<233>";
 					t_uncle2.m_color=1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<234>";
 					t_uncle2.m_parent.m_color=-1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<235>";
 					t_node=t_uncle2.m_parent;
 				}else{
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<237>";
 					if(t_node==t_node.m_parent.m_left){
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<238>";
 						t_node=t_node.m_parent;
-						bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<239>";
-						p_RotateRight(t_node);
+						p_RotateRight2(t_node);
 					}
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<241>";
 					t_node.m_parent.m_color=1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<242>";
 					t_node.m_parent.m_parent.m_color=-1;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<243>";
-					p_RotateLeft(t_node.m_parent.m_parent);
+					p_RotateLeft2(t_node.m_parent.m_parent);
 				}
 			}
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<247>";
 		m_root.m_color=1;
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final boolean p_Set(int t_key,c_DisplayMode t_value){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<29>";
-		c_Node t_node=m_root;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<30>";
-		c_Node t_parent=null;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<30>";
+		c_Node2 t_node=m_root;
+		c_Node2 t_parent=null;
 		int t_cmp=0;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<32>";
 		while((t_node)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<33>";
 			t_parent=t_node;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<34>";
 			t_cmp=p_Compare(t_key,t_node.m_key);
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<35>";
 			if(t_cmp>0){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<36>";
 				t_node=t_node.m_right;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<37>";
 				if(t_cmp<0){
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<38>";
 					t_node=t_node.m_left;
 				}else{
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<40>";
 					t_node.m_value=t_value;
-					bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<41>";
-					bb_std_lang.popErr();
 					return false;
 				}
 			}
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<45>";
-		t_node=(new c_Node()).m_Node_new(t_key,t_value,-1,t_parent);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<47>";
+		t_node=(new c_Node2()).m_Node_new(t_key,t_value,-1,t_parent);
 		if((t_parent)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<48>";
 			if(t_cmp>0){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<49>";
 				t_parent.m_right=t_node;
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<51>";
 				t_parent.m_left=t_node;
 			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<53>";
-			p_InsertFixup(t_node);
+			p_InsertFixup2(t_node);
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<55>";
 			m_root=t_node;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<57>";
-		bb_std_lang.popErr();
 		return true;
 	}
 	public final boolean p_Insert(int t_key,c_DisplayMode t_value){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<146>";
-		boolean t_=p_Set(t_key,t_value);
-		bb_std_lang.popErr();
-		return t_;
+		return p_Set(t_key,t_value);
 	}
 }
-class c_IntMap extends c_Map{
-	public final c_IntMap m_IntMap_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<534>";
+class c_IntMap2 extends c_Map2{
+	public final c_IntMap2 m_IntMap_new(){
 		super.m_Map_new();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<534>";
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final int p_Compare(int t_lhs,int t_rhs){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<537>";
-		int t_=t_lhs-t_rhs;
-		bb_std_lang.popErr();
-		return t_;
+		return t_lhs-t_rhs;
 	}
 }
 class c_Stack extends Object{
 	public final c_Stack m_Stack_new(){
-		bb_std_lang.pushErr();
-		bb_std_lang.popErr();
 		return this;
 	}
 	c_DisplayMode[] m_data=new c_DisplayMode[0];
 	int m_length=0;
 	public final c_Stack m_Stack_new2(c_DisplayMode[] t_data){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<13>";
 		this.m_data=((c_DisplayMode[])bb_std_lang.sliceArray(t_data,0));
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<14>";
 		this.m_length=bb_std_lang.length(t_data);
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final void p_Push(c_DisplayMode t_value){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<71>";
 		if(m_length==bb_std_lang.length(m_data)){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<72>";
 			m_data=(c_DisplayMode[])bb_std_lang.resize(m_data,m_length*2+10,c_DisplayMode.class);
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<74>";
 		m_data[m_length]=t_value;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<75>";
 		m_length+=1;
-		bb_std_lang.popErr();
 	}
 	public final void p_Push2(c_DisplayMode[] t_values,int t_offset,int t_count){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<83>";
 		for(int t_i=0;t_i<t_count;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<84>";
 			p_Push(t_values[t_offset+t_i]);
 		}
-		bb_std_lang.popErr();
 	}
 	public final void p_Push3(c_DisplayMode[] t_values,int t_offset){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<79>";
 		p_Push2(t_values,t_offset,bb_std_lang.length(t_values)-t_offset);
-		bb_std_lang.popErr();
 	}
 	public final c_DisplayMode[] p_ToArray(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<18>";
 		c_DisplayMode[] t_t=new c_DisplayMode[m_length];
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<19>";
 		for(int t_i=0;t_i<m_length;t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<20>";
 			t_t[t_i]=m_data[t_i];
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/stack.cxs<22>";
-		bb_std_lang.popErr();
 		return t_t;
 	}
 }
-class c_Node extends Object{
+class c_Node2 extends Object{
 	int m_key=0;
-	c_Node m_right=null;
-	c_Node m_left=null;
+	c_Node2 m_right=null;
+	c_Node2 m_left=null;
 	c_DisplayMode m_value=null;
 	int m_color=0;
-	c_Node m_parent=null;
-	public final c_Node m_Node_new(int t_key,c_DisplayMode t_value,int t_color,c_Node t_parent){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<364>";
+	c_Node2 m_parent=null;
+	public final c_Node2 m_Node_new(int t_key,c_DisplayMode t_value,int t_color,c_Node2 t_parent){
 		this.m_key=t_key;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<365>";
 		this.m_value=t_value;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<366>";
 		this.m_color=t_color;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<367>";
 		this.m_parent=t_parent;
-		bb_std_lang.popErr();
 		return this;
 	}
-	public final c_Node m_Node_new2(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/cerberus/map.cxs<361>";
-		bb_std_lang.popErr();
+	public final c_Node2 m_Node_new2(){
 		return this;
 	}
 }
@@ -3870,90 +3828,49 @@ class c_Court extends Object{
 	int m_sizey=0;
 	c_Ball m_theball=null;
 	public final c_Court m_Court_new(int t_x,int t_y,int t_sizex,int t_sizey){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<48>";
 		bb_app.g_SetUpdateRate(0);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<49>";
 		this.m_x=t_x;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<50>";
 		this.m_y=t_y;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<51>";
 		this.m_sizex=t_sizex;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<52>";
 		this.m_sizey=t_sizey;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<54>";
 		m_theball=(new c_Ball()).m_Ball_new(bb_app.g_DeviceWidth()/2,bb_app.g_DeviceHeight()/2,10,1,0);
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final c_Court m_Court_new2(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<37>";
-		bb_std_lang.popErr();
 		return this;
 	}
 	int m_timer=0;
 	public final int p_Collision(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<76>";
 		if(m_theball.m_x<(float)(m_x)){
-			bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<77>";
-			bb_std_lang.popErr();
 			return 1;
 		}else{
-			bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<78>";
 			if(m_theball.m_x>(float)(m_x+m_sizex)){
-				bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<79>";
-				bb_std_lang.popErr();
 				return 1;
 			}else{
-				bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<80>";
 				if(m_theball.m_y<(float)(m_y)){
-					bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<81>";
-					bb_std_lang.popErr();
 					return 2;
 				}else{
-					bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<82>";
 					if(m_theball.m_y>(float)(m_y)){
-						bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<83>";
-						bb_std_lang.popErr();
 						return 2;
 					}
 				}
 			}
 		}
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<86>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_Update(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<59>";
 		m_timer=bb_app.g_Millisecs();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<60>";
 		m_theball.p_Update();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<61>";
 		m_theball.p_AddSpeed(m_timer/1000);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<62>";
 		m_theball.p_DirectionHandeler(p_Collision());
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<63>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public final int p_Render(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<67>";
 		bb_graphics.g_Cls(0.0f,0.0f,0.0f);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<68>";
 		bb_graphics.g_DrawRect((float)(m_x),(float)(m_y),(float)(m_sizex),(float)(m_sizey));
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<69>";
 		bb_graphics.g_SetColor(0.0f,0.0f,0.0f);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<70>";
 		bb_graphics.g_DrawRect((float)(m_x+5),(float)(m_y+5),(float)(m_sizex-10),(float)(m_sizey-10));
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<71>";
 		m_theball.p_Render();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<72>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
@@ -3963,70 +3880,39 @@ class c_Ball extends Object{
 	int m_size=0;
 	c_Vec2i m_direction=null;
 	public final c_Ball m_Ball_new(int t_x,int t_y,int t_size,int t_dirx,int t_diry){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<99>";
 		this.m_x=(float)(t_x);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<100>";
 		this.m_y=(float)(t_y);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<101>";
 		this.m_size=t_size;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<102>";
 		this.m_direction=(new c_Vec2i()).m_Vec2i_new(t_dirx,t_diry);
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final c_Ball m_Ball_new2(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<91>";
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final int p_Update(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<108>";
 		bb_std_lang.print("directionx"+String.valueOf(m_direction.m_x));
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<109>";
 		bb_std_lang.print("directiony"+String.valueOf(m_direction.m_y));
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<110>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 	float m_speed=0.5f;
 	public final void p_AddSpeed(int t_time){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<121>";
 		m_x=m_x+m_speed*(float)(t_time)*(float)(m_direction.m_x);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<123>";
 		m_y=m_y+m_speed*(float)(t_time)*(float)(m_direction.m_y);
-		bb_std_lang.popErr();
 	}
 	public final void p_DirectionHandeler(int t_change){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<129>";
 		int t_1=t_change;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<130>";
 		if(t_1==((t_change==1)?1:0)){
-			bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<131>";
 			m_direction.m_x=m_direction.m_x*-1;
 		}else{
-			bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<132>";
 			if(t_1==((t_change==2)?1:0)){
-				bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<133>";
 				m_direction.m_y=m_direction.m_y*-1;
-				bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<134>";
 				bb_std_lang.print("YYY");
 			}
 		}
-		bb_std_lang.popErr();
 	}
 	public final int p_Render(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<114>";
 		bb_graphics.g_SetColor(255.0f,255.0f,255.0f);
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<116>";
 		bb_graphics.g_DrawRect(m_x,m_y,(float)(m_size),(float)(m_size));
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<117>";
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
@@ -4034,49 +3920,15 @@ class c_Vec2i extends Object{
 	int m_x=0;
 	int m_y=0;
 	public final c_Vec2i m_Vec2i_new(int t_x,int t_y){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<151>";
 		this.m_x=t_x;
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<152>";
 		this.m_y=t_y;
-		bb_std_lang.popErr();
 		return this;
 	}
 	public final c_Vec2i m_Vec2i_new2(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<146>";
-		bb_std_lang.popErr();
 		return this;
 	}
 }
 class c_RETVAL extends Object{
-}
-class bb_{
-	public static int bbMain(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<5>";
-		c_Pong t_theapp=(new c_Pong()).m_Pong_new();
-		bb_std_lang.errInfo="C:/GitHub/Pong/Pong.cxs<6>";
-		bb_std_lang.popErr();
-		return 0;
-	}
-	public static int bbInit(){
-		bb_app.g__app=null;
-		bb_app.g__delegate=null;
-		bb_app.g__game=BBGame.Game();
-		bb_graphics.g_device=null;
-		bb_graphics.g_context=(new c_GraphicsContext()).m_GraphicsContext_new();
-		c_Image.m_DefaultFlags=0;
-		bb_audio.g_device=null;
-		bb_input.g_device=null;
-		bb_app.g__devWidth=0;
-		bb_app.g__devHeight=0;
-		bb_app.g__displayModes=new c_DisplayMode[0];
-		bb_app.g__desktopMode=null;
-		bb_graphics.g_renderDevice=null;
-		bb_app.g__updateRate=0;
-		return 0;
-	}
 }
 class bb_Mojo{
 }
@@ -4110,106 +3962,64 @@ class bb_app{
 	static c_App g__app;
 	static c_GameDelegate g__delegate;
 	static BBGame g__game;
+	public static String g_LoadString(String t_path){
+		return bb_app.g__game.LoadString(bb_data.g_FixDataPath(t_path));
+	}
 	static int g__devWidth;
 	static int g__devHeight;
 	public static void g_ValidateDeviceWindow(boolean t_notifyApp){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<57>";
 		int t_w=bb_app.g__game.GetDeviceWidth();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<58>";
 		int t_h=bb_app.g__game.GetDeviceHeight();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<59>";
 		if(t_w==bb_app.g__devWidth && t_h==bb_app.g__devHeight){
-			bb_std_lang.popErr();
 			return;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<60>";
 		bb_app.g__devWidth=t_w;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<61>";
 		bb_app.g__devHeight=t_h;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<62>";
 		if(t_notifyApp){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<62>";
 			bb_app.g__app.p_OnResize();
 		}
-		bb_std_lang.popErr();
 	}
 	static c_DisplayMode[] g__displayModes;
 	static c_DisplayMode g__desktopMode;
 	public static int g_DeviceWidth(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<263>";
-		bb_std_lang.popErr();
 		return bb_app.g__devWidth;
 	}
 	public static int g_DeviceHeight(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<267>";
-		bb_std_lang.popErr();
 		return bb_app.g__devHeight;
 	}
 	public static void g_EnumDisplayModes(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<33>";
 		BBDisplayMode[] t_modes=bb_app.g__game.GetDisplayModes();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<34>";
-		c_IntMap t_mmap=(new c_IntMap()).m_IntMap_new();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<35>";
+		c_IntMap2 t_mmap=(new c_IntMap2()).m_IntMap_new();
 		c_Stack t_mstack=(new c_Stack()).m_Stack_new();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<36>";
 		for(int t_i=0;t_i<bb_std_lang.length(t_modes);t_i=t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<37>";
 			int t_w=t_modes[t_i].width;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<38>";
 			int t_h=t_modes[t_i].height;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<39>";
 			int t_size=t_w<<16|t_h;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<40>";
 			if(t_mmap.p_Contains(t_size)){
 			}else{
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<42>";
 				c_DisplayMode t_mode=(new c_DisplayMode()).m_DisplayMode_new(t_modes[t_i].width,t_modes[t_i].height);
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<43>";
 				t_mmap.p_Insert(t_size,t_mode);
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<44>";
 				t_mstack.p_Push(t_mode);
 			}
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<47>";
 		bb_app.g__displayModes=t_mstack.p_ToArray();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<48>";
 		BBDisplayMode t_mode2=bb_app.g__game.GetDesktopMode();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<49>";
 		if((t_mode2)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<50>";
 			bb_app.g__desktopMode=(new c_DisplayMode()).m_DisplayMode_new(t_mode2.width,t_mode2.height);
 		}else{
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<52>";
 			bb_app.g__desktopMode=(new c_DisplayMode()).m_DisplayMode_new(bb_app.g_DeviceWidth(),bb_app.g_DeviceHeight());
 		}
-		bb_std_lang.popErr();
 	}
 	public static void g_EndApp(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<259>";
 		bb_std_lang.error("");
-		bb_std_lang.popErr();
 	}
 	static int g__updateRate;
 	public static void g_SetUpdateRate(int t_hertz){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<224>";
 		bb_app.g__updateRate=t_hertz;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<225>";
 		bb_app.g__game.SetUpdateRate(t_hertz);
-		bb_std_lang.popErr();
 	}
 	public static int g_Millisecs(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/app.cxs<233>";
-		int t_=bb_app.g__game.Millisecs();
-		bb_std_lang.popErr();
-		return t_;
+		return bb_app.g__game.Millisecs();
 	}
 }
 class bb_asyncimageloader{
@@ -4221,10 +4031,7 @@ class bb_asyncsoundloader{
 class bb_audio{
 	static gxtkAudio g_device;
 	public static int g_SetAudioDevice(gxtkAudio t_dev){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/audio.cxs<22>";
 		bb_audio.g_device=t_dev;
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
@@ -4232,25 +4039,14 @@ class bb_audiodevice{
 }
 class bb_data{
 	public static String g_FixDataPath(String t_path){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/data.cxs<7>";
 		int t_i=t_path.indexOf(":/",0);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/data.cxs<8>";
 		if(t_i!=-1 && t_path.indexOf("/",0)==t_i+1){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/data.cxs<8>";
-			bb_std_lang.popErr();
 			return t_path;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/data.cxs<9>";
 		if(t_path.startsWith("./") || t_path.startsWith("/")){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/data.cxs<9>";
-			bb_std_lang.popErr();
 			return t_path;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/data.cxs<10>";
-		String t_="cerberus://data/"+t_path;
-		bb_std_lang.popErr();
-		return t_;
+		return "cerberus://data/"+t_path;
 	}
 }
 class bb_driver{
@@ -4258,191 +4054,95 @@ class bb_driver{
 class bb_graphics{
 	static gxtkGraphics g_device;
 	public static int g_SetGraphicsDevice(gxtkGraphics t_dev){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<63>";
 		bb_graphics.g_device=t_dev;
-		bb_std_lang.popErr();
 		return 0;
 	}
 	static c_GraphicsContext g_context;
 	public static c_Image g_LoadImage(String t_path,int t_frameCount,int t_flags){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<240>";
 		gxtkSurface t_surf=bb_graphics.g_device.LoadSurface(bb_data.g_FixDataPath(t_path));
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<241>";
 		if((t_surf)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<241>";
-			c_Image t_=((new c_Image()).m_Image_new()).p_Init(t_surf,t_frameCount,t_flags);
-			bb_std_lang.popErr();
-			return t_;
+			return ((new c_Image()).m_Image_new()).p_Init(t_surf,t_frameCount,t_flags);
 		}
-		bb_std_lang.popErr();
 		return null;
 	}
 	public static c_Image g_LoadImage2(String t_path,int t_frameWidth,int t_frameHeight,int t_frameCount,int t_flags){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<245>";
 		gxtkSurface t_surf=bb_graphics.g_device.LoadSurface(bb_data.g_FixDataPath(t_path));
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<246>";
 		if((t_surf)!=null){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<246>";
-			c_Image t_=((new c_Image()).m_Image_new()).p_Init2(t_surf,0,0,t_frameWidth,t_frameHeight,t_frameCount,t_flags,null,0,0,t_surf.Width(),t_surf.Height());
-			bb_std_lang.popErr();
-			return t_;
+			return ((new c_Image()).m_Image_new()).p_Init2(t_surf,0,0,t_frameWidth,t_frameHeight,t_frameCount,t_flags,null,0,0,t_surf.Width(),t_surf.Height());
 		}
-		bb_std_lang.popErr();
 		return null;
 	}
-	public static int g_SetFont(c_Image t_font,int t_firstChar){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<549>";
+	public static void g_SetFont(c_Font t_font){
 		if(!((t_font)!=null)){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<550>";
 			if(!((bb_graphics.g_context.m_defaultFont)!=null)){
-				bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<551>";
-				bb_graphics.g_context.m_defaultFont=bb_graphics.g_LoadImage("mojo_font.png",96,2);
+				bb_graphics.g_context.m_defaultFont=c_Font.m_Load("mojo_font.png",32,96,false);
 			}
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<553>";
 			t_font=bb_graphics.g_context.m_defaultFont;
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<554>";
-			t_firstChar=32;
 		}
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<556>";
 		bb_graphics.g_context.m_font=t_font;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<557>";
-		bb_graphics.g_context.m_firstChar=t_firstChar;
-		bb_std_lang.popErr();
-		return 0;
 	}
 	static gxtkGraphics g_renderDevice;
 	public static int g_SetMatrix(float t_ix,float t_iy,float t_jx,float t_jy,float t_tx,float t_ty){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<313>";
 		bb_graphics.g_context.m_ix=t_ix;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<314>";
 		bb_graphics.g_context.m_iy=t_iy;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<315>";
 		bb_graphics.g_context.m_jx=t_jx;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<316>";
 		bb_graphics.g_context.m_jy=t_jy;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<317>";
 		bb_graphics.g_context.m_tx=t_tx;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<318>";
 		bb_graphics.g_context.m_ty=t_ty;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<319>";
 		bb_graphics.g_context.m_tformed=((t_ix!=1.0f || t_iy!=0.0f || t_jx!=0.0f || t_jy!=1.0f || t_tx!=0.0f || t_ty!=0.0f)?1:0);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<320>";
 		bb_graphics.g_context.m_matDirty=1;
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_SetMatrix2(float[] t_m){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<309>";
 		bb_graphics.g_SetMatrix(t_m[0],t_m[1],t_m[2],t_m[3],t_m[4],t_m[5]);
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_SetColor(float t_r,float t_g,float t_b){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<255>";
 		bb_graphics.g_context.m_color_r=t_r;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<256>";
 		bb_graphics.g_context.m_color_g=t_g;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<257>";
 		bb_graphics.g_context.m_color_b=t_b;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<258>";
 		bb_graphics.g_renderDevice.SetColor(t_r,t_g,t_b);
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_SetAlpha(float t_alpha){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<272>";
 		bb_graphics.g_context.m_alpha=t_alpha;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<273>";
 		bb_graphics.g_renderDevice.SetAlpha(t_alpha);
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_SetBlend(int t_blend){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<281>";
 		bb_graphics.g_context.m_blend=t_blend;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<282>";
 		bb_graphics.g_renderDevice.SetBlend(t_blend);
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_SetScissor(float t_x,float t_y,float t_width,float t_height){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<290>";
 		bb_graphics.g_context.m_scissor_x=t_x;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<291>";
 		bb_graphics.g_context.m_scissor_y=t_y;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<292>";
 		bb_graphics.g_context.m_scissor_width=t_width;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<293>";
 		bb_graphics.g_context.m_scissor_height=t_height;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<294>";
 		bb_graphics.g_renderDevice.SetScissor((int)(t_x),(int)(t_y),(int)(t_width),(int)(t_height));
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_BeginRender(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<226>";
 		bb_graphics.g_renderDevice=bb_graphics.g_device;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<227>";
 		bb_graphics.g_context.m_matrixSp=0;
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<228>";
 		bb_graphics.g_SetMatrix(1.0f,0.0f,0.0f,1.0f,0.0f,0.0f);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<229>";
 		bb_graphics.g_SetColor(255.0f,255.0f,255.0f);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<230>";
 		bb_graphics.g_SetAlpha(1.0f);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<231>";
 		bb_graphics.g_SetBlend(0);
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<232>";
 		bb_graphics.g_SetScissor(0.0f,0.0f,(float)(bb_app.g_DeviceWidth()),(float)(bb_app.g_DeviceHeight()));
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_EndRender(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<236>";
 		bb_graphics.g_renderDevice=null;
-		bb_std_lang.popErr();
-		return 0;
-	}
-	public static int g_DebugRenderDevice(){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<53>";
-		if(!((bb_graphics.g_renderDevice)!=null)){
-			bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<53>";
-			bb_std_lang.error("Rendering operations can only be performed inside OnRender");
-		}
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_Cls(float t_r,float t_g,float t_b){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<379>";
-		bb_graphics.g_DebugRenderDevice();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<381>";
 		bb_graphics.g_renderDevice.Cls(t_r,t_g,t_b);
-		bb_std_lang.popErr();
 		return 0;
 	}
 	public static int g_DrawRect(float t_x,float t_y,float t_w,float t_h){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<394>";
-		bb_graphics.g_DebugRenderDevice();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<396>";
 		bb_graphics.g_context.p_Validate();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/graphics.cxs<397>";
 		bb_graphics.g_renderDevice.DrawRect(t_x,t_y,t_w,t_h);
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
@@ -4451,10 +4151,7 @@ class bb_graphicsdevice{
 class bb_input{
 	static c_InputDevice g_device;
 	public static int g_SetInputDevice(c_InputDevice t_dev){
-		bb_std_lang.pushErr();
-		bb_std_lang.errInfo="C:/cerberus-v2017-07-31/Cerberus/modules/mojo/input.cxs<22>";
 		bb_input.g_device=t_dev;
-		bb_std_lang.popErr();
 		return 0;
 	}
 }
@@ -4463,5 +4160,28 @@ class bb_inputdevice{
 class bb_keycodes{
 }
 class bb_cerberustarget{
+}
+class bb_{
+	public static int bbMain(){
+		c_Pong t_theapp=(new c_Pong()).m_Pong_new();
+		return 0;
+	}
+	public static int bbInit(){
+		bb_app.g__app=null;
+		bb_app.g__delegate=null;
+		bb_app.g__game=BBGame.Game();
+		bb_graphics.g_device=null;
+		bb_graphics.g_context=(new c_GraphicsContext()).m_GraphicsContext_new();
+		c_Image.m_DefaultFlags=0;
+		bb_audio.g_device=null;
+		bb_input.g_device=null;
+		bb_app.g__devWidth=0;
+		bb_app.g__devHeight=0;
+		bb_app.g__displayModes=new c_DisplayMode[0];
+		bb_app.g__desktopMode=null;
+		bb_graphics.g_renderDevice=null;
+		bb_app.g__updateRate=0;
+		return 0;
+	}
 }
 //${TRANSCODE_END}
