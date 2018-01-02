@@ -76,12 +76,20 @@ Class Court
 	 
 	
 		Collision(theball)
-			
-
-	
 		
 	
 	End 
+	
+	Method OnSuspend:Int()
+		Print " OnSuspend" 
+		Return 0
+	End
+	
+	Method OnResume:Int()
+		oldtime = Millisecs()
+		Print " OnResume" 
+		Return 0
+	End	
 	
 	
 	
