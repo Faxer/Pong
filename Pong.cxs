@@ -33,6 +33,17 @@ Class Pong Extends App
 		Return 0
 	End method
 
+	Method OnSuspend:Int()
+		Print " OnSuspend" 
+		Return 0
+	End
+	
+	Method OnResume:Int()
+		mycourt.oldtime = Millisecs()
+		Print " OnResume" 
+		Return 0
+	End	
+	
 
 End Class
 
@@ -79,18 +90,6 @@ Class Court
 		
 	
 	End 
-	
-	Method OnSuspend:Int()
-		Print " OnSuspend" 
-		Return 0
-	End
-	
-	Method OnResume:Int()
-		oldtime = Millisecs()
-		Print " OnResume" 
-		Return 0
-	End	
-	
 	
 	
 	Method Render:Int()

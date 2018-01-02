@@ -2360,16 +2360,36 @@ c_Pong.prototype.p_OnCreate=function(){
 c_Pong.prototype.p_OnUpdate=function(){
 	push_err();
 	err_info="C:/GitHub/Pong/Pong.cxs<25>";
-	this.m_mycourt.p_Update();
-	err_info="C:/GitHub/Pong/Pong.cxs<26>";
+	var t_nowtime=bb_app_Millisecs();
+	err_info="C:/GitHub/Pong/Pong.cxs<27>";
+	this.m_mycourt.p_Update(t_nowtime);
+	err_info="C:/GitHub/Pong/Pong.cxs<28>";
 	pop_err();
 	return 0;
 }
 c_Pong.prototype.p_OnRender=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<30>";
+	err_info="C:/GitHub/Pong/Pong.cxs<32>";
 	this.m_mycourt.p_Render();
-	err_info="C:/GitHub/Pong/Pong.cxs<31>";
+	err_info="C:/GitHub/Pong/Pong.cxs<33>";
+	pop_err();
+	return 0;
+}
+c_Pong.prototype.p_OnSuspend=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/Pong.cxs<37>";
+	print(" OnSuspend");
+	err_info="C:/GitHub/Pong/Pong.cxs<38>";
+	pop_err();
+	return 0;
+}
+c_Pong.prototype.p_OnResume=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/Pong.cxs<42>";
+	dbg_object(this.m_mycourt).m_oldtime=bb_app_Millisecs();
+	err_info="C:/GitHub/Pong/Pong.cxs<43>";
+	print(" OnResume");
+	err_info="C:/GitHub/Pong/Pong.cxs<44>";
 	pop_err();
 	return 0;
 }
@@ -4363,96 +4383,105 @@ function c_Court(){
 	this.m_sizex=0;
 	this.m_sizey=0;
 	this.m_theball=null;
-	this.m_timerbuffer=0;
-	this.m_timer=0;
+	this.m_oldtime=0;
 }
 c_Court.m_new=function(t_x,t_y,t_sizex,t_sizey){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<48>";
+	err_info="C:/GitHub/Pong/Pong.cxs<60>";
 	bb_app_SetUpdateRate(0);
-	err_info="C:/GitHub/Pong/Pong.cxs<49>";
+	err_info="C:/GitHub/Pong/Pong.cxs<61>";
 	dbg_object(this).m_x=t_x;
-	err_info="C:/GitHub/Pong/Pong.cxs<50>";
+	err_info="C:/GitHub/Pong/Pong.cxs<62>";
 	dbg_object(this).m_y=t_y;
-	err_info="C:/GitHub/Pong/Pong.cxs<51>";
+	err_info="C:/GitHub/Pong/Pong.cxs<63>";
 	dbg_object(this).m_sizex=t_sizex;
-	err_info="C:/GitHub/Pong/Pong.cxs<52>";
+	err_info="C:/GitHub/Pong/Pong.cxs<64>";
 	dbg_object(this).m_sizey=t_sizey;
-	err_info="C:/GitHub/Pong/Pong.cxs<54>";
+	err_info="C:/GitHub/Pong/Pong.cxs<66>";
 	this.m_theball=c_Ball.m_new.call(new c_Ball,((bb_app_DeviceWidth()/2)|0),((bb_app_DeviceHeight()/2)|0),10,1,1);
 	pop_err();
 	return this;
 }
 c_Court.m_new2=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<37>";
+	err_info="C:/GitHub/Pong/Pong.cxs<50>";
 	pop_err();
 	return this;
 }
-c_Court.prototype.p_Collision=function(){
+c_Court.prototype.p_Collision=function(t_ball){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<77>";
-	if(dbg_object(this.m_theball).m_x<(this.m_x)){
-		err_info="C:/GitHub/Pong/Pong.cxs<78>";
-		pop_err();
-		return 1;
+	err_info="C:/GitHub/Pong/Pong.cxs<107>";
+	if(dbg_object(t_ball).m_x<(this.m_x)){
+		err_info="C:/GitHub/Pong/Pong.cxs<108>";
+		dbg_object(dbg_object(t_ball).m_movevec).m_x=dbg_object(dbg_object(t_ball).m_movevec).m_x*-1.0;
+		err_info="C:/GitHub/Pong/Pong.cxs<109>";
+		dbg_object(dbg_object(t_ball).m_direction).m_x=dbg_object(dbg_object(t_ball).m_direction).m_x*-1.0;
 	}else{
-		err_info="C:/GitHub/Pong/Pong.cxs<79>";
-		if(dbg_object(this.m_theball).m_x>(this.m_x+this.m_sizex)){
-			err_info="C:/GitHub/Pong/Pong.cxs<80>";
-			pop_err();
-			return 1;
+		err_info="C:/GitHub/Pong/Pong.cxs<110>";
+		if(dbg_object(t_ball).m_x>(this.m_x+this.m_sizex)-dbg_object(t_ball).m_size){
+			err_info="C:/GitHub/Pong/Pong.cxs<111>";
+			dbg_object(dbg_object(t_ball).m_movevec).m_x=dbg_object(dbg_object(t_ball).m_movevec).m_x*-1.0;
+			err_info="C:/GitHub/Pong/Pong.cxs<112>";
+			dbg_object(dbg_object(t_ball).m_direction).m_x=dbg_object(dbg_object(t_ball).m_direction).m_x*-1.0;
 		}else{
-			err_info="C:/GitHub/Pong/Pong.cxs<81>";
-			if(dbg_object(this.m_theball).m_y<(this.m_y)){
-				err_info="C:/GitHub/Pong/Pong.cxs<82>";
-				pop_err();
-				return 2;
+			err_info="C:/GitHub/Pong/Pong.cxs<113>";
+			if(dbg_object(t_ball).m_y<(this.m_y)){
+				err_info="C:/GitHub/Pong/Pong.cxs<114>";
+				dbg_object(dbg_object(t_ball).m_movevec).m_y=dbg_object(dbg_object(t_ball).m_movevec).m_y*-1.0;
+				err_info="C:/GitHub/Pong/Pong.cxs<115>";
+				dbg_object(dbg_object(t_ball).m_direction).m_y=dbg_object(dbg_object(t_ball).m_direction).m_y*-1.0;
 			}else{
-				err_info="C:/GitHub/Pong/Pong.cxs<83>";
-				if(dbg_object(this.m_theball).m_y>(this.m_y+this.m_sizey)){
-					err_info="C:/GitHub/Pong/Pong.cxs<84>";
-					print("COOOOL");
-					err_info="C:/GitHub/Pong/Pong.cxs<85>";
-					pop_err();
-					return 2;
+				err_info="C:/GitHub/Pong/Pong.cxs<116>";
+				if(dbg_object(t_ball).m_y>(this.m_y+this.m_sizey)-dbg_object(t_ball).m_size){
+					err_info="C:/GitHub/Pong/Pong.cxs<118>";
+					dbg_object(dbg_object(t_ball).m_movevec).m_y=dbg_object(dbg_object(t_ball).m_movevec).m_y*-1.0;
+					err_info="C:/GitHub/Pong/Pong.cxs<119>";
+					dbg_object(dbg_object(t_ball).m_direction).m_y=dbg_object(dbg_object(t_ball).m_direction).m_y*-1.0;
 				}
 			}
 		}
 	}
-	err_info="C:/GitHub/Pong/Pong.cxs<88>";
 	pop_err();
-	return 0;
 }
-c_Court.prototype.p_Update=function(){
+c_Court.prototype.p_ResolveMoves=function(t_deltatime){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<59>";
-	this.m_timer=bb_app_Millisecs()-this.m_timerbuffer;
-	err_info="C:/GitHub/Pong/Pong.cxs<60>";
-	this.m_timerbuffer=this.m_timer;
-	err_info="C:/GitHub/Pong/Pong.cxs<61>";
-	this.m_theball.p_Update();
-	err_info="C:/GitHub/Pong/Pong.cxs<62>";
-	this.m_theball.p_AddSpeed((this.m_timer/1000)|0);
-	err_info="C:/GitHub/Pong/Pong.cxs<63>";
-	this.m_theball.p_DirectionHandeler(this.p_Collision());
-	err_info="C:/GitHub/Pong/Pong.cxs<64>";
+	err_info="C:/GitHub/Pong/Pong.cxs<84>";
+	var t_deltaspeed=dbg_object(this.m_theball).m_speed*t_deltatime;
+	err_info="C:/GitHub/Pong/Pong.cxs<86>";
+	dbg_object(this.m_theball).m_movevec=c_Vec2f.m_new.call(new c_Vec2f,t_deltaspeed*dbg_object(dbg_object(this.m_theball).m_direction).m_x,t_deltaspeed*dbg_object(dbg_object(this.m_theball).m_direction).m_y);
+	err_info="C:/GitHub/Pong/Pong.cxs<89>";
+	this.p_Collision(this.m_theball);
+	pop_err();
+}
+c_Court.prototype.p_Update=function(t_nowtime){
+	push_err();
+	err_info="C:/GitHub/Pong/Pong.cxs<72>";
+	var t_deltatime=(t_nowtime-this.m_oldtime)/1000.0;
+	err_info="C:/GitHub/Pong/Pong.cxs<74>";
+	this.m_oldtime=t_nowtime;
+	err_info="C:/GitHub/Pong/Pong.cxs<75>";
+	this.p_ResolveMoves(t_deltatime);
+	err_info="C:/GitHub/Pong/Pong.cxs<77>";
+	this.m_theball.p_Applymove();
+	err_info="C:/GitHub/Pong/Pong.cxs<79>";
 	pop_err();
 	return 0;
 }
 c_Court.prototype.p_Render=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<68>";
+	err_info="C:/GitHub/Pong/Pong.cxs<96>";
 	bb_graphics_Cls(0.0,0.0,0.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<69>";
-	bb_graphics_DrawRect((this.m_x),(this.m_y),(this.m_sizex),(this.m_sizey));
-	err_info="C:/GitHub/Pong/Pong.cxs<70>";
+	err_info="C:/GitHub/Pong/Pong.cxs<97>";
+	bb_graphics_SetColor(255.0,0.0,0.0);
+	err_info="C:/GitHub/Pong/Pong.cxs<98>";
+	bb_graphics_DrawRect((this.m_x-1),(this.m_y-1),(this.m_sizex+2),(this.m_sizey+2));
+	err_info="C:/GitHub/Pong/Pong.cxs<99>";
 	bb_graphics_SetColor(0.0,0.0,0.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<71>";
-	bb_graphics_DrawRect((this.m_x+5),(this.m_y+5),(this.m_sizex-10),(this.m_sizey-10));
-	err_info="C:/GitHub/Pong/Pong.cxs<72>";
+	err_info="C:/GitHub/Pong/Pong.cxs<100>";
+	bb_graphics_DrawRect((this.m_x),(this.m_y),(this.m_sizex),(this.m_sizey));
+	err_info="C:/GitHub/Pong/Pong.cxs<101>";
 	this.m_theball.p_Render();
-	err_info="C:/GitHub/Pong/Pong.cxs<73>";
+	err_info="C:/GitHub/Pong/Pong.cxs<102>";
 	pop_err();
 	return 0;
 }
@@ -4469,89 +4498,67 @@ function c_Ball(){
 	Object.call(this);
 	this.m_x=.0;
 	this.m_y=.0;
-	this.m_size=0;
+	this.m_size=.0;
 	this.m_direction=null;
-	this.m_speed=0.5;
+	this.m_speed=50.0;
+	this.m_movevec=c_Vec2f.m_new2.call(new c_Vec2f);
 }
 c_Ball.m_new=function(t_x,t_y,t_size,t_dirx,t_diry){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<101>";
+	err_info="C:/GitHub/Pong/Pong.cxs<137>";
 	dbg_object(this).m_x=(t_x);
-	err_info="C:/GitHub/Pong/Pong.cxs<102>";
+	err_info="C:/GitHub/Pong/Pong.cxs<138>";
 	dbg_object(this).m_y=(t_y);
-	err_info="C:/GitHub/Pong/Pong.cxs<103>";
-	dbg_object(this).m_size=t_size;
-	err_info="C:/GitHub/Pong/Pong.cxs<104>";
-	dbg_object(this).m_direction=c_Vec2i.m_new.call(new c_Vec2i,t_dirx,t_diry);
+	err_info="C:/GitHub/Pong/Pong.cxs<139>";
+	dbg_object(this).m_size=(t_size);
+	err_info="C:/GitHub/Pong/Pong.cxs<140>";
+	dbg_object(this).m_direction=c_Vec2f.m_new.call(new c_Vec2f,(t_dirx),(t_diry));
 	pop_err();
 	return this;
 }
 c_Ball.m_new2=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<93>";
+	err_info="C:/GitHub/Pong/Pong.cxs<128>";
 	pop_err();
 	return this;
 }
-c_Ball.prototype.p_Update=function(){
+c_Ball.prototype.p_Applymove=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<110>";
-	print("directionx"+String(dbg_object(this.m_direction).m_x));
-	err_info="C:/GitHub/Pong/Pong.cxs<111>";
-	print("directiony"+String(dbg_object(this.m_direction).m_y));
-	err_info="C:/GitHub/Pong/Pong.cxs<112>";
+	err_info="C:/GitHub/Pong/Pong.cxs<144>";
+	this.m_x+=dbg_object(this.m_movevec).m_x;
+	err_info="C:/GitHub/Pong/Pong.cxs<145>";
+	this.m_y+=dbg_object(this.m_movevec).m_y;
+	err_info="C:/GitHub/Pong/Pong.cxs<148>";
 	pop_err();
 	return 0;
-}
-c_Ball.prototype.p_AddSpeed=function(t_time){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<123>";
-	this.m_x=this.m_x+this.m_speed*(t_time)*(dbg_object(this.m_direction).m_x);
-	err_info="C:/GitHub/Pong/Pong.cxs<125>";
-	this.m_y=this.m_y+this.m_speed*(t_time)*(dbg_object(this.m_direction).m_y);
-	pop_err();
-}
-c_Ball.prototype.p_DirectionHandeler=function(t_change){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<131>";
-	if(t_change==1){
-		err_info="C:/GitHub/Pong/Pong.cxs<132>";
-		dbg_object(this.m_direction).m_x=dbg_object(this.m_direction).m_x*-1;
-	}else{
-		err_info="C:/GitHub/Pong/Pong.cxs<133>";
-		if(t_change==2){
-			err_info="C:/GitHub/Pong/Pong.cxs<134>";
-			dbg_object(this.m_direction).m_y=dbg_object(this.m_direction).m_y*-1;
-		}
-	}
-	pop_err();
 }
 c_Ball.prototype.p_Render=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<116>";
+	err_info="C:/GitHub/Pong/Pong.cxs<152>";
 	bb_graphics_SetColor(255.0,255.0,255.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<118>";
-	bb_graphics_DrawRect(this.m_x,this.m_y,(this.m_size),(this.m_size));
-	err_info="C:/GitHub/Pong/Pong.cxs<119>";
+	err_info="C:/GitHub/Pong/Pong.cxs<154>";
+	bb_graphics_DrawRect(this.m_x,this.m_y,this.m_size,this.m_size);
+	err_info="C:/GitHub/Pong/Pong.cxs<155>";
 	pop_err();
 	return 0;
 }
-function c_Vec2i(){
+function c_Vec2f(){
 	Object.call(this);
-	this.m_x=0;
-	this.m_y=0;
+	this.m_x=.0;
+	this.m_y=.0;
 }
-c_Vec2i.m_new=function(t_x,t_y){
+c_Vec2f.m_new=function(t_x,t_y){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<147>";
+	err_info="C:/GitHub/Pong/Pong.cxs<183>";
 	dbg_object(this).m_x=t_x;
-	err_info="C:/GitHub/Pong/Pong.cxs<148>";
+	err_info="C:/GitHub/Pong/Pong.cxs<184>";
 	dbg_object(this).m_y=t_y;
 	pop_err();
 	return this;
 }
-c_Vec2i.m_new2=function(){
+c_Vec2f.m_new2=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<142>";
+	err_info="C:/GitHub/Pong/Pong.cxs<178>";
 	pop_err();
 	return this;
 }
@@ -4561,9 +4568,6 @@ function bb_app_Millisecs(){
 	var t_=bb_app__game.Millisecs();
 	pop_err();
 	return t_;
-}
-function c_RETVAL(){
-	Object.call(this);
 }
 function bb_graphics_DebugRenderDevice(){
 	push_err();
