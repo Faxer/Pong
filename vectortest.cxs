@@ -1,0 +1,338 @@
+Strict
+Import mojo
+Import vectors
+
+Function distance:Float(x1:Int, y1:Int, x2:Int, y2:Int) 
+	Local x:Float=Sqrt(((x1 - x2)*(x1 - x2)) + ((y1 - y2)*(y1 - y2)) )
+	Return x
+End Function
+
+Global shapes:List<shape>
+Global square1:poly
+Global square2:poly
+Class collisions Extends App
+
+
+
+	Method OnUpdate:Int()
+		'Local s:shape=shapes.First()
+		
+		If KeyDown(KEY_LEFT)
+		square1.posx=square1.posx-1
+		Endif
+		
+		If KeyDown(KEY_RIGHT)
+		square1.posx=square1.posx+1
+		Endif
+		
+		If KeyDown(KEY_UP)
+		square1.posy=square1.posy-1
+		
+		Endif
+		
+		If KeyDown(KEY_DOWN)
+		square1.posy=square1.posy+1
+		Endif
+		
+		'square1 s2.angle
+		If square1.collide(square2)
+			square1.collided=True
+		'square1 "yeah"
+		Endif
+		
+		square1.angle=square1.angle+1
+		
+		square2.angle=square2.angle+1
+		
+		
+		Return 0
+	End Method
+
+	Method OnRender:Int()
+		Cls(0,0,0)
+		'For Local s:shape=Eachin shapes
+			square1.render()
+			square2.render()
+		
+			If 	square1.collided
+			Print "COLLI " + Millisecs()
+			Endif 
+		
+		
+		'Next
+		Return 0
+	End Method
+
+Method OnCreate:Int()
+SetUpdateRate(30)
+'shapes=New List<shape>
+'shapes.AddLast(New point(5,5))
+
+square1=New poly(150,250,3)
+'shapes.AddLast(p)
+'square1.angle=0
+square1.add_point(New point(-25,-25))
+
+'square1=New point(250,200)
+
+'square1.add_point(New point(25,-25))
+
+square1.add_point(New point(25,25))
+
+
+
+square1.add_point(New point(-25,25))
+
+
+square2=New poly(250,250,4)
+'shapes.AddLast(p)
+'p.angle=0
+square2.add_point(New point(-25,-25))
+
+
+square2.add_point(New point(25,-25))
+
+
+square2.add_point(New point(25,25))
+
+square2.add_point(New point(-25,25))
+
+
+'p.add_point(New point(0,25))
+
+
+Return 0
+End Method
+
+End Class
+
+Function Main:Int()
+New collisions
+Return 0
+End Function
+
+Class point Extends shape
+	Field rotatedx:Float
+	Field rotatedy:Float
+	
+	Method New(x1:Int,y1:Int)
+		Self.posx=x1
+	Self.posy=y1
+End Method
+
+Method rotate_around:Void(angle:Float,cx:Float,cy:Float)
+	
+	  Local s:Float = Sin(angle)
+	  Local c:Float = Cos(angle)
+	
+	  Local px:Float=Self.posx
+	  Local py:Float=Self.posy
+  
+	  Local xnew:Float = px * c - py * s
+	  Local ynew:Float = px * s + py * c
+	  
+	  Self.rotatedx = xnew + cx
+	  Self.rotatedy = ynew + cy
+	
+	End Method
+
+	
+
+	Method collide:Bool(shape2:shape)
+	
+	Local result:Bool
+		Local other_number:Int
+		If poly(shape2)
+		Local p:poly=poly(shape2)
+		Local angles:Int[p.num_points]
+		Local backwards_angles:Int[p.num_points]
+		Local angle_to_middle:Int[p.num_points]
+		Local tolerance_angle:Int[p.num_points]
+		Local point_num:Int
+		
+		For Local iter:Int=0 To p.num_points-1
+		Local t:Vector=New Vector(p.points[iter].rotatedx,p.points[iter].rotatedy)
+		Local t2:Vector=New Vector(p.points[p.next_point(iter)].rotatedx,p.points[p.next_point(iter)].rotatedy)
+		Local t3:Vector=New Vector(0,0)
+		t3.MakeBetween(t,t2)
+		
+		angles[iter]=t3.Direction
+		
+		
+		Local t22:Vector=New Vector(p.points[p.prev_point(iter)].rotatedx,p.points[p.prev_point(iter)].rotatedy)
+		Local t33:Vector=New Vector(0,0)
+		t33.MakeBetween(t,t22)
+		backwards_angles[iter]=t33.Direction
+		
+		
+		Local t222:Vector=New Vector(posx,posy)
+		Local t333:Vector=New Vector(0,0)
+		t333.MakeBetween(t,t222)
+		angle_to_middle[iter]=t333.Direction
+		tolerance_angle[iter]=Abs(angles[iter]-backwards_angles[iter])
+		Next
+		
+		
+		For Local iter:Int=0 To p.num_points-1
+		p.success[iter]=False
+		Next
+		
+		result=True
+		
+		For Local iter:Int=0 To p.num_points-1
+			Local t:Vector=New Vector(p.points[iter].rotatedx,p.points[iter].rotatedy)
+			Local t2:Vector=New Vector(Self.rotatedx,Self.rotatedy)
+			Local t3:Vector=New Vector(0,0)
+			t3.MakeBetween(t,t2)
+			If (t3.Direction<angles[iter] And t3.Direction>backwards_angles[iter]) Or (tolerance_angle[iter]>179)
+				p.success[iter]=True
+			Endif
+		
+		Next
+		
+		
+		For Local iter:Int=0 To p.num_points-1
+		If p.success[iter]=False
+		result=False
+		Endif
+		Next
+		
+		Endif
+	
+	
+		Return result
+	
+	End Method
+
+	Method render:Void()
+		If collided=True
+			SetColor(255,255,0)
+		Endif
+		DrawText(posx+" "+posy,posx,posy)
+		DrawRect(posx,posy,2,2)
+		SetColor(255,255,255)
+		collided=False
+	End Method
+End Class
+
+Class shape
+	Field posx:Float
+	Field posy:Float
+	Field angle:Int
+	Field width:Int
+	Field height:Int
+	Field collided:Bool
+
+
+	Method collide:Bool(shape2:shape) Abstract
+ 
+
+	Method render:Void()
+	End Method
+
+End Class
+
+
+Class poly Extends shape
+	Field success:Bool[]
+	Field num_points:Int
+	Field point_index:Int
+	Field points:point[]
+
+	Method add_point:Void(p:point)
+		points[point_index]=p
+		point_index=point_index+1
+	End Method
+
+	Method render:Void()
+
+		For Local iter:=0 To num_points-1
+			Self.points[iter].rotate_around(Self.angle,Self.posx,Self.posy)
+			Self.points[next_point(iter)].rotate_around(Self.angle,Self.posx,Self.posy)
+			If success[iter]=True
+				SetColor(255,0,0)
+			Endif
+			DrawText(iter,Self.points[iter].rotatedx,Self.points[iter].rotatedy)
+			DrawLine(Self.points[iter].rotatedx,Self.points[iter].rotatedy,Self.points[next_point(iter)].rotatedx,Self.points[next_point(iter)].rotatedy)
+			SetColor(255,255,255)
+		Next	
+		DrawRect(Self.posx,Self.posy,3,3)
+	End Method
+
+
+	Method next_point:Int(a:Int)
+	If a<num_points-1
+	Return a+1
+	Else
+	Return 0
+	Endif
+	End Method
+	
+	Method prev_point:Int(a:Int)
+	If a>0
+	Return a-1
+	Else
+	Return num_points-1
+	Endif
+	
+	End Method
+	
+	Method New(x:Int,y:Int,ps:Int)
+		Self.posx=x
+		Self.posy=y
+		Self.angle=0
+		
+		num_points=ps
+		
+		points=New point[ps]
+		success=New Bool[ps]
+		
+		For Local iter:Int=0 To ps-1
+			success[iter]=False
+		Next
+	
+	End Method
+	
+	Method collide:Bool(shape2:shape)
+			Local hit_this:Bool
+		If circle(shape2)
+		
+		Local circ:circle=circle(shape2)
+	
+		For Local iter:=0 To num_points-1
+				If distance(circ.posx,circ.posy,points[iter].rotatedx,points[iter].rotatedy)<circ.width
+				hit_this=True
+				
+				Endif
+		Next	
+				
+		Endif
+		If poly(shape2)
+		
+		Local pol:poly=poly(shape2)
+	
+		For Local iter:=0 To num_points-1
+		
+		
+				If Self.points[iter].collide(shape2)=True
+				hit_this=True
+				Return true
+		
+				Endif
+		Next	
+				
+		Endif
+		Return hit_this
+	End Method
+
+	
+End Class
+
+Class circle Extends shape
+Method New(x:Int,y:Int,wid:Int)
+Self.posx=x
+Self.posy=y
+Self.width=wid
+End Method
+
+End Class
