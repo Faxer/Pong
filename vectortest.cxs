@@ -40,7 +40,7 @@ Class collisions Extends App
 		'square1 "yeah"
 		Endif
 		
-		square1.angle=square1.angle+1
+		square1.angle= -20'square1.angle+1.2
 		
 		square2.angle=square2.angle+1
 		
@@ -63,46 +63,51 @@ Class collisions Extends App
 		Return 0
 	End Method
 
-Method OnCreate:Int()
-SetUpdateRate(30)
-'shapes=New List<shape>
-'shapes.AddLast(New point(5,5))
-
-square1=New poly(150,250,3)
-'shapes.AddLast(p)
-'square1.angle=0
-square1.add_point(New point(-25,-25))
-
-'square1=New point(250,200)
-
-'square1.add_point(New point(25,-25))
-
-square1.add_point(New point(25,25))
-
-
-
-square1.add_point(New point(-25,25))
-
-
-square2=New poly(250,250,4)
-'shapes.AddLast(p)
-'p.angle=0
-square2.add_point(New point(-25,-25))
-
-
-square2.add_point(New point(25,-25))
-
-
-square2.add_point(New point(25,25))
-
-square2.add_point(New point(-25,25))
-
-
-'p.add_point(New point(0,25))
-
-
-Return 0
-End Method
+	Method OnCreate:Int()
+		SetUpdateRate(30)
+		'shapes=New List<shape>
+		'shapes.AddLast(New point(5,5))
+		
+		square1=New poly(150,250,3)
+		'shapes.AddLast(p)
+		'square1.angle=0
+		square1.add_point(New point(-25,-25))
+		
+		'square1=New point(250,200)
+		
+		'square1.add_point(New point(25,-25))
+		
+		square1.add_point(New point(25,25))
+		
+		
+		
+		square1.add_point(New point(-25,25))
+		
+		
+		square2=New poly(250,250,5)
+		'shapes.AddLast(p)
+		'p.angle=0
+		
+		
+		square2.add_point(New point(-25,-25))
+		
+		
+		square2.add_point(New point(0,15))
+		
+		
+		square2.add_point(New point(25,-25))
+		
+		
+		square2.add_point(New point(25,25))
+		
+		square2.add_point(New point(-25,25))
+		
+		
+		'p.add_point(New point(0,25))
+		
+		
+	Return 0
+	End Method
 
 End Class
 

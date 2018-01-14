@@ -2334,95 +2334,76 @@ c_App.prototype.p_OnBack=function(){
 	pop_err();
 	return 0;
 }
-function c_collisions(){
+function c_myApp(){
 	c_App.call(this);
 }
-c_collisions.prototype=extend_class(c_App);
-c_collisions.m_new=function(){
+c_myApp.prototype=extend_class(c_App);
+c_myApp.m_new=function(){
 	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<13>";
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<27>";
 	c_App.m_new.call(this);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<13>";
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<27>";
 	pop_err();
 	return this;
 }
-c_collisions.prototype.p_OnUpdate=function(){
+c_myApp.prototype.p_OnCreate=function(){
 	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<20>";
-	if((bb_input_KeyDown(37))!=0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<21>";
-		dbg_object(bb_vectortest_square1).m_posx=dbg_object(bb_vectortest_square1).m_posx-1.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<31>";
+	bb_app_SetUpdateRate(60);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<34>";
+	bb_verlet_World=c_Physics.m_new.call(new c_Physics,0.0,0.5,10);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<37>";
+	var t_testBody=null;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<38>";
+	var t_X=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<39>";
+	var t_Y=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<40>";
+	for(t_X=20;t_X<=bb_app_DeviceWidth()-150;t_X=t_X+100){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<41>";
+		for(t_Y=50;t_Y<=bb_app_DeviceHeight()-250;t_Y=t_Y+100){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<42>";
+			t_testBody=c_PhysicsBody.m_new.call(new c_PhysicsBody);
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<43>";
+			t_testBody.p_CreateBox(t_X,t_Y,50,50);
+		}
 	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<24>";
-	if((bb_input_KeyDown(39))!=0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<25>";
-		dbg_object(bb_vectortest_square1).m_posx=dbg_object(bb_vectortest_square1).m_posx+1.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<49>";
+	for(t_X=50;t_X<=bb_app_DeviceWidth()-50;t_X=t_X+130){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<50>";
+		t_testBody=c_PhysicsBody.m_new.call(new c_PhysicsBody);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<51>";
+		var t_V1=c_Vertex.m_new.call(new c_Vertex,t_testBody,(t_X),45.0);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<52>";
+		var t_V2=c_Vertex.m_new.call(new c_Vertex,t_testBody,(t_X+50),0.0);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<53>";
+		var t_V3=c_Vertex.m_new.call(new c_Vertex,t_testBody,(t_X+100),45.0);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<54>";
+		c_Edge.m_new.call(new c_Edge,t_testBody,t_V1,t_V2,true);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<55>";
+		c_Edge.m_new.call(new c_Edge,t_testBody,t_V2,t_V3,true);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<56>";
+		c_Edge.m_new.call(new c_Edge,t_testBody,t_V3,t_V1,true);
 	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<28>";
+	pop_err();
+	return 0;
+}
+c_myApp.prototype.p_OnUpdate=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<64>";
 	if((bb_input_KeyDown(38))!=0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<29>";
-		dbg_object(bb_vectortest_square1).m_posy=dbg_object(bb_vectortest_square1).m_posy-1.0;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<66>";
+		bb_verlet_World.p_Update();
 	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<33>";
-	if((bb_input_KeyDown(40))!=0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<34>";
-		dbg_object(bb_vectortest_square1).m_posy=dbg_object(bb_vectortest_square1).m_posy+1.0;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<38>";
-	if(bb_vectortest_square1.p_collide(bb_vectortest_square2)){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<39>";
-		dbg_object(bb_vectortest_square1).m_collided=true;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<43>";
-	dbg_object(bb_vectortest_square1).m_angle=-20;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<45>";
-	dbg_object(bb_vectortest_square2).m_angle=dbg_object(bb_vectortest_square2).m_angle+1;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<48>";
 	pop_err();
 	return 0;
 }
-c_collisions.prototype.p_OnRender=function(){
+c_myApp.prototype.p_OnRender=function(){
 	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<52>";
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<74>";
 	bb_graphics_Cls(0.0,0.0,0.0);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<54>";
-	bb_vectortest_square1.p_render();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<55>";
-	bb_vectortest_square2.p_render();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<57>";
-	if(dbg_object(bb_vectortest_square1).m_collided){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<58>";
-		print("COLLI "+String(bb_app_Millisecs()));
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<63>";
-	pop_err();
-	return 0;
-}
-c_collisions.prototype.p_OnCreate=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<67>";
-	bb_app_SetUpdateRate(30);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<71>";
-	bb_vectortest_square1=c_poly.m_new.call(new c_poly,150,250,3);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<74>";
-	bb_vectortest_square1.p_add_point(c_point.m_new.call(new c_point,-25,-25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<80>";
-	bb_vectortest_square1.p_add_point(c_point.m_new.call(new c_point,25,25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<84>";
-	bb_vectortest_square1.p_add_point(c_point.m_new.call(new c_point,-25,25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<87>";
-	bb_vectortest_square2=c_poly.m_new.call(new c_poly,250,250,5);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<92>";
-	bb_vectortest_square2.p_add_point(c_point.m_new.call(new c_point,-25,-25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<95>";
-	bb_vectortest_square2.p_add_point(c_point.m_new.call(new c_point,0,15));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<98>";
-	bb_vectortest_square2.p_add_point(c_point.m_new.call(new c_point,25,-25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<101>";
-	bb_vectortest_square2.p_add_point(c_point.m_new.call(new c_point,25,25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<103>";
-	bb_vectortest_square2.p_add_point(c_point.m_new.call(new c_point,-25,25));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<109>";
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<76>";
+	bb_verlet_World.p_Render();
 	pop_err();
 	return 0;
 }
@@ -2572,9 +2553,8 @@ var bb_app__delegate=null;
 var bb_app__game=null;
 function bbMain(){
 	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<115>";
-	c_collisions.m_new.call(new c_collisions);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<116>";
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<21>";
+	c_myApp.m_new.call(new c_myApp);
 	pop_err();
 	return 0;
 }
@@ -2742,25 +2722,6 @@ c_Image.prototype.p_Init2=function(t_surf,t_x,t_y,t_iwidth,t_iheight,t_nframes,t
 	pop_err();
 	return this;
 }
-c_Image.prototype.p_Width=function(){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<81>";
-	pop_err();
-	return this.m_width;
-}
-c_Image.prototype.p_Height=function(){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<85>";
-	pop_err();
-	return this.m_height;
-}
-c_Image.prototype.p_Frames=function(){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<93>";
-	var t_=this.m_frames.length;
-	pop_err();
-	return t_;
-}
 function c_GraphicsContext(){
 	Object.call(this);
 	this.m_defaultFont=null;
@@ -2784,7 +2745,6 @@ function c_GraphicsContext(){
 	this.m_scissor_y=.0;
 	this.m_scissor_width=.0;
 	this.m_scissor_height=.0;
-	this.m_matrixStack=new_number_array(192);
 }
 c_GraphicsContext.m_new=function(){
 	push_err();
@@ -3737,6 +3697,678 @@ function bb_app_EndApp(){
 	error("");
 	pop_err();
 }
+var bb_app__updateRate=0;
+function bb_app_SetUpdateRate(t_hertz){
+	push_err();
+	err_info="/Applications/Cerberus/modules/mojo/app.cxs<224>";
+	bb_app__updateRate=t_hertz;
+	err_info="/Applications/Cerberus/modules/mojo/app.cxs<225>";
+	bb_app__game.SetUpdateRate(t_hertz);
+	pop_err();
+}
+function c_Physics(){
+	Object.call(this);
+	this.m_BodyCount=0;
+	this.m_VertexCount=0;
+	this.m_EdgeCount=0;
+	this.m_Timestep=.0;
+	this.m_Gravity=null;
+	this.m_Iterations=0;
+	this.m_Bodies=new_object_array(bb_verlet_MAX_BODIES);
+	this.m_Vertices=new_object_array(bb_verlet_MAX_VERTICES);
+	this.m_Edges=new_object_array(bb_verlet_MAX_EDGES);
+}
+c_Physics.m_new=function(t_GravitationX,t_GravitationY,t_pIterations){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<569>";
+	this.m_BodyCount=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<570>";
+	this.m_VertexCount=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<571>";
+	this.m_EdgeCount=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<572>";
+	this.m_Timestep=1.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<573>";
+	this.m_Gravity=c_Vec2.m_new.call(new c_Vec2,t_GravitationX,t_GravitationY);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<574>";
+	this.m_Iterations=t_pIterations;
+	pop_err();
+	return this;
+}
+c_Physics.m_new2=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<158>";
+	pop_err();
+	return this;
+}
+c_Physics.prototype.p_AddBody=function(t_Body){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<540>";
+	dbg_array(dbg_object(this).m_Bodies,dbg_object(this).m_BodyCount)[dbg_index]=t_Body;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<541>";
+	dbg_object(this).m_BodyCount=dbg_object(this).m_BodyCount+1;
+	pop_err();
+	return 0;
+}
+c_Physics.prototype.p_AddVertex=function(t_V){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<556>";
+	dbg_array(dbg_object(this).m_Vertices,dbg_object(this).m_VertexCount)[dbg_index]=t_V;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<557>";
+	dbg_object(this).m_VertexCount=dbg_object(this).m_VertexCount+1;
+	pop_err();
+	return 0;
+}
+c_Physics.prototype.p_AddEdge=function(t_E){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<549>";
+	dbg_array(dbg_object(this).m_Edges,dbg_object(this).m_EdgeCount)[dbg_index]=t_E;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<550>";
+	dbg_object(this).m_EdgeCount=dbg_object(this).m_EdgeCount+1;
+	pop_err();
+	return 0;
+}
+c_Physics.prototype.p_UpdateForces=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<197>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<198>";
+	for(t_i=0;t_i<=dbg_object(this).m_VertexCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<199>";
+		dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Acceleration=this.m_Gravity;
+	}
+	pop_err();
+}
+c_Physics.prototype.p_UpdateVerlet=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<207>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<208>";
+	for(t_i=0;t_i<=this.m_VertexCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<210>";
+		var t_V=dbg_array(this.m_Vertices,t_i)[dbg_index];
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<212>";
+		var t_TempX=dbg_object(dbg_object(t_V).m_Position).m_X;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<213>";
+		var t_TempY=dbg_object(dbg_object(t_V).m_Position).m_Y;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<215>";
+		dbg_object(dbg_object(t_V).m_Position).m_X=dbg_object(dbg_object(t_V).m_Position).m_X+(dbg_object(dbg_object(t_V).m_Position).m_X-dbg_object(dbg_object(t_V).m_OldPosition).m_X+dbg_object(dbg_object(t_V).m_Acceleration).m_X*this.m_Timestep*this.m_Timestep);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<216>";
+		dbg_object(dbg_object(t_V).m_Position).m_Y=dbg_object(dbg_object(t_V).m_Position).m_Y+(dbg_object(dbg_object(t_V).m_Position).m_Y-dbg_object(dbg_object(t_V).m_OldPosition).m_Y+dbg_object(dbg_object(t_V).m_Acceleration).m_Y*this.m_Timestep*this.m_Timestep);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<220>";
+		dbg_object(dbg_object(t_V).m_OldPosition).m_X=t_TempX;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<221>";
+		dbg_object(dbg_object(t_V).m_OldPosition).m_Y=t_TempY;
+	}
+	pop_err();
+}
+c_Physics.prototype.p_UpdateEdges=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<230>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<231>";
+	for(t_i=0;t_i<=this.m_EdgeCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<234>";
+		var t_E=dbg_array(this.m_Edges,t_i)[dbg_index];
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<237>";
+		var t_V1V2=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X,dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<238>";
+		t_V1V2.p_SubtractVec(dbg_object(dbg_object(t_E).m_V1).m_Position);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<240>";
+		var t_V1V2Length=t_V1V2.p_GetLength();
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<241>";
+		var t_Diff=t_V1V2Length-dbg_object(t_E).m_Length;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<243>";
+		t_V1V2.p_Normalize();
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<245>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_X=dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_X+dbg_object(t_V1V2).m_X*t_Diff*0.5;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<246>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_Y=dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_Y+dbg_object(t_V1V2).m_Y*t_Diff*0.5;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<247>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X=dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X-dbg_object(t_V1V2).m_X*t_Diff*0.5;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<248>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y=dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y-dbg_object(t_V1V2).m_Y*t_Diff*0.5;
+	}
+	pop_err();
+}
+c_Physics.prototype.p_BodiesOverlap=function(t_B1,t_B2){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<509>";
+	var t_=dbg_object(t_B1).m_MinX<=dbg_object(t_B2).m_MaxX && dbg_object(t_B1).m_MinY<=dbg_object(t_B2).m_MaxY && dbg_object(t_B1).m_MaxX>=dbg_object(t_B2).m_MinX && dbg_object(t_B2).m_MaxY>=dbg_object(t_B1).m_MinY;
+	pop_err();
+	return t_;
+}
+c_Physics.prototype.p_IntervalDistance=function(t_MinA,t_MaxA,t_MinB,t_MaxB){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<498>";
+	if(dbg_array(t_MinA,0)[dbg_index]<dbg_array(t_MinB,0)[dbg_index]){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<499>";
+		var t_=dbg_array(t_MinB,0)[dbg_index]-dbg_array(t_MaxA,0)[dbg_index];
+		pop_err();
+		return t_;
+	}else{
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<501>";
+		var t_2=dbg_array(t_MinA,0)[dbg_index]-dbg_array(t_MaxB,0)[dbg_index];
+		pop_err();
+		return t_2;
+	}
+}
+c_Physics.m_CollisionInfoNormal=null;
+c_Physics.m_CollisionInfoE=null;
+c_Physics.m_CollisionInfoDepth=0;
+c_Physics.m_CollisionInfoV=null;
+c_Physics.prototype.p_DetectCollision=function(t_B1,t_B2){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<309>";
+	var t_MinDistance=10000.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<311>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<312>";
+	for(t_i=0;t_i<=dbg_object(t_B1).m_EdgeCount+dbg_object(t_B2).m_EdgeCount-2;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<315>";
+		var t_E=null;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<319>";
+		if(t_i<dbg_object(t_B1).m_EdgeCount){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<321>";
+			t_E=dbg_array(dbg_object(t_B1).m_Edges,t_i)[dbg_index];
+		}else{
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<325>";
+			t_E=dbg_array(dbg_object(t_B2).m_Edges,t_i-dbg_object(t_B1).m_EdgeCount)[dbg_index];
+		}
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<334>";
+		if(!dbg_object(t_E).m_Boundary){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<336>";
+			continue;
+		}
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<341>";
+		var t_Axis=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_Y,dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<342>";
+		dbg_object(t_Axis).m_X=dbg_object(t_Axis).m_X-dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<343>";
+		dbg_object(t_Axis).m_Y=dbg_object(t_Axis).m_Y-dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_X;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<345>";
+		t_Axis.p_Normalize();
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<351>";
+		var t_MinA=new_number_array(1);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<352>";
+		var t_MinB=new_number_array(1);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<353>";
+		var t_MaxA=new_number_array(1);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<354>";
+		var t_MaxB=new_number_array(1);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<357>";
+		t_B1.p_ProjectToAxis(t_Axis,t_MinA,t_MaxA);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<359>";
+		t_B2.p_ProjectToAxis(t_Axis,t_MinB,t_MaxB);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<364>";
+		var t_Distance=this.p_IntervalDistance(t_MinA,t_MaxA,t_MinB,t_MaxB);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<369>";
+		if(t_Distance>0.0){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<371>";
+			pop_err();
+			return false;
+		}else{
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<373>";
+			if(bb_math_Abs2(t_Distance)<t_MinDistance){
+				err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<375>";
+				t_MinDistance=bb_math_Abs2(t_Distance);
+				err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<377>";
+				c_Physics.m_CollisionInfoNormal=t_Axis;
+				err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<379>";
+				c_Physics.m_CollisionInfoE=t_E;
+			}
+		}
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<386>";
+	c_Physics.m_CollisionInfoDepth=t_MinDistance;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<391>";
+	if(dbg_object(c_Physics.m_CollisionInfoE).m_Parent!=t_B2){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<393>";
+		var t_Temp=t_B2;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<395>";
+		t_B2=t_B1;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<397>";
+		t_B1=t_Temp;
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<403>";
+	var t_SignVec=c_Vec2.m_new.call(new c_Vec2,dbg_object(c_Physics.m_CollisionInfoNormal).m_X,dbg_object(c_Physics.m_CollisionInfoNormal).m_Y);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<404>";
+	var t_CenterDiff=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(t_B1).m_Center).m_X,dbg_object(dbg_object(t_B1).m_Center).m_Y);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<405>";
+	t_CenterDiff.p_SubtractVec(dbg_object(t_B2).m_Center);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<406>";
+	var t_SignFloat=dbg_object(t_SignVec).m_X*dbg_object(t_CenterDiff).m_X+dbg_object(t_SignVec).m_Y*dbg_object(t_CenterDiff).m_Y;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<407>";
+	var t_Sign=((bb_math_Sgn2(t_SignFloat))|0);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<415>";
+	if(t_Sign!=1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<418>";
+		dbg_object(c_Physics.m_CollisionInfoNormal).m_X=-dbg_object(c_Physics.m_CollisionInfoNormal).m_X;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<419>";
+		dbg_object(c_Physics.m_CollisionInfoNormal).m_Y=-dbg_object(c_Physics.m_CollisionInfoNormal).m_Y;
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<424>";
+	var t_CollisionVector=c_Vec2.m_new.call(new c_Vec2,dbg_object(c_Physics.m_CollisionInfoNormal).m_X,dbg_object(c_Physics.m_CollisionInfoNormal).m_Y);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<425>";
+	t_CollisionVector.p_Multiply(c_Physics.m_CollisionInfoDepth,c_Physics.m_CollisionInfoDepth);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<431>";
+	var t_SmallestD=10000.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<433>";
+	var t_Distance2=.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<436>";
+	for(t_i=0;t_i<=dbg_object(t_B1).m_VertexCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<439>";
+		var t_cDist=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(dbg_array(dbg_object(t_B1).m_Vertices,t_i)[dbg_index]).m_Position).m_X,dbg_object(dbg_object(dbg_array(dbg_object(t_B1).m_Vertices,t_i)[dbg_index]).m_Position).m_Y);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<440>";
+		t_cDist.p_SubtractVec(dbg_object(t_B2).m_Center);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<442>";
+		t_Distance2=dbg_object(c_Physics.m_CollisionInfoNormal).m_X*dbg_object(t_cDist).m_X+dbg_object(c_Physics.m_CollisionInfoNormal).m_Y*dbg_object(t_cDist).m_Y;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<446>";
+		if(t_Distance2<t_SmallestD){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<448>";
+			t_SmallestD=t_Distance2;
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<450>";
+			c_Physics.m_CollisionInfoV=dbg_array(dbg_object(t_B1).m_Vertices,t_i)[dbg_index];
+		}
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<459>";
+	pop_err();
+	return true;
+}
+c_Physics.prototype.p_ProcessCollision=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<468>";
+	var t_E1=dbg_object(c_Physics.m_CollisionInfoE).m_V1;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<470>";
+	var t_E2=dbg_object(c_Physics.m_CollisionInfoE).m_V2;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<472>";
+	var t_CollisionVector=c_Vec2.m_new.call(new c_Vec2,dbg_object(c_Physics.m_CollisionInfoNormal).m_X*c_Physics.m_CollisionInfoDepth,dbg_object(c_Physics.m_CollisionInfoNormal).m_Y*c_Physics.m_CollisionInfoDepth);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<474>";
+	var t_T=.0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<476>";
+	if(bb_math_Abs2(dbg_object(dbg_object(t_E1).m_Position).m_X-dbg_object(dbg_object(t_E2).m_Position).m_X)>bb_math_Abs2(dbg_object(dbg_object(t_E1).m_Position).m_Y-dbg_object(dbg_object(t_E2).m_Position).m_Y)){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<477>";
+		t_T=(dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_X-dbg_object(t_CollisionVector).m_X-dbg_object(dbg_object(t_E1).m_Position).m_X)/(dbg_object(dbg_object(t_E2).m_Position).m_X-dbg_object(dbg_object(t_E1).m_Position).m_X);
+	}else{
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<479>";
+		t_T=(dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_Y-dbg_object(t_CollisionVector).m_Y-dbg_object(dbg_object(t_E1).m_Position).m_Y)/(dbg_object(dbg_object(t_E2).m_Position).m_Y-dbg_object(dbg_object(t_E1).m_Position).m_Y);
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<481>";
+	var t_Lambda=1.0/(t_T*t_T+(1.0-t_T)*(1.0-t_T));
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<483>";
+	dbg_object(dbg_object(t_E1).m_Position).m_X=dbg_object(dbg_object(t_E1).m_Position).m_X-dbg_object(t_CollisionVector).m_X*(1.0-t_T)*0.5*t_Lambda;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<484>";
+	dbg_object(dbg_object(t_E1).m_Position).m_Y=dbg_object(dbg_object(t_E1).m_Position).m_Y-dbg_object(t_CollisionVector).m_Y*(1.0-t_T)*0.5*t_Lambda;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<486>";
+	dbg_object(dbg_object(t_E2).m_Position).m_X=dbg_object(dbg_object(t_E2).m_Position).m_X-dbg_object(t_CollisionVector).m_X*t_T*0.5*t_Lambda;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<487>";
+	dbg_object(dbg_object(t_E2).m_Position).m_Y=dbg_object(dbg_object(t_E2).m_Position).m_Y-dbg_object(t_CollisionVector).m_Y*t_T*0.5*t_Lambda;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<489>";
+	dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_X=dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_X+dbg_object(t_CollisionVector).m_X*0.5;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<490>";
+	dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_Y=dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_Y+dbg_object(t_CollisionVector).m_Y*0.5;
+	pop_err();
+}
+c_Physics.prototype.p_IterateCollisions=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<260>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<261>";
+	for(t_i=0;t_i<=this.m_Iterations-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<264>";
+		var t_t=0;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<265>";
+		for(t_t=0;t_t<=this.m_VertexCount-1;t_t=t_t+1){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<266>";
+			var t_Pos=dbg_object(dbg_array(this.m_Vertices,t_t)[dbg_index]).m_Position;
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<267>";
+			dbg_object(t_Pos).m_X=bb_math_Max2(bb_math_Min2(dbg_object(t_Pos).m_X,(bb_app_DeviceWidth())),0.0);
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<269>";
+			dbg_object(t_Pos).m_Y=bb_math_Max2(bb_math_Min2(dbg_object(t_Pos).m_Y,(bb_app_DeviceHeight())),0.0);
+		}
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<274>";
+		this.p_UpdateEdges();
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<277>";
+		var t_c=0;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<278>";
+		for(t_c=0;t_c<=this.m_BodyCount-1;t_c=t_c+1){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<279>";
+			dbg_array(this.m_Bodies,t_c)[dbg_index].p_CalculateCenter();
+		}
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<284>";
+		var t_B1=0;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<285>";
+		var t_B2=0;
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<286>";
+		for(t_B1=0;t_B1<=this.m_BodyCount-1;t_B1=t_B1+1){
+			err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<287>";
+			for(t_B2=0;t_B2<=this.m_BodyCount-1;t_B2=t_B2+1){
+				err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<288>";
+				if(t_B1!=t_B2){
+					err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<290>";
+					if(this.p_BodiesOverlap(dbg_array(this.m_Bodies,t_B1)[dbg_index],dbg_array(this.m_Bodies,t_B2)[dbg_index])){
+						err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<293>";
+						if(this.p_DetectCollision(dbg_array(this.m_Bodies,t_B1)[dbg_index],dbg_array(this.m_Bodies,t_B2)[dbg_index])){
+							err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<294>";
+							this.p_ProcessCollision();
+						}
+					}
+				}
+			}
+		}
+	}
+	pop_err();
+}
+c_Physics.prototype.p_Update=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<515>";
+	this.p_UpdateForces();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<516>";
+	this.p_UpdateVerlet();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<517>";
+	this.p_IterateCollisions();
+	pop_err();
+	return 0;
+}
+c_Physics.prototype.p_Render=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<524>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<525>";
+	for(t_i=0;t_i<=this.m_EdgeCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<526>";
+		bb_graphics_DrawLine(dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V1).m_Position).m_X,dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V1).m_Position).m_Y,dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V2).m_Position).m_X,dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V2).m_Position).m_Y);
+	}
+	pop_err();
+	return 0;
+}
+function c_Vec2(){
+	Object.call(this);
+	this.m_X=.0;
+	this.m_Y=.0;
+}
+c_Vec2.m_new=function(t_vX,t_vY){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<95>";
+	dbg_object(this).m_X=t_vX;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<96>";
+	dbg_object(this).m_Y=t_vY;
+	pop_err();
+	return this;
+}
+c_Vec2.m_new2=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<90>";
+	pop_err();
+	return this;
+}
+c_Vec2.prototype.p_SubtractVec=function(t_Vec){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<116>";
+	if(t_Vec==null){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<116>";
+		pop_err();
+		return 0;
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<117>";
+	this.m_X=this.m_X-dbg_object(t_Vec).m_X;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<118>";
+	this.m_Y=this.m_Y-dbg_object(t_Vec).m_Y;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_GetLength=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<144>";
+	var t_=Math.sqrt(this.m_X*this.m_X+this.m_Y*this.m_Y);
+	pop_err();
+	return t_;
+}
+c_Vec2.prototype.p_Normalize=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<149>";
+	var t_Lent=1.0/this.p_GetLength();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<150>";
+	this.m_X=this.m_X*t_Lent;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<151>";
+	this.m_Y=this.m_Y*t_Lent;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_AddVec=function(t_Vec){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<110>";
+	if(t_Vec==null){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<110>";
+		pop_err();
+		return 0;
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<111>";
+	this.m_X=this.m_X+dbg_object(t_Vec).m_X;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<112>";
+	this.m_Y=this.m_Y+dbg_object(t_Vec).m_Y;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_Divide=function(t__x,t__y){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<133>";
+	if(t__x==0.0 || t__y==0.0){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<133>";
+		pop_err();
+		return 0;
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<134>";
+	this.m_X=this.m_X/t__x;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<135>";
+	this.m_Y=this.m_Y/t__y;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_DotProduct=function(t_Vec){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<140>";
+	var t_=this.m_X*dbg_object(t_Vec).m_X+this.m_Y*dbg_object(t_Vec).m_Y;
+	pop_err();
+	return t_;
+}
+c_Vec2.prototype.p_Multiply=function(t__x,t__y){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<122>";
+	this.m_X=this.m_X*t__x;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<123>";
+	this.m_Y=this.m_Y*t__y;
+	pop_err();
+	return 0;
+}
+var bb_verlet_World=null;
+function c_PhysicsBody(){
+	Object.call(this);
+	this.m_VertexCount=0;
+	this.m_EdgeCount=0;
+	this.m_Vertices=new_object_array(bb_verlet_MAX_BODY_VERTICES);
+	this.m_Edges=new_object_array(bb_verlet_MAX_BODY_EDGES);
+	this.m_Center=null;
+	this.m_MinX=0;
+	this.m_MinY=0;
+	this.m_MaxX=0;
+	this.m_MaxY=0;
+}
+c_PhysicsBody.m_new=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<621>";
+	dbg_object(this).m_VertexCount=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<622>";
+	dbg_object(this).m_EdgeCount=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<623>";
+	bb_verlet_World.p_AddBody(this);
+	pop_err();
+	return this;
+}
+c_PhysicsBody.prototype.p_AddVertex=function(t_V){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<636>";
+	dbg_array(dbg_object(this).m_Vertices,dbg_object(this).m_VertexCount)[dbg_index]=t_V;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<637>";
+	dbg_object(this).m_VertexCount=dbg_object(this).m_VertexCount+1;
+	pop_err();
+}
+c_PhysicsBody.prototype.p_AddEdge=function(t_E){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<630>";
+	dbg_array(dbg_object(this).m_Edges,dbg_object(this).m_EdgeCount)[dbg_index]=t_E;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<631>";
+	dbg_object(this).m_EdgeCount=dbg_object(this).m_EdgeCount+1;
+	pop_err();
+}
+c_PhysicsBody.prototype.p_CreateBox=function(t_X,t_Y,t_Width,t_Height){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<685>";
+	var t_V1=c_Vertex.m_new.call(new c_Vertex,this,(t_X),(t_Y));
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<686>";
+	var t_V2=c_Vertex.m_new.call(new c_Vertex,this,(t_X+t_Width),(t_Y));
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<687>";
+	var t_V3=c_Vertex.m_new.call(new c_Vertex,this,(t_X+t_Width),(t_Y+t_Height));
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<688>";
+	var t_V4=c_Vertex.m_new.call(new c_Vertex,this,(t_X),(t_Y+t_Height));
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<689>";
+	c_Edge.m_new.call(new c_Edge,this,t_V1,t_V2,true);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<690>";
+	c_Edge.m_new.call(new c_Edge,this,t_V2,t_V3,true);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<691>";
+	c_Edge.m_new.call(new c_Edge,this,t_V3,t_V4,true);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<692>";
+	c_Edge.m_new.call(new c_Edge,this,t_V4,t_V1,true);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<693>";
+	c_Edge.m_new.call(new c_Edge,this,t_V1,t_V3,false);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<694>";
+	c_Edge.m_new.call(new c_Edge,this,t_V2,t_V4,false);
+	pop_err();
+	return 0;
+}
+c_PhysicsBody.prototype.p_CalculateCenter=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<661>";
+	this.m_Center=c_Vec2.m_new.call(new c_Vec2,0.0,0.0);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<662>";
+	this.m_MinX=10000;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<663>";
+	this.m_MinY=10000;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<664>";
+	this.m_MaxX=-10000;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<665>";
+	this.m_MaxY=-10000;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<666>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<667>";
+	for(t_i=0;t_i<=dbg_object(this).m_VertexCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<668>";
+		this.m_Center.p_AddVec(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<669>";
+		this.m_MinX=((bb_math_Min2((this.m_MinX),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_X))|0);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<671>";
+		this.m_MinY=((bb_math_Min2((this.m_MinY),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_Y))|0);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<673>";
+		this.m_MaxX=((bb_math_Max2((this.m_MaxX),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_X))|0);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<675>";
+		this.m_MaxY=((bb_math_Max2((this.m_MaxY),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_Y))|0);
+	}
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<677>";
+	this.m_Center.p_Divide((this.m_VertexCount),(this.m_VertexCount));
+	pop_err();
+}
+c_PhysicsBody.prototype.p_ProjectToAxis=function(t_Axis,t_MinV,t_MaxV){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<643>";
+	var t_DotP=t_Axis.p_DotProduct(dbg_object(dbg_array(this.m_Vertices,0)[dbg_index]).m_Position);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<644>";
+	dbg_array(t_MinV,0)[dbg_index]=t_DotP;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<645>";
+	dbg_array(t_MaxV,0)[dbg_index]=t_DotP;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<646>";
+	var t_i=0;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<647>";
+	for(t_i=0;t_i<=this.m_VertexCount-1;t_i=t_i+1){
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<649>";
+		t_DotP=t_Axis.p_DotProduct(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<651>";
+		dbg_array(t_MinV,0)[dbg_index]=bb_math_Min2(t_DotP,dbg_array(t_MinV,0)[dbg_index]);
+		err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<653>";
+		dbg_array(t_MaxV,0)[dbg_index]=bb_math_Max2(t_DotP,dbg_array(t_MaxV,0)[dbg_index]);
+	}
+	pop_err();
+	return 0;
+}
+var bb_verlet_MAX_BODIES=0;
+function c_Vertex(){
+	Object.call(this);
+	this.m_Position=null;
+	this.m_OldPosition=null;
+	this.m_Parent=null;
+	this.m_Acceleration=null;
+}
+c_Vertex.m_new=function(t_Body,t_PosX,t_PosY){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<721>";
+	dbg_object(this).m_Position=c_Vec2.m_new.call(new c_Vec2,t_PosX,t_PosY);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<723>";
+	dbg_object(this).m_OldPosition=c_Vec2.m_new.call(new c_Vec2,t_PosX,t_PosY);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<725>";
+	dbg_object(this).m_Parent=t_Body;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<728>";
+	t_Body.p_AddVertex(this);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<730>";
+	bb_verlet_World.p_AddVertex(this);
+	pop_err();
+	return this;
+}
+c_Vertex.m_new2=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<707>";
+	pop_err();
+	return this;
+}
+var bb_verlet_MAX_BODY_VERTICES=0;
+var bb_verlet_MAX_VERTICES=0;
+function c_Edge(){
+	Object.call(this);
+	this.m_V1=null;
+	this.m_V2=null;
+	this.m_Length=.0;
+	this.m_Boundary=false;
+	this.m_Parent=null;
+}
+c_Edge.m_new=function(t_Body,t_pV1,t_pV2,t_pBoundary){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<765>";
+	dbg_object(this).m_V1=t_pV1;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<767>";
+	dbg_object(this).m_V2=t_pV2;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<771>";
+	var t_this=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(t_pV2).m_Position).m_X,dbg_object(dbg_object(t_pV2).m_Position).m_Y);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<772>";
+	t_this.p_SubtractVec(dbg_object(t_pV1).m_Position);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<773>";
+	dbg_object(this).m_Length=t_this.p_GetLength();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<777>";
+	dbg_object(this).m_Boundary=t_pBoundary;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<781>";
+	dbg_object(this).m_Parent=t_Body;
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<786>";
+	t_Body.p_AddEdge(this);
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<788>";
+	bb_verlet_World.p_AddEdge(this);
+	pop_err();
+	return this;
+}
+c_Edge.m_new2=function(){
+	push_err();
+	err_info="/Users/peterscheutz/GitHub/Felix/Pong/verlet.cxs<741>";
+	pop_err();
+	return this;
+}
+var bb_verlet_MAX_BODY_EDGES=0;
+var bb_verlet_MAX_EDGES=0;
 function bb_input_KeyDown(t_key){
 	push_err();
 	err_info="/Applications/Cerberus/modules/mojo/input.cxs<40>";
@@ -3744,460 +4376,53 @@ function bb_input_KeyDown(t_key){
 	pop_err();
 	return t_;
 }
-function c_shape(){
-	Object.call(this);
-	this.m_posx=.0;
-	this.m_posy=.0;
-	this.m_width=0;
-	this.m_collided=false;
-	this.m_angle=0;
-}
-c_shape.prototype.p_collide=function(t_shape2){
-}
-c_shape.prototype.p_render=function(){
+function bb_math_Min(t_x,t_y){
 	push_err();
-	pop_err();
-}
-c_shape.m_new=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<223>";
-	pop_err();
-	return this;
-}
-function c_poly(){
-	c_shape.call(this);
-	this.m_num_points=0;
-	this.m_points=[];
-	this.m_success=[];
-	this.m_point_index=0;
-}
-c_poly.prototype=extend_class(c_shape);
-c_poly.prototype.p_next_point=function(t_a){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<269>";
-	if(t_a<this.m_num_points-1){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<270>";
-		var t_=t_a+1;
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<51>";
+	if(t_x<t_y){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<51>";
 		pop_err();
-		return t_;
-	}else{
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<272>";
+		return t_x;
+	}
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<52>";
+	pop_err();
+	return t_y;
+}
+function bb_math_Min2(t_x,t_y){
+	push_err();
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<78>";
+	if(t_x<t_y){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<78>";
 		pop_err();
-		return 0;
+		return t_x;
 	}
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<79>";
+	pop_err();
+	return t_y;
 }
-c_poly.prototype.p_prev_point=function(t_a){
+function bb_math_Max(t_x,t_y){
 	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<277>";
-	if(t_a>0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<278>";
-		var t_=t_a-1;
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<56>";
+	if(t_x>t_y){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<56>";
 		pop_err();
-		return t_;
-	}else{
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<280>";
-		var t_2=this.m_num_points-1;
+		return t_x;
+	}
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<57>";
+	pop_err();
+	return t_y;
+}
+function bb_math_Max2(t_x,t_y){
+	push_err();
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<83>";
+	if(t_x>t_y){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<83>";
 		pop_err();
-		return t_2;
+		return t_x;
 	}
-}
-c_poly.prototype.p_collide=function(t_shape2){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<302>";
-	var t_hit_this=false;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<303>";
-	if((object_downcast((t_shape2),c_circle))!=null){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<305>";
-		var t_circ=object_downcast((t_shape2),c_circle);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<307>";
-		for(var t_iter=0;t_iter<=this.m_num_points-1;t_iter=t_iter+1){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<308>";
-			if(bb_vectortest_distance(((dbg_object(t_circ).m_posx)|0),((dbg_object(t_circ).m_posy)|0),((dbg_object(dbg_array(this.m_points,t_iter)[dbg_index]).m_rotatedx)|0),((dbg_object(dbg_array(this.m_points,t_iter)[dbg_index]).m_rotatedy)|0))<(dbg_object(t_circ).m_width)){
-				err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<309>";
-				t_hit_this=true;
-			}
-		}
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<315>";
-	if((object_downcast((t_shape2),c_poly))!=null){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<317>";
-		var t_pol=object_downcast((t_shape2),c_poly);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<319>";
-		for(var t_iter2=0;t_iter2<=this.m_num_points-1;t_iter2=t_iter2+1){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<322>";
-			if(dbg_array(dbg_object(this).m_points,t_iter2)[dbg_index].p_collide(t_shape2)==true){
-				err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<323>";
-				t_hit_this=true;
-				err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<324>";
-				pop_err();
-				return true;
-			}
-		}
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<330>";
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<84>";
 	pop_err();
-	return t_hit_this;
-}
-c_poly.prototype.p_render=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<254>";
-	for(var t_iter=0;t_iter<=this.m_num_points-1;t_iter=t_iter+1){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<255>";
-		dbg_array(dbg_object(this).m_points,t_iter)[dbg_index].p_rotate_around((dbg_object(this).m_angle),dbg_object(this).m_posx,dbg_object(this).m_posy);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<256>";
-		dbg_array(dbg_object(this).m_points,this.p_next_point(t_iter))[dbg_index].p_rotate_around((dbg_object(this).m_angle),dbg_object(this).m_posx,dbg_object(this).m_posy);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<257>";
-		if(dbg_array(this.m_success,t_iter)[dbg_index]==true){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<258>";
-			bb_graphics_SetColor(255.0,0.0,0.0);
-		}
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<260>";
-		bb_graphics_DrawText(String(t_iter),dbg_object(dbg_array(dbg_object(this).m_points,t_iter)[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(this).m_points,t_iter)[dbg_index]).m_rotatedy,0.0,0.0);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<261>";
-		bb_graphics_DrawLine(dbg_object(dbg_array(dbg_object(this).m_points,t_iter)[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(this).m_points,t_iter)[dbg_index]).m_rotatedy,dbg_object(dbg_array(dbg_object(this).m_points,this.p_next_point(t_iter))[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(this).m_points,this.p_next_point(t_iter))[dbg_index]).m_rotatedy);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<262>";
-		bb_graphics_SetColor(255.0,255.0,255.0);
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<264>";
-	bb_graphics_DrawRect(dbg_object(this).m_posx,dbg_object(this).m_posy,3.0,3.0);
-	pop_err();
-}
-c_poly.m_new=function(t_x,t_y,t_ps){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<285>";
-	c_shape.m_new.call(this);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<286>";
-	dbg_object(this).m_posx=(t_x);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<287>";
-	dbg_object(this).m_posy=(t_y);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<288>";
-	dbg_object(this).m_angle=0;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<290>";
-	this.m_num_points=t_ps;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<292>";
-	this.m_points=new_object_array(t_ps);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<293>";
-	this.m_success=new_bool_array(t_ps);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<295>";
-	for(var t_iter=0;t_iter<=t_ps-1;t_iter=t_iter+1){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<296>";
-		dbg_array(this.m_success,t_iter)[dbg_index]=false;
-	}
-	pop_err();
-	return this;
-}
-c_poly.m_new2=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<241>";
-	c_shape.m_new.call(this);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<241>";
-	pop_err();
-	return this;
-}
-c_poly.prototype.p_add_point=function(t_p){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<248>";
-	dbg_array(this.m_points,this.m_point_index)[dbg_index]=t_p;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<249>";
-	this.m_point_index=this.m_point_index+1;
-	pop_err();
-}
-var bb_vectortest_square1=null;
-var bb_vectortest_square2=null;
-function c_circle(){
-	c_shape.call(this);
-}
-c_circle.prototype=extend_class(c_shape);
-function c_point(){
-	c_shape.call(this);
-	this.m_rotatedx=.0;
-	this.m_rotatedy=.0;
-}
-c_point.prototype=extend_class(c_shape);
-c_point.prototype.p_collide=function(t_shape2){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<148>";
-	var t_result=false;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<149>";
-	var t_other_number=0;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<150>";
-	if((object_downcast((t_shape2),c_poly))!=null){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<151>";
-		var t_p=object_downcast((t_shape2),c_poly);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<152>";
-		var t_angles=new_number_array(dbg_object(t_p).m_num_points);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<153>";
-		var t_backwards_angles=new_number_array(dbg_object(t_p).m_num_points);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<154>";
-		var t_angle_to_middle=new_number_array(dbg_object(t_p).m_num_points);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<155>";
-		var t_tolerance_angle=new_number_array(dbg_object(t_p).m_num_points);
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<156>";
-		var t_point_num=0;
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<158>";
-		for(var t_iter=0;t_iter<=dbg_object(t_p).m_num_points-1;t_iter=t_iter+1){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<159>";
-			var t_t=c_Vector.m_new.call(new c_Vector,dbg_object(dbg_array(dbg_object(t_p).m_points,t_iter)[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(t_p).m_points,t_iter)[dbg_index]).m_rotatedy);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<160>";
-			var t_t2=c_Vector.m_new.call(new c_Vector,dbg_object(dbg_array(dbg_object(t_p).m_points,t_p.p_next_point(t_iter))[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(t_p).m_points,t_p.p_next_point(t_iter))[dbg_index]).m_rotatedy);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<161>";
-			var t_t3=c_Vector.m_new.call(new c_Vector,0.0,0.0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<162>";
-			t_t3.p_MakeBetween(t_t,t_t2);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<164>";
-			dbg_array(t_angles,t_iter)[dbg_index]=((t_t3.p_Direction())|0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<167>";
-			var t_t22=c_Vector.m_new.call(new c_Vector,dbg_object(dbg_array(dbg_object(t_p).m_points,t_p.p_prev_point(t_iter))[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(t_p).m_points,t_p.p_prev_point(t_iter))[dbg_index]).m_rotatedy);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<168>";
-			var t_t33=c_Vector.m_new.call(new c_Vector,0.0,0.0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<169>";
-			t_t33.p_MakeBetween(t_t,t_t22);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<170>";
-			dbg_array(t_backwards_angles,t_iter)[dbg_index]=((t_t33.p_Direction())|0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<173>";
-			var t_t222=c_Vector.m_new.call(new c_Vector,this.m_posx,this.m_posy);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<174>";
-			var t_t333=c_Vector.m_new.call(new c_Vector,0.0,0.0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<175>";
-			t_t333.p_MakeBetween(t_t,t_t222);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<176>";
-			dbg_array(t_angle_to_middle,t_iter)[dbg_index]=((t_t333.p_Direction())|0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<177>";
-			dbg_array(t_tolerance_angle,t_iter)[dbg_index]=bb_math_Abs(dbg_array(t_angles,t_iter)[dbg_index]-dbg_array(t_backwards_angles,t_iter)[dbg_index]);
-		}
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<181>";
-		for(var t_iter2=0;t_iter2<=dbg_object(t_p).m_num_points-1;t_iter2=t_iter2+1){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<182>";
-			dbg_array(dbg_object(t_p).m_success,t_iter2)[dbg_index]=false;
-		}
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<185>";
-		t_result=true;
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<187>";
-		for(var t_iter3=0;t_iter3<=dbg_object(t_p).m_num_points-1;t_iter3=t_iter3+1){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<188>";
-			var t_t4=c_Vector.m_new.call(new c_Vector,dbg_object(dbg_array(dbg_object(t_p).m_points,t_iter3)[dbg_index]).m_rotatedx,dbg_object(dbg_array(dbg_object(t_p).m_points,t_iter3)[dbg_index]).m_rotatedy);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<189>";
-			var t_t23=c_Vector.m_new.call(new c_Vector,dbg_object(this).m_rotatedx,dbg_object(this).m_rotatedy);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<190>";
-			var t_t32=c_Vector.m_new.call(new c_Vector,0.0,0.0);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<191>";
-			t_t32.p_MakeBetween(t_t4,t_t23);
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<192>";
-			if(t_t32.p_Direction()<(dbg_array(t_angles,t_iter3)[dbg_index]) && t_t32.p_Direction()>(dbg_array(t_backwards_angles,t_iter3)[dbg_index]) || dbg_array(t_tolerance_angle,t_iter3)[dbg_index]>179){
-				err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<193>";
-				dbg_array(dbg_object(t_p).m_success,t_iter3)[dbg_index]=true;
-			}
-		}
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<199>";
-		for(var t_iter4=0;t_iter4<=dbg_object(t_p).m_num_points-1;t_iter4=t_iter4+1){
-			err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<200>";
-			if(dbg_array(dbg_object(t_p).m_success,t_iter4)[dbg_index]==false){
-				err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<201>";
-				t_result=false;
-			}
-		}
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<208>";
-	pop_err();
-	return t_result;
-}
-c_point.prototype.p_rotate_around=function(t_angle,t_cx,t_cy){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<130>";
-	var t_s=Math.sin((t_angle)*D2R);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<131>";
-	var t_c=Math.cos((t_angle)*D2R);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<133>";
-	var t_px=dbg_object(this).m_posx;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<134>";
-	var t_py=dbg_object(this).m_posy;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<136>";
-	var t_xnew=t_px*t_c-t_py*t_s;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<137>";
-	var t_ynew=t_px*t_s+t_py*t_c;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<139>";
-	dbg_object(this).m_rotatedx=t_xnew+t_cx;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<140>";
-	dbg_object(this).m_rotatedy=t_ynew+t_cy;
-	pop_err();
-}
-c_point.m_new=function(t_x1,t_y1){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<123>";
-	c_shape.m_new.call(this);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<124>";
-	dbg_object(this).m_posx=(t_x1);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<125>";
-	dbg_object(this).m_posy=(t_y1);
-	pop_err();
-	return this;
-}
-c_point.m_new2=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<119>";
-	c_shape.m_new.call(this);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<119>";
-	pop_err();
-	return this;
-}
-c_point.prototype.p_render=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<213>";
-	if(this.m_collided==true){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<214>";
-		bb_graphics_SetColor(255.0,255.0,0.0);
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<216>";
-	bb_graphics_DrawText(String(this.m_posx)+" "+String(this.m_posy),this.m_posx,this.m_posy,0.0,0.0);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<217>";
-	bb_graphics_DrawRect(this.m_posx,this.m_posy,2.0,2.0);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<218>";
-	bb_graphics_SetColor(255.0,255.0,255.0);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<219>";
-	this.m_collided=false;
-	pop_err();
-}
-function bb_vectortest_distance(t_x1,t_y1,t_x2,t_y2){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<6>";
-	var t_x=Math.sqrt((t_x1-t_x2)*(t_x1-t_x2)+(t_y1-t_y2)*(t_y1-t_y2));
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectortest.cxs<7>";
-	pop_err();
-	return t_x;
-}
-function c_Vector(){
-	Object.call(this);
-	this.m_X=.0;
-	this.m_Y=.0;
-}
-c_Vector.m_new=function(t_x,t_y){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<21>";
-	this.m_X=t_x;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<22>";
-	this.m_Y=t_y;
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_MakeBetween=function(t_PositionFrom,t_PositionToo){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<267>";
-	if(t_PositionFrom==null || t_PositionToo==null){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<267>";
-		pop_err();
-		return this;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<268>";
-	this.m_X=dbg_object(t_PositionToo).m_X-dbg_object(t_PositionFrom).m_X;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<269>";
-	this.m_Y=dbg_object(t_PositionToo).m_Y-dbg_object(t_PositionFrom).m_Y;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<270>";
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_Direction=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<189>";
-	var t_angle=(Math.atan2(-this.m_Y,this.m_X)*R2D);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<190>";
-	if(t_angle<0.0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<191>";
-		t_angle=t_angle+360.0;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<195>";
-	pop_err();
-	return t_angle;
-}
-c_Vector.prototype.p_Length=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<151>";
-	var t_=Math.sqrt(this.m_X*this.m_X+this.m_Y*this.m_Y);
-	pop_err();
-	return t_;
-}
-c_Vector.prototype.p_Set2=function(t_vector){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<28>";
-	this.m_X=dbg_object(t_vector).m_X;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<29>";
-	this.m_Y=dbg_object(t_vector).m_Y;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<30>";
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_Set3=function(t_x,t_y){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<33>";
-	this.m_X=t_x;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<34>";
-	this.m_Y=t_y;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<35>";
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_Normalize=function(){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<136>";
-	var t_Length=this.p_Length();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<137>";
-	if(t_Length==0.0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<138>";
-		pop_err();
-		return this;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<143>";
-	this.p_Set3(this.m_X/t_Length,this.m_Y/t_Length);
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<144>";
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_Multiply=function(t_Value){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<66>";
-	this.m_X*=t_Value;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<67>";
-	this.m_Y*=t_Value;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<68>";
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_Length2=function(t_length){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<158>";
-	if(t_length==0.0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<159>";
-		this.m_X=0.0;
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<160>";
-		this.m_Y=0.0;
-		pop_err();
-		return;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<164>";
-	if(this.m_X==0.0 && this.m_Y==0.0){
-		err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<165>";
-		this.m_X=t_length;
-	}
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<168>";
-	this.p_Normalize();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<169>";
-	this.p_Multiply(t_length);
-	pop_err();
-}
-c_Vector.prototype.p_MakeField=function(t_direction,t_length){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<89>";
-	this.m_X=Math.cos((-t_direction)*D2R)*t_length;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<90>";
-	this.m_Y=Math.sin((-t_direction)*D2R)*t_length;
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<91>";
-	pop_err();
-	return this;
-}
-c_Vector.prototype.p_Direction2=function(t_direction){
-	push_err();
-	err_info="/Users/peterscheutz/GitHub/Felix/Pong/vectors.cxs<205>";
-	this.p_MakeField(t_direction,this.p_Length());
-	pop_err();
+	return t_y;
 }
 function bb_math_Abs(t_x){
 	push_err();
@@ -4225,6 +4450,37 @@ function bb_math_Abs2(t_x){
 	pop_err();
 	return t_;
 }
+function bb_math_Sgn(t_x){
+	push_err();
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<41>";
+	if(t_x<0){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<41>";
+		pop_err();
+		return -1;
+	}
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<42>";
+	var t_=((t_x>0)?1:0);
+	pop_err();
+	return t_;
+}
+function bb_math_Sgn2(t_x){
+	push_err();
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<67>";
+	if(t_x<0.0){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<67>";
+		pop_err();
+		return -1.0;
+	}
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<68>";
+	if(t_x>0.0){
+		err_info="/Applications/Cerberus/modules/cerberus/math.cxs<68>";
+		pop_err();
+		return 1.0;
+	}
+	err_info="/Applications/Cerberus/modules/cerberus/math.cxs<69>";
+	pop_err();
+	return 0.0;
+}
 function bb_graphics_DebugRenderDevice(){
 	push_err();
 	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<53>";
@@ -4244,181 +4500,6 @@ function bb_graphics_Cls(t_r,t_g,t_b){
 	pop_err();
 	return 0;
 }
-function bb_graphics_DrawImage(t_image,t_x,t_y,t_frame){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<453>";
-	bb_graphics_DebugRenderDevice();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<454>";
-	if(t_frame<0 || t_frame>=dbg_object(t_image).m_frames.length){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<454>";
-		error("Invalid image frame");
-	}
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<457>";
-	var t_f=dbg_array(dbg_object(t_image).m_frames,t_frame)[dbg_index];
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<459>";
-	bb_graphics_context.p_Validate();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<461>";
-	if((dbg_object(t_image).m_flags&65536)!=0){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<462>";
-		bb_graphics_renderDevice.DrawSurface(dbg_object(t_image).m_surface,t_x-dbg_object(t_image).m_tx,t_y-dbg_object(t_image).m_ty);
-	}else{
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<464>";
-		bb_graphics_renderDevice.DrawSurface2(dbg_object(t_image).m_surface,t_x-dbg_object(t_image).m_tx,t_y-dbg_object(t_image).m_ty,dbg_object(t_f).m_x,dbg_object(t_f).m_y,dbg_object(t_image).m_width,dbg_object(t_image).m_height);
-	}
-	pop_err();
-	return 0;
-}
-function bb_graphics_PushMatrix(){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<334>";
-	var t_sp=dbg_object(bb_graphics_context).m_matrixSp;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<335>";
-	if(t_sp==dbg_object(bb_graphics_context).m_matrixStack.length){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<335>";
-		dbg_object(bb_graphics_context).m_matrixStack=resize_number_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp*2);
-	}
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<336>";
-	dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+0)[dbg_index]=dbg_object(bb_graphics_context).m_ix;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<337>";
-	dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+1)[dbg_index]=dbg_object(bb_graphics_context).m_iy;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<338>";
-	dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+2)[dbg_index]=dbg_object(bb_graphics_context).m_jx;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<339>";
-	dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+3)[dbg_index]=dbg_object(bb_graphics_context).m_jy;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<340>";
-	dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+4)[dbg_index]=dbg_object(bb_graphics_context).m_tx;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<341>";
-	dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+5)[dbg_index]=dbg_object(bb_graphics_context).m_ty;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<342>";
-	dbg_object(bb_graphics_context).m_matrixSp=t_sp+6;
-	pop_err();
-	return 0;
-}
-function bb_graphics_Transform(t_ix,t_iy,t_jx,t_jy,t_tx,t_ty){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<356>";
-	var t_ix2=t_ix*dbg_object(bb_graphics_context).m_ix+t_iy*dbg_object(bb_graphics_context).m_jx;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<357>";
-	var t_iy2=t_ix*dbg_object(bb_graphics_context).m_iy+t_iy*dbg_object(bb_graphics_context).m_jy;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<358>";
-	var t_jx2=t_jx*dbg_object(bb_graphics_context).m_ix+t_jy*dbg_object(bb_graphics_context).m_jx;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<359>";
-	var t_jy2=t_jx*dbg_object(bb_graphics_context).m_iy+t_jy*dbg_object(bb_graphics_context).m_jy;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<360>";
-	var t_tx2=t_tx*dbg_object(bb_graphics_context).m_ix+t_ty*dbg_object(bb_graphics_context).m_jx+dbg_object(bb_graphics_context).m_tx;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<361>";
-	var t_ty2=t_tx*dbg_object(bb_graphics_context).m_iy+t_ty*dbg_object(bb_graphics_context).m_jy+dbg_object(bb_graphics_context).m_ty;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<362>";
-	bb_graphics_SetMatrix(t_ix2,t_iy2,t_jx2,t_jy2,t_tx2,t_ty2);
-	pop_err();
-	return 0;
-}
-function bb_graphics_Transform2(t_m){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<352>";
-	bb_graphics_Transform(dbg_array(t_m,0)[dbg_index],dbg_array(t_m,1)[dbg_index],dbg_array(t_m,2)[dbg_index],dbg_array(t_m,3)[dbg_index],dbg_array(t_m,4)[dbg_index],dbg_array(t_m,5)[dbg_index]);
-	pop_err();
-	return 0;
-}
-function bb_graphics_Translate(t_x,t_y){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<366>";
-	bb_graphics_Transform(1.0,0.0,0.0,1.0,t_x,t_y);
-	pop_err();
-	return 0;
-}
-function bb_graphics_Rotate(t_angle){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<374>";
-	bb_graphics_Transform(Math.cos((t_angle)*D2R),-Math.sin((t_angle)*D2R),Math.sin((t_angle)*D2R),Math.cos((t_angle)*D2R),0.0,0.0);
-	pop_err();
-	return 0;
-}
-function bb_graphics_Scale(t_x,t_y){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<370>";
-	bb_graphics_Transform(t_x,0.0,0.0,t_y,0.0,0.0);
-	pop_err();
-	return 0;
-}
-function bb_graphics_PopMatrix(){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<346>";
-	var t_sp=dbg_object(bb_graphics_context).m_matrixSp-6;
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<347>";
-	bb_graphics_SetMatrix(dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+0)[dbg_index],dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+1)[dbg_index],dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+2)[dbg_index],dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+3)[dbg_index],dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+4)[dbg_index],dbg_array(dbg_object(bb_graphics_context).m_matrixStack,t_sp+5)[dbg_index]);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<348>";
-	dbg_object(bb_graphics_context).m_matrixSp=t_sp;
-	pop_err();
-	return 0;
-}
-function bb_graphics_DrawImage2(t_image,t_x,t_y,t_rotation,t_scaleX,t_scaleY,t_frame){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<471>";
-	bb_graphics_DebugRenderDevice();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<472>";
-	if(t_frame<0 || t_frame>=dbg_object(t_image).m_frames.length){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<472>";
-		error("Invalid image frame");
-	}
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<475>";
-	var t_f=dbg_array(dbg_object(t_image).m_frames,t_frame)[dbg_index];
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<477>";
-	bb_graphics_PushMatrix();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<479>";
-	bb_graphics_Translate(t_x,t_y);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<480>";
-	bb_graphics_Rotate(t_rotation);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<481>";
-	bb_graphics_Scale(t_scaleX,t_scaleY);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<483>";
-	bb_graphics_Translate(-dbg_object(t_image).m_tx,-dbg_object(t_image).m_ty);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<485>";
-	bb_graphics_context.p_Validate();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<487>";
-	if((dbg_object(t_image).m_flags&65536)!=0){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<488>";
-		bb_graphics_renderDevice.DrawSurface(dbg_object(t_image).m_surface,0.0,0.0);
-	}else{
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<490>";
-		bb_graphics_renderDevice.DrawSurface2(dbg_object(t_image).m_surface,0.0,0.0,dbg_object(t_f).m_x,dbg_object(t_f).m_y,dbg_object(t_image).m_width,dbg_object(t_image).m_height);
-	}
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<493>";
-	bb_graphics_PopMatrix();
-	pop_err();
-	return 0;
-}
-function bb_graphics_DrawText(t_text,t_x,t_y,t_xalign,t_yalign){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<578>";
-	bb_graphics_DebugRenderDevice();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<580>";
-	if(!((dbg_object(bb_graphics_context).m_font)!=null)){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<580>";
-		pop_err();
-		return 0;
-	}
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<582>";
-	var t_w=dbg_object(bb_graphics_context).m_font.p_Width();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<583>";
-	var t_h=dbg_object(bb_graphics_context).m_font.p_Height();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<585>";
-	t_x-=Math.floor((t_w*t_text.length)*t_xalign);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<586>";
-	t_y-=Math.floor((t_h)*t_yalign);
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<588>";
-	for(var t_i=0;t_i<t_text.length;t_i=t_i+1){
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<589>";
-		var t_ch=dbg_charCodeAt(t_text,t_i)-dbg_object(bb_graphics_context).m_firstChar;
-		err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<590>";
-		if(t_ch>=0 && t_ch<dbg_object(bb_graphics_context).m_font.p_Frames()){
-			err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<591>";
-			bb_graphics_DrawImage(dbg_object(bb_graphics_context).m_font,t_x+(t_i*t_w),t_y,t_ch);
-		}
-	}
-	pop_err();
-	return 0;
-}
 function bb_graphics_DrawLine(t_x1,t_y1,t_x2,t_y2){
 	push_err();
 	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<402>";
@@ -4429,33 +4510,6 @@ function bb_graphics_DrawLine(t_x1,t_y1,t_x2,t_y2){
 	bb_graphics_renderDevice.DrawLine(t_x1,t_y1,t_x2,t_y2);
 	pop_err();
 	return 0;
-}
-function bb_graphics_DrawRect(t_x,t_y,t_w,t_h){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<394>";
-	bb_graphics_DebugRenderDevice();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<396>";
-	bb_graphics_context.p_Validate();
-	err_info="/Applications/Cerberus/modules/mojo/graphics.cxs<397>";
-	bb_graphics_renderDevice.DrawRect(t_x,t_y,t_w,t_h);
-	pop_err();
-	return 0;
-}
-function bb_app_Millisecs(){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/app.cxs<233>";
-	var t_=bb_app__game.Millisecs();
-	pop_err();
-	return t_;
-}
-var bb_app__updateRate=0;
-function bb_app_SetUpdateRate(t_hertz){
-	push_err();
-	err_info="/Applications/Cerberus/modules/mojo/app.cxs<224>";
-	bb_app__updateRate=t_hertz;
-	err_info="/Applications/Cerberus/modules/mojo/app.cxs<225>";
-	bb_app__game.SetUpdateRate(t_hertz);
-	pop_err();
 }
 function bbInit(){
 	bb_app__app=null;
@@ -4471,8 +4525,16 @@ function bbInit(){
 	bb_app__displayModes=[];
 	bb_app__desktopMode=null;
 	bb_graphics_renderDevice=null;
-	bb_vectortest_square1=null;
-	bb_vectortest_square2=null;
 	bb_app__updateRate=0;
+	bb_verlet_World=null;
+	bb_verlet_MAX_BODIES=512;
+	bb_verlet_MAX_BODY_VERTICES=64;
+	bb_verlet_MAX_VERTICES=1024;
+	bb_verlet_MAX_BODY_EDGES=64;
+	bb_verlet_MAX_EDGES=1024;
+	c_Physics.m_CollisionInfoNormal=null;
+	c_Physics.m_CollisionInfoE=null;
+	c_Physics.m_CollisionInfoDepth=.0;
+	c_Physics.m_CollisionInfoV=null;
 }
 //${TRANSCODE_END}
