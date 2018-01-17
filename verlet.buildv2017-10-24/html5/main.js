@@ -2336,60 +2336,76 @@ c_App.prototype.p_OnBack=function(){
 	pop_err();
 	return 0;
 }
-function c_Pong(){
+function c_myApp(){
 	c_App.call(this);
-	this.m_mycourt=null;
 }
-c_Pong.prototype=extend_class(c_App);
-c_Pong.m_new=function(){
+c_myApp.prototype=extend_class(c_App);
+c_myApp.m_new=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<16>";
+	err_info="C:/GitHub/Pong/verlet.cxs<27>";
 	c_App.m_new.call(this);
-	err_info="C:/GitHub/Pong/Pong.cxs<16>";
+	err_info="C:/GitHub/Pong/verlet.cxs<27>";
 	pop_err();
 	return this;
 }
-c_Pong.prototype.p_OnCreate=function(){
+c_myApp.prototype.p_OnCreate=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<20>";
-	this.m_mycourt=c_Court.m_new.call(new c_Court,100,100,bb_app_DeviceWidth()-200,bb_app_DeviceHeight()-200);
-	err_info="C:/GitHub/Pong/Pong.cxs<21>";
+	err_info="C:/GitHub/Pong/verlet.cxs<31>";
+	bb_app_SetUpdateRate(60);
+	err_info="C:/GitHub/Pong/verlet.cxs<34>";
+	bb_verlet_World=c_Physics.m_new.call(new c_Physics,0.0,0.5,10);
+	err_info="C:/GitHub/Pong/verlet.cxs<37>";
+	var t_testBody=null;
+	err_info="C:/GitHub/Pong/verlet.cxs<38>";
+	var t_X=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<39>";
+	var t_Y=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<40>";
+	for(t_X=20;t_X<=bb_app_DeviceWidth()-150;t_X=t_X+100){
+		err_info="C:/GitHub/Pong/verlet.cxs<41>";
+		for(t_Y=50;t_Y<=bb_app_DeviceHeight()-250;t_Y=t_Y+100){
+			err_info="C:/GitHub/Pong/verlet.cxs<42>";
+			t_testBody=c_PhysicsBody.m_new.call(new c_PhysicsBody);
+			err_info="C:/GitHub/Pong/verlet.cxs<43>";
+			t_testBody.p_CreateBox(t_X,t_Y,50,50);
+		}
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<49>";
+	for(t_X=50;t_X<=bb_app_DeviceWidth()-50;t_X=t_X+130){
+		err_info="C:/GitHub/Pong/verlet.cxs<50>";
+		t_testBody=c_PhysicsBody.m_new.call(new c_PhysicsBody);
+		err_info="C:/GitHub/Pong/verlet.cxs<51>";
+		var t_V1=c_Vertex.m_new.call(new c_Vertex,t_testBody,(t_X),45.0);
+		err_info="C:/GitHub/Pong/verlet.cxs<52>";
+		var t_V2=c_Vertex.m_new.call(new c_Vertex,t_testBody,(t_X+50),0.0);
+		err_info="C:/GitHub/Pong/verlet.cxs<53>";
+		var t_V3=c_Vertex.m_new.call(new c_Vertex,t_testBody,(t_X+100),45.0);
+		err_info="C:/GitHub/Pong/verlet.cxs<54>";
+		c_Edge.m_new.call(new c_Edge,t_testBody,t_V1,t_V2,true);
+		err_info="C:/GitHub/Pong/verlet.cxs<55>";
+		c_Edge.m_new.call(new c_Edge,t_testBody,t_V2,t_V3,true);
+		err_info="C:/GitHub/Pong/verlet.cxs<56>";
+		c_Edge.m_new.call(new c_Edge,t_testBody,t_V3,t_V1,true);
+	}
 	pop_err();
 	return 0;
 }
-c_Pong.prototype.p_OnUpdate=function(){
+c_myApp.prototype.p_OnUpdate=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<25>";
-	var t_nowtime=bb_app_Millisecs();
-	err_info="C:/GitHub/Pong/Pong.cxs<27>";
-	this.m_mycourt.p_Update(t_nowtime);
-	err_info="C:/GitHub/Pong/Pong.cxs<28>";
+	err_info="C:/GitHub/Pong/verlet.cxs<64>";
+	if((bb_input_KeyDown(38))!=0){
+		err_info="C:/GitHub/Pong/verlet.cxs<66>";
+		bb_verlet_World.p_Update();
+	}
 	pop_err();
 	return 0;
 }
-c_Pong.prototype.p_OnRender=function(){
+c_myApp.prototype.p_OnRender=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<32>";
-	this.m_mycourt.p_Render();
-	err_info="C:/GitHub/Pong/Pong.cxs<33>";
-	pop_err();
-	return 0;
-}
-c_Pong.prototype.p_OnSuspend=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<37>";
-	print(" OnSuspend");
-	err_info="C:/GitHub/Pong/Pong.cxs<38>";
-	pop_err();
-	return 0;
-}
-c_Pong.prototype.p_OnResume=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<42>";
-	dbg_object(this.m_mycourt).m_oldtime=bb_app_Millisecs();
-	err_info="C:/GitHub/Pong/Pong.cxs<43>";
-	print(" OnResume");
-	err_info="C:/GitHub/Pong/Pong.cxs<44>";
+	err_info="C:/GitHub/Pong/verlet.cxs<74>";
+	bb_graphics_Cls(0.0,0.0,0.0);
+	err_info="C:/GitHub/Pong/verlet.cxs<76>";
+	bb_verlet_World.p_Render();
 	pop_err();
 	return 0;
 }
@@ -2539,9 +2555,8 @@ var bb_app__delegate=null;
 var bb_app__game=null;
 function bbMain(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<5>";
-	var t_theapp=c_Pong.m_new.call(new c_Pong);
-	err_info="C:/GitHub/Pong/Pong.cxs<6>";
+	err_info="C:/GitHub/Pong/verlet.cxs<21>";
+	c_myApp.m_new.call(new c_myApp);
 	pop_err();
 	return 0;
 }
@@ -3795,6 +3810,18 @@ c_InputDevice.prototype.p_MotionEvent=function(t_event,t_data,t_x,t_y,t_z){
 	this.m__accelZ=t_z;
 	pop_err();
 }
+c_InputDevice.prototype.p_KeyDown=function(t_key){
+	push_err();
+	err_info="C:/Cerberus/modules/mojo/inputdevice.cxs<47>";
+	if(t_key>0 && t_key<512){
+		err_info="C:/Cerberus/modules/mojo/inputdevice.cxs<47>";
+		pop_err();
+		return dbg_array(this.m__keyDown,t_key)[dbg_index];
+	}
+	err_info="C:/Cerberus/modules/mojo/inputdevice.cxs<48>";
+	pop_err();
+	return false;
+}
 function c_JoyState(){
 	Object.call(this);
 	this.m_joyx=new_number_array(2);
@@ -4376,131 +4403,6 @@ function bb_app_EndApp(){
 	error("");
 	pop_err();
 }
-function c_Court(){
-	Object.call(this);
-	this.m_x=0;
-	this.m_y=0;
-	this.m_sizex=0;
-	this.m_sizey=0;
-	this.m_theball=null;
-	this.m_player1=null;
-	this.m_player2=null;
-	this.m_oldtime=0;
-}
-c_Court.m_new=function(t_x,t_y,t_sizex,t_sizey){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<63>";
-	bb_app_SetUpdateRate(0);
-	err_info="C:/GitHub/Pong/Pong.cxs<64>";
-	dbg_object(this).m_x=t_x;
-	err_info="C:/GitHub/Pong/Pong.cxs<65>";
-	dbg_object(this).m_y=t_y;
-	err_info="C:/GitHub/Pong/Pong.cxs<66>";
-	dbg_object(this).m_sizex=t_sizex;
-	err_info="C:/GitHub/Pong/Pong.cxs<67>";
-	dbg_object(this).m_sizey=t_sizey;
-	err_info="C:/GitHub/Pong/Pong.cxs<69>";
-	this.m_theball=c_Ball.m_new.call(new c_Ball,((bb_app_DeviceWidth()/2)|0),((bb_app_DeviceHeight()/2)|0),10,1,1);
-	err_info="C:/GitHub/Pong/Pong.cxs<71>";
-	this.m_player1=c_Paddle.m_new.call(new c_Paddle,(t_x+((t_sizex/10)|0)),((bb_app_DeviceHeight()/2)|0),5.0,50.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<72>";
-	this.m_player2=c_Paddle.m_new.call(new c_Paddle,(t_sizex+((t_sizex/10)|0)),((bb_app_DeviceHeight()/2)|0),5.0,50.0);
-	pop_err();
-	return this;
-}
-c_Court.m_new2=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<50>";
-	pop_err();
-	return this;
-}
-c_Court.prototype.p_Collision=function(t_ball){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<119>";
-	if(dbg_object(t_ball).m_x<(this.m_x)){
-		err_info="C:/GitHub/Pong/Pong.cxs<120>";
-		dbg_object(dbg_object(t_ball).m_movevec).m_x=dbg_object(dbg_object(t_ball).m_movevec).m_x*-1.0;
-		err_info="C:/GitHub/Pong/Pong.cxs<121>";
-		dbg_object(dbg_object(t_ball).m_direction).m_x=dbg_object(dbg_object(t_ball).m_direction).m_x*-1.0;
-	}else{
-		err_info="C:/GitHub/Pong/Pong.cxs<122>";
-		if(dbg_object(t_ball).m_x>(this.m_x+this.m_sizex)-dbg_object(t_ball).m_size){
-			err_info="C:/GitHub/Pong/Pong.cxs<123>";
-			dbg_object(dbg_object(t_ball).m_movevec).m_x=dbg_object(dbg_object(t_ball).m_movevec).m_x*-1.0;
-			err_info="C:/GitHub/Pong/Pong.cxs<124>";
-			dbg_object(dbg_object(t_ball).m_direction).m_x=dbg_object(dbg_object(t_ball).m_direction).m_x*-1.0;
-		}else{
-			err_info="C:/GitHub/Pong/Pong.cxs<125>";
-			if(dbg_object(t_ball).m_y<(this.m_y)){
-				err_info="C:/GitHub/Pong/Pong.cxs<126>";
-				dbg_object(dbg_object(t_ball).m_movevec).m_y=dbg_object(dbg_object(t_ball).m_movevec).m_y*-1.0;
-				err_info="C:/GitHub/Pong/Pong.cxs<127>";
-				dbg_object(dbg_object(t_ball).m_direction).m_y=dbg_object(dbg_object(t_ball).m_direction).m_y*-1.0;
-			}else{
-				err_info="C:/GitHub/Pong/Pong.cxs<128>";
-				if(dbg_object(t_ball).m_y>(this.m_y+this.m_sizey)-dbg_object(t_ball).m_size){
-					err_info="C:/GitHub/Pong/Pong.cxs<130>";
-					dbg_object(dbg_object(t_ball).m_movevec).m_y=dbg_object(dbg_object(t_ball).m_movevec).m_y*-1.0;
-					err_info="C:/GitHub/Pong/Pong.cxs<131>";
-					dbg_object(dbg_object(t_ball).m_direction).m_y=dbg_object(dbg_object(t_ball).m_direction).m_y*-1.0;
-				}
-			}
-		}
-	}
-	pop_err();
-}
-c_Court.prototype.p_ResolveMoves=function(t_deltatime){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<93>";
-	var t_deltaspeed=dbg_object(this.m_theball).m_speed*t_deltatime;
-	err_info="C:/GitHub/Pong/Pong.cxs<95>";
-	dbg_object(this.m_theball).m_movevec=c_Vec2f.m_new.call(new c_Vec2f,t_deltaspeed*dbg_object(dbg_object(this.m_theball).m_direction).m_x,t_deltaspeed*dbg_object(dbg_object(this.m_theball).m_direction).m_y);
-	err_info="C:/GitHub/Pong/Pong.cxs<98>";
-	this.p_Collision(this.m_theball);
-	pop_err();
-}
-c_Court.prototype.p_Update=function(t_nowtime){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<78>";
-	var t_deltatime=(t_nowtime-this.m_oldtime)/1000.0;
-	err_info="C:/GitHub/Pong/Pong.cxs<80>";
-	this.m_oldtime=t_nowtime;
-	err_info="C:/GitHub/Pong/Pong.cxs<81>";
-	this.p_ResolveMoves(t_deltatime);
-	err_info="C:/GitHub/Pong/Pong.cxs<83>";
-	this.m_theball.p_Applymove();
-	err_info="C:/GitHub/Pong/Pong.cxs<85>";
-	this.m_player1.p_Update2();
-	err_info="C:/GitHub/Pong/Pong.cxs<86>";
-	this.m_player2.p_Update2();
-	err_info="C:/GitHub/Pong/Pong.cxs<88>";
-	pop_err();
-	return 0;
-}
-c_Court.prototype.p_Render=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<105>";
-	bb_graphics_Cls(0.0,0.0,0.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<106>";
-	bb_graphics_SetColor(255.0,0.0,0.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<107>";
-	bb_graphics_DrawRect((this.m_x-1),(this.m_y-1),(this.m_sizex+2),(this.m_sizey+2));
-	err_info="C:/GitHub/Pong/Pong.cxs<108>";
-	bb_graphics_SetColor(0.0,0.0,0.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<109>";
-	bb_graphics_DrawRect((this.m_x),(this.m_y),(this.m_sizex),(this.m_sizey));
-	err_info="C:/GitHub/Pong/Pong.cxs<110>";
-	this.m_theball.p_Render();
-	err_info="C:/GitHub/Pong/Pong.cxs<111>";
-	bb_graphics_SetColor(255.0,0.0,0.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<112>";
-	this.m_player1.p_Render();
-	err_info="C:/GitHub/Pong/Pong.cxs<113>";
-	this.m_player2.p_Render();
-	err_info="C:/GitHub/Pong/Pong.cxs<114>";
-	pop_err();
-	return 0;
-}
 var bb_app__updateRate=0;
 function bb_app_SetUpdateRate(t_hertz){
 	push_err();
@@ -4510,124 +4412,780 @@ function bb_app_SetUpdateRate(t_hertz){
 	bb_app__game.SetUpdateRate(t_hertz);
 	pop_err();
 }
-function c_Ball(){
+function c_Physics(){
 	Object.call(this);
-	this.m_x=.0;
-	this.m_y=.0;
-	this.m_size=.0;
-	this.m_direction=null;
-	this.m_speed=50.0;
-	this.m_movevec=c_Vec2f.m_new2.call(new c_Vec2f);
+	this.m_BodyCount=0;
+	this.m_VertexCount=0;
+	this.m_EdgeCount=0;
+	this.m_Timestep=.0;
+	this.m_Gravity=null;
+	this.m_Iterations=0;
+	this.m_Bodies=new_object_array(bb_verlet_MAX_BODIES);
+	this.m_Vertices=new_object_array(bb_verlet_MAX_VERTICES);
+	this.m_Edges=new_object_array(bb_verlet_MAX_EDGES);
 }
-c_Ball.m_new=function(t_x,t_y,t_size,t_dirx,t_diry){
+c_Physics.m_new=function(t_GravitationX,t_GravitationY,t_pIterations){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<149>";
-	dbg_object(this).m_x=(t_x);
-	err_info="C:/GitHub/Pong/Pong.cxs<150>";
-	dbg_object(this).m_y=(t_y);
-	err_info="C:/GitHub/Pong/Pong.cxs<151>";
-	dbg_object(this).m_size=(t_size);
-	err_info="C:/GitHub/Pong/Pong.cxs<152>";
-	dbg_object(this).m_direction=c_Vec2f.m_new.call(new c_Vec2f,(t_dirx),(t_diry));
+	err_info="C:/GitHub/Pong/verlet.cxs<569>";
+	this.m_BodyCount=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<570>";
+	this.m_VertexCount=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<571>";
+	this.m_EdgeCount=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<572>";
+	this.m_Timestep=1.0;
+	err_info="C:/GitHub/Pong/verlet.cxs<573>";
+	this.m_Gravity=c_Vec2.m_new.call(new c_Vec2,t_GravitationX,t_GravitationY);
+	err_info="C:/GitHub/Pong/verlet.cxs<574>";
+	this.m_Iterations=t_pIterations;
 	pop_err();
 	return this;
 }
-c_Ball.m_new2=function(){
+c_Physics.m_new2=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<140>";
+	err_info="C:/GitHub/Pong/verlet.cxs<158>";
 	pop_err();
 	return this;
 }
-c_Ball.prototype.p_Applymove=function(){
+c_Physics.prototype.p_AddBody=function(t_Body){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<156>";
-	this.m_x+=dbg_object(this.m_movevec).m_x;
-	err_info="C:/GitHub/Pong/Pong.cxs<157>";
-	this.m_y+=dbg_object(this.m_movevec).m_y;
-	err_info="C:/GitHub/Pong/Pong.cxs<160>";
+	err_info="C:/GitHub/Pong/verlet.cxs<540>";
+	dbg_array(dbg_object(this).m_Bodies,dbg_object(this).m_BodyCount)[dbg_index]=t_Body;
+	err_info="C:/GitHub/Pong/verlet.cxs<541>";
+	dbg_object(this).m_BodyCount=dbg_object(this).m_BodyCount+1;
 	pop_err();
 	return 0;
 }
-c_Ball.prototype.p_Render=function(){
+c_Physics.prototype.p_AddVertex=function(t_V){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<164>";
-	bb_graphics_SetColor(255.0,255.0,255.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<166>";
-	bb_graphics_DrawRect(this.m_x,this.m_y,this.m_size,this.m_size);
-	err_info="C:/GitHub/Pong/Pong.cxs<167>";
+	err_info="C:/GitHub/Pong/verlet.cxs<556>";
+	dbg_array(dbg_object(this).m_Vertices,dbg_object(this).m_VertexCount)[dbg_index]=t_V;
+	err_info="C:/GitHub/Pong/verlet.cxs<557>";
+	dbg_object(this).m_VertexCount=dbg_object(this).m_VertexCount+1;
 	pop_err();
 	return 0;
 }
-function c_Vec2f(){
-	Object.call(this);
-	this.m_x=.0;
-	this.m_y=.0;
-}
-c_Vec2f.m_new=function(t_x,t_y){
+c_Physics.prototype.p_AddEdge=function(t_E){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<230>";
-	dbg_object(this).m_x=t_x;
-	err_info="C:/GitHub/Pong/Pong.cxs<231>";
-	dbg_object(this).m_y=t_y;
-	pop_err();
-	return this;
-}
-c_Vec2f.m_new2=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<225>";
-	pop_err();
-	return this;
-}
-function c_Paddle(){
-	Object.call(this);
-	this.m_x=.0;
-	this.m_y=0;
-	this.m_sizex=0;
-	this.m_sizey=0;
-}
-c_Paddle.m_new=function(t_x,t_y,t_sizex,t_sizey){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<183>";
-	dbg_object(this).m_x=t_x;
-	err_info="C:/GitHub/Pong/Pong.cxs<184>";
-	dbg_object(this).m_y=((t_y)|0);
-	err_info="C:/GitHub/Pong/Pong.cxs<185>";
-	dbg_object(this).m_sizex=((t_sizex)|0);
-	err_info="C:/GitHub/Pong/Pong.cxs<186>";
-	dbg_object(this).m_sizey=((t_sizey)|0);
-	pop_err();
-	return this;
-}
-c_Paddle.m_new2=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<175>";
-	pop_err();
-	return this;
-}
-c_Paddle.prototype.p_Update2=function(){
-	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<193>";
+	err_info="C:/GitHub/Pong/verlet.cxs<549>";
+	dbg_array(dbg_object(this).m_Edges,dbg_object(this).m_EdgeCount)[dbg_index]=t_E;
+	err_info="C:/GitHub/Pong/verlet.cxs<550>";
+	dbg_object(this).m_EdgeCount=dbg_object(this).m_EdgeCount+1;
 	pop_err();
 	return 0;
 }
-c_Paddle.prototype.p_Render=function(){
+c_Physics.prototype.p_UpdateForces=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<197>";
-	bb_graphics_SetColor(255.0,255.0,255.0);
-	err_info="C:/GitHub/Pong/Pong.cxs<198>";
-	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y*this.m_sizey),(this.m_sizex),(this.m_sizey));
-	err_info="C:/GitHub/Pong/Pong.cxs<199>";
-	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y)-(this.m_sizey)*0.5,(this.m_sizex),(this.m_sizey));
-	err_info="C:/GitHub/Pong/Pong.cxs<202>";
+	err_info="C:/GitHub/Pong/verlet.cxs<197>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<198>";
+	for(t_i=0;t_i<=dbg_object(this).m_VertexCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<199>";
+		dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Acceleration=this.m_Gravity;
+	}
 	pop_err();
-	return 0;
 }
-function bb_app_Millisecs(){
+c_Physics.prototype.p_UpdateVerlet=function(){
 	push_err();
-	err_info="C:/Cerberus/modules/mojo/app.cxs<233>";
-	var t_=bb_app__game.Millisecs();
+	err_info="C:/GitHub/Pong/verlet.cxs<207>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<208>";
+	for(t_i=0;t_i<=this.m_VertexCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<210>";
+		var t_V=dbg_array(this.m_Vertices,t_i)[dbg_index];
+		err_info="C:/GitHub/Pong/verlet.cxs<212>";
+		var t_TempX=dbg_object(dbg_object(t_V).m_Position).m_X;
+		err_info="C:/GitHub/Pong/verlet.cxs<213>";
+		var t_TempY=dbg_object(dbg_object(t_V).m_Position).m_Y;
+		err_info="C:/GitHub/Pong/verlet.cxs<215>";
+		dbg_object(dbg_object(t_V).m_Position).m_X=dbg_object(dbg_object(t_V).m_Position).m_X+(dbg_object(dbg_object(t_V).m_Position).m_X-dbg_object(dbg_object(t_V).m_OldPosition).m_X+dbg_object(dbg_object(t_V).m_Acceleration).m_X*this.m_Timestep*this.m_Timestep);
+		err_info="C:/GitHub/Pong/verlet.cxs<216>";
+		dbg_object(dbg_object(t_V).m_Position).m_Y=dbg_object(dbg_object(t_V).m_Position).m_Y+(dbg_object(dbg_object(t_V).m_Position).m_Y-dbg_object(dbg_object(t_V).m_OldPosition).m_Y+dbg_object(dbg_object(t_V).m_Acceleration).m_Y*this.m_Timestep*this.m_Timestep);
+		err_info="C:/GitHub/Pong/verlet.cxs<220>";
+		dbg_object(dbg_object(t_V).m_OldPosition).m_X=t_TempX;
+		err_info="C:/GitHub/Pong/verlet.cxs<221>";
+		dbg_object(dbg_object(t_V).m_OldPosition).m_Y=t_TempY;
+	}
+	pop_err();
+}
+c_Physics.prototype.p_UpdateEdges=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<230>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<231>";
+	for(t_i=0;t_i<=this.m_EdgeCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<234>";
+		var t_E=dbg_array(this.m_Edges,t_i)[dbg_index];
+		err_info="C:/GitHub/Pong/verlet.cxs<237>";
+		var t_V1V2=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X,dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y);
+		err_info="C:/GitHub/Pong/verlet.cxs<238>";
+		t_V1V2.p_SubtractVec(dbg_object(dbg_object(t_E).m_V1).m_Position);
+		err_info="C:/GitHub/Pong/verlet.cxs<240>";
+		var t_V1V2Length=t_V1V2.p_GetLength();
+		err_info="C:/GitHub/Pong/verlet.cxs<241>";
+		var t_Diff=t_V1V2Length-dbg_object(t_E).m_Length;
+		err_info="C:/GitHub/Pong/verlet.cxs<243>";
+		t_V1V2.p_Normalize();
+		err_info="C:/GitHub/Pong/verlet.cxs<245>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_X=dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_X+dbg_object(t_V1V2).m_X*t_Diff*0.5;
+		err_info="C:/GitHub/Pong/verlet.cxs<246>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_Y=dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_Y+dbg_object(t_V1V2).m_Y*t_Diff*0.5;
+		err_info="C:/GitHub/Pong/verlet.cxs<247>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X=dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X-dbg_object(t_V1V2).m_X*t_Diff*0.5;
+		err_info="C:/GitHub/Pong/verlet.cxs<248>";
+		dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y=dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y-dbg_object(t_V1V2).m_Y*t_Diff*0.5;
+	}
+	pop_err();
+}
+c_Physics.prototype.p_BodiesOverlap=function(t_B1,t_B2){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<509>";
+	var t_=dbg_object(t_B1).m_MinX<=dbg_object(t_B2).m_MaxX && dbg_object(t_B1).m_MinY<=dbg_object(t_B2).m_MaxY && dbg_object(t_B1).m_MaxX>=dbg_object(t_B2).m_MinX && dbg_object(t_B2).m_MaxY>=dbg_object(t_B1).m_MinY;
 	pop_err();
 	return t_;
+}
+c_Physics.prototype.p_IntervalDistance=function(t_MinA,t_MaxA,t_MinB,t_MaxB){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<498>";
+	if(dbg_array(t_MinA,0)[dbg_index]<dbg_array(t_MinB,0)[dbg_index]){
+		err_info="C:/GitHub/Pong/verlet.cxs<499>";
+		var t_=dbg_array(t_MinB,0)[dbg_index]-dbg_array(t_MaxA,0)[dbg_index];
+		pop_err();
+		return t_;
+	}else{
+		err_info="C:/GitHub/Pong/verlet.cxs<501>";
+		var t_2=dbg_array(t_MinA,0)[dbg_index]-dbg_array(t_MaxB,0)[dbg_index];
+		pop_err();
+		return t_2;
+	}
+}
+c_Physics.m_CollisionInfoNormal=null;
+c_Physics.m_CollisionInfoE=null;
+c_Physics.m_CollisionInfoDepth=0;
+c_Physics.m_CollisionInfoV=null;
+c_Physics.prototype.p_DetectCollision=function(t_B1,t_B2){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<309>";
+	var t_MinDistance=10000.0;
+	err_info="C:/GitHub/Pong/verlet.cxs<311>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<312>";
+	for(t_i=0;t_i<=dbg_object(t_B1).m_EdgeCount+dbg_object(t_B2).m_EdgeCount-2;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<315>";
+		var t_E=null;
+		err_info="C:/GitHub/Pong/verlet.cxs<319>";
+		if(t_i<dbg_object(t_B1).m_EdgeCount){
+			err_info="C:/GitHub/Pong/verlet.cxs<321>";
+			t_E=dbg_array(dbg_object(t_B1).m_Edges,t_i)[dbg_index];
+		}else{
+			err_info="C:/GitHub/Pong/verlet.cxs<325>";
+			t_E=dbg_array(dbg_object(t_B2).m_Edges,t_i-dbg_object(t_B1).m_EdgeCount)[dbg_index];
+		}
+		err_info="C:/GitHub/Pong/verlet.cxs<334>";
+		if(!dbg_object(t_E).m_Boundary){
+			err_info="C:/GitHub/Pong/verlet.cxs<336>";
+			continue;
+		}
+		err_info="C:/GitHub/Pong/verlet.cxs<341>";
+		var t_Axis=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_Y,dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_X);
+		err_info="C:/GitHub/Pong/verlet.cxs<342>";
+		dbg_object(t_Axis).m_X=dbg_object(t_Axis).m_X-dbg_object(dbg_object(dbg_object(t_E).m_V2).m_Position).m_Y;
+		err_info="C:/GitHub/Pong/verlet.cxs<343>";
+		dbg_object(t_Axis).m_Y=dbg_object(t_Axis).m_Y-dbg_object(dbg_object(dbg_object(t_E).m_V1).m_Position).m_X;
+		err_info="C:/GitHub/Pong/verlet.cxs<345>";
+		t_Axis.p_Normalize();
+		err_info="C:/GitHub/Pong/verlet.cxs<351>";
+		var t_MinA=new_number_array(1);
+		err_info="C:/GitHub/Pong/verlet.cxs<352>";
+		var t_MinB=new_number_array(1);
+		err_info="C:/GitHub/Pong/verlet.cxs<353>";
+		var t_MaxA=new_number_array(1);
+		err_info="C:/GitHub/Pong/verlet.cxs<354>";
+		var t_MaxB=new_number_array(1);
+		err_info="C:/GitHub/Pong/verlet.cxs<357>";
+		t_B1.p_ProjectToAxis(t_Axis,t_MinA,t_MaxA);
+		err_info="C:/GitHub/Pong/verlet.cxs<359>";
+		t_B2.p_ProjectToAxis(t_Axis,t_MinB,t_MaxB);
+		err_info="C:/GitHub/Pong/verlet.cxs<364>";
+		var t_Distance=this.p_IntervalDistance(t_MinA,t_MaxA,t_MinB,t_MaxB);
+		err_info="C:/GitHub/Pong/verlet.cxs<369>";
+		if(t_Distance>0.0){
+			err_info="C:/GitHub/Pong/verlet.cxs<371>";
+			pop_err();
+			return false;
+		}else{
+			err_info="C:/GitHub/Pong/verlet.cxs<373>";
+			if(bb_math_Abs2(t_Distance)<t_MinDistance){
+				err_info="C:/GitHub/Pong/verlet.cxs<375>";
+				t_MinDistance=bb_math_Abs2(t_Distance);
+				err_info="C:/GitHub/Pong/verlet.cxs<377>";
+				c_Physics.m_CollisionInfoNormal=t_Axis;
+				err_info="C:/GitHub/Pong/verlet.cxs<379>";
+				c_Physics.m_CollisionInfoE=t_E;
+			}
+		}
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<386>";
+	c_Physics.m_CollisionInfoDepth=t_MinDistance;
+	err_info="C:/GitHub/Pong/verlet.cxs<391>";
+	if(dbg_object(c_Physics.m_CollisionInfoE).m_Parent!=t_B2){
+		err_info="C:/GitHub/Pong/verlet.cxs<393>";
+		var t_Temp=t_B2;
+		err_info="C:/GitHub/Pong/verlet.cxs<395>";
+		t_B2=t_B1;
+		err_info="C:/GitHub/Pong/verlet.cxs<397>";
+		t_B1=t_Temp;
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<403>";
+	var t_SignVec=c_Vec2.m_new.call(new c_Vec2,dbg_object(c_Physics.m_CollisionInfoNormal).m_X,dbg_object(c_Physics.m_CollisionInfoNormal).m_Y);
+	err_info="C:/GitHub/Pong/verlet.cxs<404>";
+	var t_CenterDiff=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(t_B1).m_Center).m_X,dbg_object(dbg_object(t_B1).m_Center).m_Y);
+	err_info="C:/GitHub/Pong/verlet.cxs<405>";
+	t_CenterDiff.p_SubtractVec(dbg_object(t_B2).m_Center);
+	err_info="C:/GitHub/Pong/verlet.cxs<406>";
+	var t_SignFloat=dbg_object(t_SignVec).m_X*dbg_object(t_CenterDiff).m_X+dbg_object(t_SignVec).m_Y*dbg_object(t_CenterDiff).m_Y;
+	err_info="C:/GitHub/Pong/verlet.cxs<407>";
+	var t_Sign=((bb_math_Sgn2(t_SignFloat))|0);
+	err_info="C:/GitHub/Pong/verlet.cxs<415>";
+	if(t_Sign!=1){
+		err_info="C:/GitHub/Pong/verlet.cxs<418>";
+		dbg_object(c_Physics.m_CollisionInfoNormal).m_X=-dbg_object(c_Physics.m_CollisionInfoNormal).m_X;
+		err_info="C:/GitHub/Pong/verlet.cxs<419>";
+		dbg_object(c_Physics.m_CollisionInfoNormal).m_Y=-dbg_object(c_Physics.m_CollisionInfoNormal).m_Y;
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<424>";
+	var t_CollisionVector=c_Vec2.m_new.call(new c_Vec2,dbg_object(c_Physics.m_CollisionInfoNormal).m_X,dbg_object(c_Physics.m_CollisionInfoNormal).m_Y);
+	err_info="C:/GitHub/Pong/verlet.cxs<425>";
+	t_CollisionVector.p_Multiply(c_Physics.m_CollisionInfoDepth,c_Physics.m_CollisionInfoDepth);
+	err_info="C:/GitHub/Pong/verlet.cxs<431>";
+	var t_SmallestD=10000.0;
+	err_info="C:/GitHub/Pong/verlet.cxs<433>";
+	var t_Distance2=.0;
+	err_info="C:/GitHub/Pong/verlet.cxs<436>";
+	for(t_i=0;t_i<=dbg_object(t_B1).m_VertexCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<439>";
+		var t_cDist=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(dbg_array(dbg_object(t_B1).m_Vertices,t_i)[dbg_index]).m_Position).m_X,dbg_object(dbg_object(dbg_array(dbg_object(t_B1).m_Vertices,t_i)[dbg_index]).m_Position).m_Y);
+		err_info="C:/GitHub/Pong/verlet.cxs<440>";
+		t_cDist.p_SubtractVec(dbg_object(t_B2).m_Center);
+		err_info="C:/GitHub/Pong/verlet.cxs<442>";
+		t_Distance2=dbg_object(c_Physics.m_CollisionInfoNormal).m_X*dbg_object(t_cDist).m_X+dbg_object(c_Physics.m_CollisionInfoNormal).m_Y*dbg_object(t_cDist).m_Y;
+		err_info="C:/GitHub/Pong/verlet.cxs<446>";
+		if(t_Distance2<t_SmallestD){
+			err_info="C:/GitHub/Pong/verlet.cxs<448>";
+			t_SmallestD=t_Distance2;
+			err_info="C:/GitHub/Pong/verlet.cxs<450>";
+			c_Physics.m_CollisionInfoV=dbg_array(dbg_object(t_B1).m_Vertices,t_i)[dbg_index];
+		}
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<459>";
+	pop_err();
+	return true;
+}
+c_Physics.prototype.p_ProcessCollision=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<468>";
+	var t_E1=dbg_object(c_Physics.m_CollisionInfoE).m_V1;
+	err_info="C:/GitHub/Pong/verlet.cxs<470>";
+	var t_E2=dbg_object(c_Physics.m_CollisionInfoE).m_V2;
+	err_info="C:/GitHub/Pong/verlet.cxs<472>";
+	var t_CollisionVector=c_Vec2.m_new.call(new c_Vec2,dbg_object(c_Physics.m_CollisionInfoNormal).m_X*c_Physics.m_CollisionInfoDepth,dbg_object(c_Physics.m_CollisionInfoNormal).m_Y*c_Physics.m_CollisionInfoDepth);
+	err_info="C:/GitHub/Pong/verlet.cxs<474>";
+	var t_T=.0;
+	err_info="C:/GitHub/Pong/verlet.cxs<476>";
+	if(bb_math_Abs2(dbg_object(dbg_object(t_E1).m_Position).m_X-dbg_object(dbg_object(t_E2).m_Position).m_X)>bb_math_Abs2(dbg_object(dbg_object(t_E1).m_Position).m_Y-dbg_object(dbg_object(t_E2).m_Position).m_Y)){
+		err_info="C:/GitHub/Pong/verlet.cxs<477>";
+		t_T=(dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_X-dbg_object(t_CollisionVector).m_X-dbg_object(dbg_object(t_E1).m_Position).m_X)/(dbg_object(dbg_object(t_E2).m_Position).m_X-dbg_object(dbg_object(t_E1).m_Position).m_X);
+	}else{
+		err_info="C:/GitHub/Pong/verlet.cxs<479>";
+		t_T=(dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_Y-dbg_object(t_CollisionVector).m_Y-dbg_object(dbg_object(t_E1).m_Position).m_Y)/(dbg_object(dbg_object(t_E2).m_Position).m_Y-dbg_object(dbg_object(t_E1).m_Position).m_Y);
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<481>";
+	var t_Lambda=1.0/(t_T*t_T+(1.0-t_T)*(1.0-t_T));
+	err_info="C:/GitHub/Pong/verlet.cxs<483>";
+	dbg_object(dbg_object(t_E1).m_Position).m_X=dbg_object(dbg_object(t_E1).m_Position).m_X-dbg_object(t_CollisionVector).m_X*(1.0-t_T)*0.5*t_Lambda;
+	err_info="C:/GitHub/Pong/verlet.cxs<484>";
+	dbg_object(dbg_object(t_E1).m_Position).m_Y=dbg_object(dbg_object(t_E1).m_Position).m_Y-dbg_object(t_CollisionVector).m_Y*(1.0-t_T)*0.5*t_Lambda;
+	err_info="C:/GitHub/Pong/verlet.cxs<486>";
+	dbg_object(dbg_object(t_E2).m_Position).m_X=dbg_object(dbg_object(t_E2).m_Position).m_X-dbg_object(t_CollisionVector).m_X*t_T*0.5*t_Lambda;
+	err_info="C:/GitHub/Pong/verlet.cxs<487>";
+	dbg_object(dbg_object(t_E2).m_Position).m_Y=dbg_object(dbg_object(t_E2).m_Position).m_Y-dbg_object(t_CollisionVector).m_Y*t_T*0.5*t_Lambda;
+	err_info="C:/GitHub/Pong/verlet.cxs<489>";
+	dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_X=dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_X+dbg_object(t_CollisionVector).m_X*0.5;
+	err_info="C:/GitHub/Pong/verlet.cxs<490>";
+	dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_Y=dbg_object(dbg_object(c_Physics.m_CollisionInfoV).m_Position).m_Y+dbg_object(t_CollisionVector).m_Y*0.5;
+	pop_err();
+}
+c_Physics.prototype.p_IterateCollisions=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<260>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<261>";
+	for(t_i=0;t_i<=this.m_Iterations-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<264>";
+		var t_t=0;
+		err_info="C:/GitHub/Pong/verlet.cxs<265>";
+		for(t_t=0;t_t<=this.m_VertexCount-1;t_t=t_t+1){
+			err_info="C:/GitHub/Pong/verlet.cxs<266>";
+			var t_Pos=dbg_object(dbg_array(this.m_Vertices,t_t)[dbg_index]).m_Position;
+			err_info="C:/GitHub/Pong/verlet.cxs<267>";
+			dbg_object(t_Pos).m_X=bb_math_Max2(bb_math_Min2(dbg_object(t_Pos).m_X,(bb_app_DeviceWidth())),0.0);
+			err_info="C:/GitHub/Pong/verlet.cxs<269>";
+			dbg_object(t_Pos).m_Y=bb_math_Max2(bb_math_Min2(dbg_object(t_Pos).m_Y,(bb_app_DeviceHeight())),0.0);
+		}
+		err_info="C:/GitHub/Pong/verlet.cxs<274>";
+		this.p_UpdateEdges();
+		err_info="C:/GitHub/Pong/verlet.cxs<277>";
+		var t_c=0;
+		err_info="C:/GitHub/Pong/verlet.cxs<278>";
+		for(t_c=0;t_c<=this.m_BodyCount-1;t_c=t_c+1){
+			err_info="C:/GitHub/Pong/verlet.cxs<279>";
+			dbg_array(this.m_Bodies,t_c)[dbg_index].p_CalculateCenter();
+		}
+		err_info="C:/GitHub/Pong/verlet.cxs<284>";
+		var t_B1=0;
+		err_info="C:/GitHub/Pong/verlet.cxs<285>";
+		var t_B2=0;
+		err_info="C:/GitHub/Pong/verlet.cxs<286>";
+		for(t_B1=0;t_B1<=this.m_BodyCount-1;t_B1=t_B1+1){
+			err_info="C:/GitHub/Pong/verlet.cxs<287>";
+			for(t_B2=0;t_B2<=this.m_BodyCount-1;t_B2=t_B2+1){
+				err_info="C:/GitHub/Pong/verlet.cxs<288>";
+				if(t_B1!=t_B2){
+					err_info="C:/GitHub/Pong/verlet.cxs<290>";
+					if(this.p_BodiesOverlap(dbg_array(this.m_Bodies,t_B1)[dbg_index],dbg_array(this.m_Bodies,t_B2)[dbg_index])){
+						err_info="C:/GitHub/Pong/verlet.cxs<293>";
+						if(this.p_DetectCollision(dbg_array(this.m_Bodies,t_B1)[dbg_index],dbg_array(this.m_Bodies,t_B2)[dbg_index])){
+							err_info="C:/GitHub/Pong/verlet.cxs<294>";
+							this.p_ProcessCollision();
+						}
+					}
+				}
+			}
+		}
+	}
+	pop_err();
+}
+c_Physics.prototype.p_Update=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<515>";
+	this.p_UpdateForces();
+	err_info="C:/GitHub/Pong/verlet.cxs<516>";
+	this.p_UpdateVerlet();
+	err_info="C:/GitHub/Pong/verlet.cxs<517>";
+	this.p_IterateCollisions();
+	pop_err();
+	return 0;
+}
+c_Physics.prototype.p_Render=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<524>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<525>";
+	for(t_i=0;t_i<=this.m_EdgeCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<526>";
+		bb_graphics_DrawLine(dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V1).m_Position).m_X,dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V1).m_Position).m_Y,dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V2).m_Position).m_X,dbg_object(dbg_object(dbg_object(dbg_array(this.m_Edges,t_i)[dbg_index]).m_V2).m_Position).m_Y);
+	}
+	pop_err();
+	return 0;
+}
+function c_Vec2(){
+	Object.call(this);
+	this.m_X=.0;
+	this.m_Y=.0;
+}
+c_Vec2.m_new=function(t_vX,t_vY){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<95>";
+	dbg_object(this).m_X=t_vX;
+	err_info="C:/GitHub/Pong/verlet.cxs<96>";
+	dbg_object(this).m_Y=t_vY;
+	pop_err();
+	return this;
+}
+c_Vec2.m_new2=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<90>";
+	pop_err();
+	return this;
+}
+c_Vec2.prototype.p_SubtractVec=function(t_Vec){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<116>";
+	if(t_Vec==null){
+		err_info="C:/GitHub/Pong/verlet.cxs<116>";
+		pop_err();
+		return 0;
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<117>";
+	this.m_X=this.m_X-dbg_object(t_Vec).m_X;
+	err_info="C:/GitHub/Pong/verlet.cxs<118>";
+	this.m_Y=this.m_Y-dbg_object(t_Vec).m_Y;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_GetLength=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<144>";
+	var t_=Math.sqrt(this.m_X*this.m_X+this.m_Y*this.m_Y);
+	pop_err();
+	return t_;
+}
+c_Vec2.prototype.p_Normalize=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<149>";
+	var t_Lent=1.0/this.p_GetLength();
+	err_info="C:/GitHub/Pong/verlet.cxs<150>";
+	this.m_X=this.m_X*t_Lent;
+	err_info="C:/GitHub/Pong/verlet.cxs<151>";
+	this.m_Y=this.m_Y*t_Lent;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_AddVec=function(t_Vec){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<110>";
+	if(t_Vec==null){
+		err_info="C:/GitHub/Pong/verlet.cxs<110>";
+		pop_err();
+		return 0;
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<111>";
+	this.m_X=this.m_X+dbg_object(t_Vec).m_X;
+	err_info="C:/GitHub/Pong/verlet.cxs<112>";
+	this.m_Y=this.m_Y+dbg_object(t_Vec).m_Y;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_Divide=function(t__x,t__y){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<133>";
+	if(t__x==0.0 || t__y==0.0){
+		err_info="C:/GitHub/Pong/verlet.cxs<133>";
+		pop_err();
+		return 0;
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<134>";
+	this.m_X=this.m_X/t__x;
+	err_info="C:/GitHub/Pong/verlet.cxs<135>";
+	this.m_Y=this.m_Y/t__y;
+	pop_err();
+	return 0;
+}
+c_Vec2.prototype.p_DotProduct=function(t_Vec){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<140>";
+	var t_=this.m_X*dbg_object(t_Vec).m_X+this.m_Y*dbg_object(t_Vec).m_Y;
+	pop_err();
+	return t_;
+}
+c_Vec2.prototype.p_Multiply=function(t__x,t__y){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<122>";
+	this.m_X=this.m_X*t__x;
+	err_info="C:/GitHub/Pong/verlet.cxs<123>";
+	this.m_Y=this.m_Y*t__y;
+	pop_err();
+	return 0;
+}
+var bb_verlet_World=null;
+function c_PhysicsBody(){
+	Object.call(this);
+	this.m_VertexCount=0;
+	this.m_EdgeCount=0;
+	this.m_Vertices=new_object_array(bb_verlet_MAX_BODY_VERTICES);
+	this.m_Edges=new_object_array(bb_verlet_MAX_BODY_EDGES);
+	this.m_Center=null;
+	this.m_MinX=0;
+	this.m_MinY=0;
+	this.m_MaxX=0;
+	this.m_MaxY=0;
+}
+c_PhysicsBody.m_new=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<621>";
+	dbg_object(this).m_VertexCount=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<622>";
+	dbg_object(this).m_EdgeCount=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<623>";
+	bb_verlet_World.p_AddBody(this);
+	pop_err();
+	return this;
+}
+c_PhysicsBody.prototype.p_AddVertex=function(t_V){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<636>";
+	dbg_array(dbg_object(this).m_Vertices,dbg_object(this).m_VertexCount)[dbg_index]=t_V;
+	err_info="C:/GitHub/Pong/verlet.cxs<637>";
+	dbg_object(this).m_VertexCount=dbg_object(this).m_VertexCount+1;
+	pop_err();
+}
+c_PhysicsBody.prototype.p_AddEdge=function(t_E){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<630>";
+	dbg_array(dbg_object(this).m_Edges,dbg_object(this).m_EdgeCount)[dbg_index]=t_E;
+	err_info="C:/GitHub/Pong/verlet.cxs<631>";
+	dbg_object(this).m_EdgeCount=dbg_object(this).m_EdgeCount+1;
+	pop_err();
+}
+c_PhysicsBody.prototype.p_CreateBox=function(t_X,t_Y,t_Width,t_Height){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<685>";
+	var t_V1=c_Vertex.m_new.call(new c_Vertex,this,(t_X),(t_Y));
+	err_info="C:/GitHub/Pong/verlet.cxs<686>";
+	var t_V2=c_Vertex.m_new.call(new c_Vertex,this,(t_X+t_Width),(t_Y));
+	err_info="C:/GitHub/Pong/verlet.cxs<687>";
+	var t_V3=c_Vertex.m_new.call(new c_Vertex,this,(t_X+t_Width),(t_Y+t_Height));
+	err_info="C:/GitHub/Pong/verlet.cxs<688>";
+	var t_V4=c_Vertex.m_new.call(new c_Vertex,this,(t_X),(t_Y+t_Height));
+	err_info="C:/GitHub/Pong/verlet.cxs<689>";
+	c_Edge.m_new.call(new c_Edge,this,t_V1,t_V2,true);
+	err_info="C:/GitHub/Pong/verlet.cxs<690>";
+	c_Edge.m_new.call(new c_Edge,this,t_V2,t_V3,true);
+	err_info="C:/GitHub/Pong/verlet.cxs<691>";
+	c_Edge.m_new.call(new c_Edge,this,t_V3,t_V4,true);
+	err_info="C:/GitHub/Pong/verlet.cxs<692>";
+	c_Edge.m_new.call(new c_Edge,this,t_V4,t_V1,true);
+	err_info="C:/GitHub/Pong/verlet.cxs<693>";
+	c_Edge.m_new.call(new c_Edge,this,t_V1,t_V3,false);
+	err_info="C:/GitHub/Pong/verlet.cxs<694>";
+	c_Edge.m_new.call(new c_Edge,this,t_V2,t_V4,false);
+	pop_err();
+	return 0;
+}
+c_PhysicsBody.prototype.p_CalculateCenter=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<661>";
+	this.m_Center=c_Vec2.m_new.call(new c_Vec2,0.0,0.0);
+	err_info="C:/GitHub/Pong/verlet.cxs<662>";
+	this.m_MinX=10000;
+	err_info="C:/GitHub/Pong/verlet.cxs<663>";
+	this.m_MinY=10000;
+	err_info="C:/GitHub/Pong/verlet.cxs<664>";
+	this.m_MaxX=-10000;
+	err_info="C:/GitHub/Pong/verlet.cxs<665>";
+	this.m_MaxY=-10000;
+	err_info="C:/GitHub/Pong/verlet.cxs<666>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<667>";
+	for(t_i=0;t_i<=dbg_object(this).m_VertexCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<668>";
+		this.m_Center.p_AddVec(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position);
+		err_info="C:/GitHub/Pong/verlet.cxs<669>";
+		this.m_MinX=((bb_math_Min2((this.m_MinX),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_X))|0);
+		err_info="C:/GitHub/Pong/verlet.cxs<671>";
+		this.m_MinY=((bb_math_Min2((this.m_MinY),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_Y))|0);
+		err_info="C:/GitHub/Pong/verlet.cxs<673>";
+		this.m_MaxX=((bb_math_Max2((this.m_MaxX),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_X))|0);
+		err_info="C:/GitHub/Pong/verlet.cxs<675>";
+		this.m_MaxY=((bb_math_Max2((this.m_MaxY),dbg_object(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position).m_Y))|0);
+	}
+	err_info="C:/GitHub/Pong/verlet.cxs<677>";
+	this.m_Center.p_Divide((this.m_VertexCount),(this.m_VertexCount));
+	pop_err();
+}
+c_PhysicsBody.prototype.p_ProjectToAxis=function(t_Axis,t_MinV,t_MaxV){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<643>";
+	var t_DotP=t_Axis.p_DotProduct(dbg_object(dbg_array(this.m_Vertices,0)[dbg_index]).m_Position);
+	err_info="C:/GitHub/Pong/verlet.cxs<644>";
+	dbg_array(t_MinV,0)[dbg_index]=t_DotP;
+	err_info="C:/GitHub/Pong/verlet.cxs<645>";
+	dbg_array(t_MaxV,0)[dbg_index]=t_DotP;
+	err_info="C:/GitHub/Pong/verlet.cxs<646>";
+	var t_i=0;
+	err_info="C:/GitHub/Pong/verlet.cxs<647>";
+	for(t_i=0;t_i<=this.m_VertexCount-1;t_i=t_i+1){
+		err_info="C:/GitHub/Pong/verlet.cxs<649>";
+		t_DotP=t_Axis.p_DotProduct(dbg_object(dbg_array(this.m_Vertices,t_i)[dbg_index]).m_Position);
+		err_info="C:/GitHub/Pong/verlet.cxs<651>";
+		dbg_array(t_MinV,0)[dbg_index]=bb_math_Min2(t_DotP,dbg_array(t_MinV,0)[dbg_index]);
+		err_info="C:/GitHub/Pong/verlet.cxs<653>";
+		dbg_array(t_MaxV,0)[dbg_index]=bb_math_Max2(t_DotP,dbg_array(t_MaxV,0)[dbg_index]);
+	}
+	pop_err();
+	return 0;
+}
+var bb_verlet_MAX_BODIES=0;
+function c_Vertex(){
+	Object.call(this);
+	this.m_Position=null;
+	this.m_OldPosition=null;
+	this.m_Parent=null;
+	this.m_Acceleration=null;
+}
+c_Vertex.m_new=function(t_Body,t_PosX,t_PosY){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<721>";
+	dbg_object(this).m_Position=c_Vec2.m_new.call(new c_Vec2,t_PosX,t_PosY);
+	err_info="C:/GitHub/Pong/verlet.cxs<723>";
+	dbg_object(this).m_OldPosition=c_Vec2.m_new.call(new c_Vec2,t_PosX,t_PosY);
+	err_info="C:/GitHub/Pong/verlet.cxs<725>";
+	dbg_object(this).m_Parent=t_Body;
+	err_info="C:/GitHub/Pong/verlet.cxs<728>";
+	t_Body.p_AddVertex(this);
+	err_info="C:/GitHub/Pong/verlet.cxs<730>";
+	bb_verlet_World.p_AddVertex(this);
+	pop_err();
+	return this;
+}
+c_Vertex.m_new2=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<707>";
+	pop_err();
+	return this;
+}
+var bb_verlet_MAX_BODY_VERTICES=0;
+var bb_verlet_MAX_VERTICES=0;
+function c_Edge(){
+	Object.call(this);
+	this.m_V1=null;
+	this.m_V2=null;
+	this.m_Length=.0;
+	this.m_Boundary=false;
+	this.m_Parent=null;
+}
+c_Edge.m_new=function(t_Body,t_pV1,t_pV2,t_pBoundary){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<765>";
+	dbg_object(this).m_V1=t_pV1;
+	err_info="C:/GitHub/Pong/verlet.cxs<767>";
+	dbg_object(this).m_V2=t_pV2;
+	err_info="C:/GitHub/Pong/verlet.cxs<771>";
+	var t_this=c_Vec2.m_new.call(new c_Vec2,dbg_object(dbg_object(t_pV2).m_Position).m_X,dbg_object(dbg_object(t_pV2).m_Position).m_Y);
+	err_info="C:/GitHub/Pong/verlet.cxs<772>";
+	t_this.p_SubtractVec(dbg_object(t_pV1).m_Position);
+	err_info="C:/GitHub/Pong/verlet.cxs<773>";
+	dbg_object(this).m_Length=t_this.p_GetLength();
+	err_info="C:/GitHub/Pong/verlet.cxs<777>";
+	dbg_object(this).m_Boundary=t_pBoundary;
+	err_info="C:/GitHub/Pong/verlet.cxs<781>";
+	dbg_object(this).m_Parent=t_Body;
+	err_info="C:/GitHub/Pong/verlet.cxs<786>";
+	t_Body.p_AddEdge(this);
+	err_info="C:/GitHub/Pong/verlet.cxs<788>";
+	bb_verlet_World.p_AddEdge(this);
+	pop_err();
+	return this;
+}
+c_Edge.m_new2=function(){
+	push_err();
+	err_info="C:/GitHub/Pong/verlet.cxs<741>";
+	pop_err();
+	return this;
+}
+var bb_verlet_MAX_BODY_EDGES=0;
+var bb_verlet_MAX_EDGES=0;
+function bb_input_KeyDown(t_key){
+	push_err();
+	err_info="C:/Cerberus/modules/mojo/input.cxs<40>";
+	var t_=((bb_input_device.p_KeyDown(t_key))?1:0);
+	pop_err();
+	return t_;
+}
+function bb_math_Min(t_x,t_y){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<51>";
+	if(t_x<t_y){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<51>";
+		pop_err();
+		return t_x;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<52>";
+	pop_err();
+	return t_y;
+}
+function bb_math_Min2(t_x,t_y){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<78>";
+	if(t_x<t_y){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<78>";
+		pop_err();
+		return t_x;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<79>";
+	pop_err();
+	return t_y;
+}
+function bb_math_Max(t_x,t_y){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<56>";
+	if(t_x>t_y){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<56>";
+		pop_err();
+		return t_x;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<57>";
+	pop_err();
+	return t_y;
+}
+function bb_math_Max2(t_x,t_y){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<83>";
+	if(t_x>t_y){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<83>";
+		pop_err();
+		return t_x;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<84>";
+	pop_err();
+	return t_y;
+}
+function bb_math_Abs(t_x){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<46>";
+	if(t_x>=0){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<46>";
+		pop_err();
+		return t_x;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<47>";
+	var t_=-t_x;
+	pop_err();
+	return t_;
+}
+function bb_math_Abs2(t_x){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<73>";
+	if(t_x>=0.0){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<73>";
+		pop_err();
+		return t_x;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<74>";
+	var t_=-t_x;
+	pop_err();
+	return t_;
+}
+function bb_math_Sgn(t_x){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<41>";
+	if(t_x<0){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<41>";
+		pop_err();
+		return -1;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<42>";
+	var t_=((t_x>0)?1:0);
+	pop_err();
+	return t_;
+}
+function bb_math_Sgn2(t_x){
+	push_err();
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<67>";
+	if(t_x<0.0){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<67>";
+		pop_err();
+		return -1.0;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<68>";
+	if(t_x>0.0){
+		err_info="C:/Cerberus/modules/cerberus/math.cxs<68>";
+		pop_err();
+		return 1.0;
+	}
+	err_info="C:/Cerberus/modules/cerberus/math.cxs<69>";
+	pop_err();
+	return 0.0;
 }
 function bb_graphics_DebugRenderDevice(){
 	push_err();
@@ -4648,14 +5206,14 @@ function bb_graphics_Cls(t_r,t_g,t_b){
 	pop_err();
 	return 0;
 }
-function bb_graphics_DrawRect(t_x,t_y,t_w,t_h){
+function bb_graphics_DrawLine(t_x1,t_y1,t_x2,t_y2){
 	push_err();
-	err_info="C:/Cerberus/modules/mojo/graphics.cxs<650>";
+	err_info="C:/Cerberus/modules/mojo/graphics.cxs<658>";
 	bb_graphics_DebugRenderDevice();
-	err_info="C:/Cerberus/modules/mojo/graphics.cxs<652>";
+	err_info="C:/Cerberus/modules/mojo/graphics.cxs<660>";
 	bb_graphics_context.p_Validate();
-	err_info="C:/Cerberus/modules/mojo/graphics.cxs<653>";
-	bb_graphics_renderDevice.DrawRect(t_x,t_y,t_w,t_h);
+	err_info="C:/Cerberus/modules/mojo/graphics.cxs<661>";
+	bb_graphics_renderDevice.DrawLine(t_x1,t_y1,t_x2,t_y2);
 	pop_err();
 	return 0;
 }
@@ -4674,5 +5232,15 @@ function bbInit(){
 	bb_app__desktopMode=null;
 	bb_graphics_renderDevice=null;
 	bb_app__updateRate=0;
+	bb_verlet_World=null;
+	bb_verlet_MAX_BODIES=512;
+	bb_verlet_MAX_BODY_VERTICES=64;
+	bb_verlet_MAX_VERTICES=1024;
+	bb_verlet_MAX_BODY_EDGES=64;
+	bb_verlet_MAX_EDGES=1024;
+	c_Physics.m_CollisionInfoNormal=null;
+	c_Physics.m_CollisionInfoE=null;
+	c_Physics.m_CollisionInfoDepth=.0;
+	c_Physics.m_CollisionInfoV=null;
 }
 //${TRANSCODE_END}

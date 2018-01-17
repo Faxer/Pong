@@ -56,6 +56,9 @@ Class Court
 	
 	Field theball:Ball 
 	
+	Field player1:Paddle
+	Field player2:Paddle
+	
 	Method New(x:Int,y:Int,sizex:Int,sizey:Int)
 		SetUpdateRate(0)
 		Self.x = x
@@ -64,6 +67,9 @@ Class Court
 		Self.sizey = sizey
 		
 		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,1)
+		
+		player1 = New Paddle(x+sizex/10,DeviceHeight()/2,5,50)
+		player2 = New Paddle(sizex+sizex/10,DeviceHeight()/2,5,50)
 
 	End Method
 	
@@ -75,7 +81,10 @@ Class Court
 		ResolveMoves(deltatime)
 		 
 		theball.Applymove() 
-
+		
+		player1.Update()
+		player2.Update()
+		
 		Return 0
 	End Method
 	
@@ -99,6 +108,9 @@ Class Court
 		SetColor(0,0,0)
 		DrawRect(x,y,sizex,sizey)
 		theball.Render
+		SetColor(255,0,0)
+		player1.Render
+		player2.Render
 		Return 0
 	End Method
 	
@@ -158,6 +170,41 @@ Class Ball
  
  
 	
+End Class
+
+Class Paddle
+
+	Field x:Float
+	Field y:Int
+	Field sizex:Int
+	Field sizey:int
+
+	Method New(x:Float,y:Float,sizex:Float,sizey:Float)
+		Self.x=x
+		Self.y=y
+		Self.sizex=sizex
+		Self.sizey=sizey
+	
+	
+	End Method
+	
+	Method Update:Int()
+	
+		Return 0
+	End Method
+	
+	Method Render:Int()
+		SetColor(255,255,255)
+		DrawRect(x-0.5*sizex,y*sizey,sizex,sizey)
+		DrawRect(x-0.5*sizex,y-sizey*0.5,sizex,sizey)
+'		Print "Rendering"
+
+		Return 0
+	End Method
+	
+
+
+
 End Class
 
 
