@@ -81,10 +81,11 @@ Class Court
 		ResolveMoves(deltatime)
 		 
 		theball.Applymove() 
-		
-		player1.Update(MouseY())
-		player2.Update(MouseY())
-		
+		If InputHandeler(MouseX())=0
+			player1.Update(MouseY())
+		Else
+			player2.Update(MouseY())
+		endif
 		Return 0
 	End Method
 	
@@ -134,6 +135,16 @@ Class Court
 		
 	 
 	End Method
+	
+	Method InputHandeler:Int(MouseX:Float)
+	If MouseX<DeviceWidth()/2
+		Return 0
+	Else
+		Return 1
+	endif
+
+
+	End method
 
 End Class
 
