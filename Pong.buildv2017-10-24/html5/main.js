@@ -3795,6 +3795,12 @@ c_InputDevice.prototype.p_MotionEvent=function(t_event,t_data,t_x,t_y,t_z){
 	this.m__accelZ=t_z;
 	pop_err();
 }
+c_InputDevice.prototype.p_MouseY=function(){
+	push_err();
+	err_info="C:/Cerberus/modules/mojo/inputdevice.cxs<73>";
+	pop_err();
+	return this.m__mouseY;
+}
 function c_JoyState(){
 	Object.call(this);
 	this.m_joyx=new_number_array(2);
@@ -4470,9 +4476,9 @@ c_Court.prototype.p_Update=function(t_nowtime){
 	err_info="C:/GitHub/Pong/Pong.cxs<83>";
 	this.m_theball.p_Applymove();
 	err_info="C:/GitHub/Pong/Pong.cxs<85>";
-	this.m_player1.p_Update2();
+	this.m_player1.p_Update((bb_input_MouseY())|0);
 	err_info="C:/GitHub/Pong/Pong.cxs<86>";
-	this.m_player2.p_Update2();
+	this.m_player2.p_Update((bb_input_MouseY())|0);
 	err_info="C:/GitHub/Pong/Pong.cxs<88>";
 	pop_err();
 	return 0;
@@ -4565,16 +4571,16 @@ function c_Vec2f(){
 }
 c_Vec2f.m_new=function(t_x,t_y){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<230>";
-	dbg_object(this).m_x=t_x;
 	err_info="C:/GitHub/Pong/Pong.cxs<231>";
+	dbg_object(this).m_x=t_x;
+	err_info="C:/GitHub/Pong/Pong.cxs<232>";
 	dbg_object(this).m_y=t_y;
 	pop_err();
 	return this;
 }
 c_Vec2f.m_new2=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<225>";
+	err_info="C:/GitHub/Pong/Pong.cxs<226>";
 	pop_err();
 	return this;
 }
@@ -4604,21 +4610,23 @@ c_Paddle.m_new2=function(){
 	pop_err();
 	return this;
 }
-c_Paddle.prototype.p_Update2=function(){
+c_Paddle.prototype.p_Update=function(t_y){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<193>";
+	err_info="C:/GitHub/Pong/Pong.cxs<192>";
+	dbg_object(this).m_y=t_y;
+	err_info="C:/GitHub/Pong/Pong.cxs<194>";
 	pop_err();
 	return 0;
 }
 c_Paddle.prototype.p_Render=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<197>";
-	bb_graphics_SetColor(255.0,255.0,255.0);
 	err_info="C:/GitHub/Pong/Pong.cxs<198>";
-	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y*this.m_sizey),(this.m_sizex),(this.m_sizey));
+	bb_graphics_SetColor(255.0,255.0,255.0);
 	err_info="C:/GitHub/Pong/Pong.cxs<199>";
+	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y*this.m_sizey),(this.m_sizex),(this.m_sizey));
+	err_info="C:/GitHub/Pong/Pong.cxs<200>";
 	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y)-(this.m_sizey)*0.5,(this.m_sizex),(this.m_sizey));
-	err_info="C:/GitHub/Pong/Pong.cxs<202>";
+	err_info="C:/GitHub/Pong/Pong.cxs<203>";
 	pop_err();
 	return 0;
 }
@@ -4626,6 +4634,13 @@ function bb_app_Millisecs(){
 	push_err();
 	err_info="C:/Cerberus/modules/mojo/app.cxs<233>";
 	var t_=bb_app__game.Millisecs();
+	pop_err();
+	return t_;
+}
+function bb_input_MouseY(){
+	push_err();
+	err_info="C:/Cerberus/modules/mojo/input.cxs<62>";
+	var t_=bb_input_device.p_MouseY();
 	pop_err();
 	return t_;
 }
