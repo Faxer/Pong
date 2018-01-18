@@ -65,7 +65,7 @@ Class Court
 		Self.y = y
 		Self.sizex = sizex
 		Self.sizey = sizey
-		
+					
 		theball = New Ball(DeviceWidth()/2,DeviceHeight()/2,10,1,1)
 		
 		player1 = New Paddle(x+sizex/10,DeviceHeight()/2,5,50)
@@ -82,10 +82,23 @@ Class Court
 		 
 		theball.Applymove() 
 		If InputHandeler(MouseX())=0
-			player1.Update(MouseY())
-		Else
-			player2.Update(MouseY())
-		endif
+			If MouseY() < y+0.5*player1.sizey
+				player1.Update(y+0.5*player1.sizey)
+			Elseif MouseY() > y+sizey-0.5*player1.sizey
+				player1.Update(y+sizey-0.5*player1.sizey)
+			Else
+				player1.Update(MouseY())
+			Endif
+		else
+			If MouseY() < y+0.5*player2.sizey
+				player2.Update(y+0.5*player2.sizey)
+			Elseif MouseY() > y+sizey-player2.sizey*0.5
+				player2.Update(y+sizey-player2.sizey*0.5)
+			Else
+				player2.Update(MouseY())
+			Endif
+		Endif
+		
 		Return 0
 	End Method
 	
@@ -117,7 +130,26 @@ Class Court
 	
 	Method Collision:Void(ball:Ball)
 
-		If ball.x < x 
+		If ball.x < player1.x 
+			If player1.y-0.5*player1.sizey < ball.y
+				If player1.y+0.5*player1.sizey > ball.y
+					ball.movevec.x *=-1
+					ball.direction.x *=-1	
+				Endif
+			Endif
+		Endif
+		
+		If ball.x+0.5*ball.size > player2.x 
+			If player2.y-0.5*player2.sizey < ball.y
+				If player2.y+0.5*player2.sizey > ball.y
+					ball.movevec.x *=-1
+					ball.direction.x *=-1	
+				Endif
+			Endif
+		Endif
+		
+		 
+		If ball.x < x  
 			ball.movevec.x *=-1
 			ball.direction.x *=-1	 
 		Elseif ball.x > x + sizex - ball.size 
@@ -130,9 +162,7 @@ Class Court
 '			Print "Bottom bounce"
 			ball.movevec.y *=-1
 			ball.direction.y *=-1
-	 
 		Endif
-		
 	 
 	End Method
 	
@@ -152,7 +182,7 @@ Class Ball
 	Field x:Float
 	Field y:Float
 	Field size:Float
-	Field speed:Float = 50
+	Field speed:Float = 100
 	Field direction:Vec2f
 	Field movevec:= New Vec2f	
 	
@@ -202,7 +232,6 @@ Class Paddle
 	Method Update:Int(y:Int)
 		
 		Self.y=y
-	
 		Return 0
 	End Method
 	
