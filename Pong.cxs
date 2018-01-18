@@ -199,7 +199,8 @@ Class Paddle
 	
 	End Method
 	
-	Method Update:Int(y:int)
+	Method Update:Int(y:Int)
+		
 		Self.y=y
 	
 		Return 0

@@ -4594,16 +4594,16 @@ function c_Vec2f(){
 }
 c_Vec2f.m_new=function(t_x,t_y){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<242>";
-	dbg_object(this).m_x=t_x;
 	err_info="C:/GitHub/Pong/Pong.cxs<243>";
+	dbg_object(this).m_x=t_x;
+	err_info="C:/GitHub/Pong/Pong.cxs<244>";
 	dbg_object(this).m_y=t_y;
 	pop_err();
 	return this;
 }
 c_Vec2f.m_new2=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<237>";
+	err_info="C:/GitHub/Pong/Pong.cxs<238>";
 	pop_err();
 	return this;
 }
@@ -4635,21 +4635,21 @@ c_Paddle.m_new2=function(){
 }
 c_Paddle.prototype.p_Update=function(t_y){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<203>";
+	err_info="C:/GitHub/Pong/Pong.cxs<204>";
 	dbg_object(this).m_y=t_y;
-	err_info="C:/GitHub/Pong/Pong.cxs<205>";
+	err_info="C:/GitHub/Pong/Pong.cxs<206>";
 	pop_err();
 	return 0;
 }
 c_Paddle.prototype.p_Render=function(){
 	push_err();
-	err_info="C:/GitHub/Pong/Pong.cxs<209>";
-	bb_graphics_SetColor(255.0,255.0,255.0);
 	err_info="C:/GitHub/Pong/Pong.cxs<210>";
-	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y*this.m_sizey),(this.m_sizex),(this.m_sizey));
+	bb_graphics_SetColor(255.0,255.0,255.0);
 	err_info="C:/GitHub/Pong/Pong.cxs<211>";
+	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y*this.m_sizey),(this.m_sizex),(this.m_sizey));
+	err_info="C:/GitHub/Pong/Pong.cxs<212>";
 	bb_graphics_DrawRect(this.m_x-0.5*(this.m_sizex),(this.m_y)-(this.m_sizey)*0.5,(this.m_sizex),(this.m_sizey));
-	err_info="C:/GitHub/Pong/Pong.cxs<214>";
+	err_info="C:/GitHub/Pong/Pong.cxs<215>";
 	pop_err();
 	return 0;
 }
