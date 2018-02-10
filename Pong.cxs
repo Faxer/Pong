@@ -129,6 +129,7 @@ Class Court
 	End Method
 	
 	Method Collision:Void(ball:Ball)
+		Local lasthit:int
 
 		If ball.x < player1.x 
 			If player1.y-0.5*player1.sizey < ball.y
@@ -148,20 +149,34 @@ Class Court
 			Endif
 		Endif
 		
-		 
-		If ball.x < x  
-			ball.movevec.x *=-1
-			ball.direction.x *=-1	 
-		Elseif ball.x > x + sizex - ball.size 
-			ball.movevec.x *=-1
-			ball.direction.x *=-1	 
-		Elseif ball.y < y  
-			ball.movevec.y *=-1
-			ball.direction.y *=-1	 
-		Elseif ball.y > y+sizey - ball.size  
-'			Print "Bottom bounce"
-			ball.movevec.y *=-1
-			ball.direction.y *=-1
+		If lasthit <> 1	 
+			If ball.x < x  
+				ball.movevec.x *=-1
+				ball.direction.x *=-1	 
+				lasthit = 1 
+			Endif
+		endif
+		If lasthit <> 3
+			if ball.x > x + sizex - ball.size 
+				ball.movevec.x *=-1
+				ball.direction.x *=-1	 
+				lasthit=3
+			Endif
+		Endif
+		If lasthit <> 2
+			If ball.y < y  
+				ball.movevec.y *=-1
+				ball.direction.y *=-1	 
+				lasthit=2
+			Endif
+		endif
+		If lasthit <> 4
+			if ball.y > y+sizey - ball.size  
+	'			Print "Bottom bounce"
+				ball.movevec.y *=-1
+				ball.direction.y *=-1
+				lasthit=4
+			Endif
 		Endif
 	 
 	End Method
