@@ -130,24 +130,29 @@ Class Court
 	
 	Method Collision:Void(ball:Ball)
 		Local lasthit:int
-
-		If ball.x < player1.x 
-			If player1.y-0.5*player1.sizey < ball.y
-				If player1.y+0.5*player1.sizey > ball.y
-					ball.movevec.x *=-1
-					ball.direction.x *=-1	
+		If lasthit <> -1
+			If ball.x < player1.x 
+				If player1.y-0.5*player1.sizey < ball.y
+					If player1.y+0.5*player1.sizey > ball.y
+						ball.movevec.x *=-1
+						ball.direction.x *=-1	
+						lasthit = -1
+					Endif
 				Endif
 			Endif
-		Endif
-		
-		If ball.x+0.5*ball.size > player2.x 
-			If player2.y-0.5*player2.sizey < ball.y
-				If player2.y+0.5*player2.sizey > ball.y
-					ball.movevec.x *=-1
-					ball.direction.x *=-1	
+		endif
+	
+		If lasthit <> -2
+			If ball.x+0.5*ball.size > player2.x 
+				If player2.y-0.5*player2.sizey < ball.y
+					If player2.y+0.5*player2.sizey > ball.y
+						ball.movevec.x *=-1
+						ball.direction.x *=-1	
+						lasthit = -2
+					Endif
 				Endif
 			Endif
-		Endif
+		endif
 		
 		If lasthit <> 1	 
 			If ball.x < x  
